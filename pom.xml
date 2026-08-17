@@ -26,14 +26,16 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>opencollab-snapshots</id>
+            <url>https://repo.opencollab.dev/maven-snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>dev.waterdog.waterdogpe</groupId>
             <artifactId>waterdog</artifactId>
-            <!-- Matches current WaterdogPE 2.x (org.cloudburstmc.protocol packets).
-                 Check https://github.com/WaterdogPE/WaterdogPE for a newer tag. -->
             <version>2.0.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
