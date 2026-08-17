@@ -26,43 +26,12 @@
         <dependency>
             <groupId>dev.waterdog.waterdogpe</groupId>
             <artifactId>waterdog</artifactId>
-            <!-- Correct, real released version. Check
-                 https://mvnrepository.com/artifact/dev.waterdog.waterdogpe/waterdog
-                 for a newer release if you need one. -->
             <version>1.2.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-    </build>
-</project>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
