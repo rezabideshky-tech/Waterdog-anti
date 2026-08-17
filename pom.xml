@@ -18,7 +18,7 @@
     <repositories>
         <repository>
             <id>waterdog-repo</id>
-            <url>https://repo.waterdog.dev/artifactory/main</url>
+            <url>https://repo.waterdog.dev/main + version: 2.0.4-SNAPSHOT</url>
         </repository>
     </repositories>
 
