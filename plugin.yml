@@ -1,0 +1,5 @@
+name: WaterdogLobbyFallback
+main: com.example.wdlf.WaterdogLobbyFallback
+version: 1.0.0
+author: HajirezaXD
+description: Automatically transfers players to a lobby server when their current backend server crashes/goes offline.
