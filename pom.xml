@@ -26,6 +26,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <!-- Transitive deps of WaterdogPE (Cloudburst Protocol / Netty RakNet) live here -->
         <repository>
             <id>opencollab-snapshots</id>
             <url>https://repo.opencollab.dev/maven-snapshots/</url>
@@ -34,6 +35,48 @@
             <id>opencollab-releases</id>
             <url>https://repo.opencollab.dev/maven-releases/</url>
         </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>dev.waterdog.waterdogpe</groupId>
+            <artifactId>waterdog</artifactId>
+            <!-- Matches current WaterdogPE 2.x (org.cloudburstmc.protocol packets).
+                 Check https://github.com/WaterdogPE/WaterdogPE for a newer tag. -->
+            <version>2.0.4-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+</project>
     </repositories>
 
     <dependencies>
