@@ -29,7 +29,7 @@ public class WaterdogLobbyFallback extends Plugin {
         getLogger().info("WaterdogLobbyFallback disabled.");
     }
 
-    public FallbackConfig getConfig() {
+    public FallbackConfig getFallbackConfig() {
         return config;
     }
 }
