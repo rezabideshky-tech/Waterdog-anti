@@ -37,7 +37,7 @@ public class ServerDisconnectListener implements Listener {
     public void onServerDisconnect(ServerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         ServerInfo downedServer = event.getServerInfo();
-        FallbackConfig cfg = plugin.getConfig();
+        FallbackConfig cfg = plugin.getFallbackConfig();
 
         if (player == null || !player.isConnected()) {
             return; // player already fully gone, nothing to do
@@ -47,7 +47,7 @@ public class ServerDisconnectListener implements Listener {
                 && cfg.lobbyServers.contains(downedServer.getServerName())) {
             // The thing that died WAS a lobby - don't try to bounce them
             // back into another lobby loop automatically here; just log it.
-            plugin.getLogger().warning("Lobby server '" + downedServer.getServerName()
+            plugin.getLogger().warn("Lobby server '" + downedServer.getServerName()
                     + "' appears to be down. Player " + player.getName()
                     + " was disconnected from it.");
             return;
@@ -70,7 +70,7 @@ public class ServerDisconnectListener implements Listener {
         if (!player.isConnected()) return;
 
         if (index >= cfg.lobbyServers.size()) {
-            plugin.getLogger().warning("No lobby server was reachable for " + player.getName() + ".");
+            plugin.getLogger().warn("No lobby server was reachable for " + player.getName() + ".");
             player.disconnect(cfg.noLobbyMessage);
             return;
         }
@@ -79,7 +79,7 @@ public class ServerDisconnectListener implements Listener {
         ServerInfo lobby = ProxyServer.getInstance().getServerInfo(lobbyName);
 
         if (lobby == null) {
-            plugin.getLogger().warning("Configured lobby '" + lobbyName
+            plugin.getLogger().warn("Configured lobby '" + lobbyName
                     + "' is not a registered server on this proxy - skipping.");
             attemptLobbyTransfer(player, cfg, index + 1);
             return;
