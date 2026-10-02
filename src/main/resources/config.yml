@@ -1,28 +1,161 @@
-# WaterdogLobbyFallback config
+# ==========================================================
+#  WaterdogAnti - config.yml
+#  Tested against WaterdogPE 2.0.4 (supports Bedrock 1.20 -> 1.26.30+)
+#  After editing run:  /wda reload
+# ==========================================================
 #
-# When a player's CURRENT backend server dies / becomes unreachable,
-# this plugin transfers them to a lobby instead of just kicking them
-# off the whole proxy.
+#  نکته: تمام مقدارها «امتیاز/آستانه» هستند؛ اگر مقدار را زیاد
+#  کنید ممکن است بازیکن عادی هم جریمه شود. ابتدا با action: alert
+#  اجرا کنید تا لاگ‌ها را ببینید، بعد punish را فعال کنید.
 
-# Ordered list of server names to try, in order, as the destination.
-# The first one that is currently online and NOT the server that
-# just went down will be used. Add multiple lobbies for redundancy.
-lobby-servers:
-  - "lobby"
-  - "lobby-1"
+general:
+  # بازیکنانی که این پرمیشن را داشته باشند از همه بررسی‌ها مستثنا می‌شوند
+  # (برای ادمین‌ها - در config.yml پروکسی در player_permissions تنظیم کنید)
+  bypass-permission: waterdoganti.bypass
+  # نام‌هایی که همیشه مستثنا هستند (حالت حساس به بزرگی/کوچکی حروف ندارد)
+  bypass-names: []
 
-# Message shown to the player right when the transfer happens.
-transfer-message: "§eThe server you were on went offline - reconnecting you to the lobby..."
+# ---------------- هشدارها / Alerts ----------------
+alerts:
+  enabled: true
+  # پرمیشن دیدن هشدارها در چت
+  permission: waterdoganti.alerts
+  prefix: "§8[§cAnti§8]§r "
+  # ذخیره هشدارها در plugins/waterdoganti/alerts.log
+  log-to-file: true
+  # حداقل فاصله بین دو هشدار مشابه از یک بازیکن (ثانیه)
+  throttle-seconds: 5
 
-# Message shown if NONE of the lobby-servers are reachable either
-# (player gets fully disconnected from the proxy in this case).
-no-lobby-message: "§cServer went offline and no lobby is currently available. Please reconnect shortly."
+# ---------------- ضد بات / Anti-Bot & Join Guard ----------------
+join-guard:
+  enabled: true
 
-# Don't trigger a fallback transfer if the player was already ON one
-# of the lobby servers listed above (avoids reconnect loops if a
-# lobby itself is the one that died).
-ignore-if-already-on-lobby: true
+  # اگر true: اکانت‌هایی که وارد Xbox نشده‌اند (اکانت مهمان/کرک) رد می‌شوند.
+  # مهم‌ترین سلاح ضد بات در Bedrock؛ اگر سرور آفلاین/کرک دارید false کنید.
+  require-xbox-auth: true
 
-# Small delay (in ticks, 20 = 1 second) before attempting the transfer,
-# giving the proxy a moment to fully register the disconnect.
-transfer-delay-ticks: 10
+  # الگوی نام مجاز. نام‌هایی که این الگو را رد کنند کیک می‌شوند.
+  name-regex: "^[A-Za-z0-9_ ]{3,16}$"
+  name-message: "§cYour name is not allowed on this server."
+
+  # نام‌های ممنوع (کامل یا بخشی از نام)
+  blocked-names:
+    - "server"
+    - "admin"
+    - "owner"
+
+  # وایت‌لیست: اگر فعال باشد فقط نام‌های زیر اجازه ورود دارند
+  whitelist-enabled: false
+  whitelist: []
+
+  # محافظ نسخه بازی: بازه پروتکل مجاز
+  # 589 = 1.20.0 | 630 = 1.20.50 | 800 = 1.21.80 | 1001 = 1.26.30 | 0 = بدون محدودیت
+  protocol-guard-enabled: false
+  min-protocol: 589
+  max-protocol: 0
+  protocol-message: "§cYour game version is not supported. Please update Minecraft."
+
+  # محدودیت تعداد ورود از یک IP در بازه مشخص (ضد بات)
+  max-joins-per-ip: 4
+  join-window-seconds: 60
+  # مدت بلاک شدن IP در صورت تخلف (ثانیه)
+  block-duration-seconds: 300
+  block-ip-on-exceed: true
+
+  # حمله موجی (Join Flood Wave): اگر در بازه زیر بیش از حد مجاز ورود رخ داد
+  wave-window-seconds: 60
+  wave-threshold: 40
+  # در حالت موج، IP هایی که بیش از یک بار تلاش کنند بلاک می‌شوند
+  wave-block-ips: true
+
+  # اگر true: نام هر XUID قفل می‌شود؛ تغییر نام = هشدار (و در حالت سخت، کیک)
+  strict-name-binding: false
+  # جلوگیری از ورود دو بازیکن با یک نام (bypass کردن اسپوف)
+  block-duplicate-name: true
+
+# ---------------- محافظت چت / Chat Guard ----------------
+chat-guard:
+  enabled: true
+  window-seconds: 10
+  max-messages: 6
+  # حداقل فاصله بین دو پیام (میلی‌ثانیه)
+  min-interval-ms: 250
+  max-length: 120
+  # جلوگیری از ارسال پیام تکراری پشت سر هم
+  block-repeated: true
+  blocked-words: []
+  # جلوگیری از فرستادن لینک/آی‌پی در چت (تبلیغ سرور دیگر)
+  block-urls: false
+  block-ip-addresses: false
+  # تعداد دستور مجاز در همان پنجره زمانی
+  commands-per-window: 12
+  # متن پیام‌های جریمه
+  too-fast-message: "§cYou are sending messages too fast! Please slow down."
+  blocked-message: "§cThat message is not allowed."
+  # بعد از چند تخلف در همان پنجره، بازیکن تا اتمام پنجره سایلنت می‌شود
+  auto-mute-violations: 4
+
+# ---------------- محافظت پکت / Packet Guard ----------------
+packet-guard:
+  enabled: true
+  window-seconds: 1
+  # حد پیش‌فرض برای هر پکت ناشناخته (تعداد در پنجره)
+  default-limit: 250
+  # اگر تعداد از (حد * این عدد) بیشتر شود پکت ارسال نمی‌شود (drop)
+  cancel-above-factor: 2.0
+  # امتیاز تخلف لازم برای اقدام
+  violations-before-action: 10
+  # alert = فقط هشدار | kick = اخراج | block = بلاک IP + اخراج
+  action: alert
+  kick-message: "§cKicked: packet flood detected."
+  block-duration-seconds: 600
+  # محدودیت پکت‌های پرخطر (نام کلاس پکت Bedrock)
+  limits:
+    SubChunkRequestPacket: 40
+    PlayerAuthInputPacket: 120
+    InventoryTransactionPacket: 40
+    InteractPacket: 25
+    AnimatePacket: 40
+    TextPacket: 12
+    CommandRequestPacket: 10
+    MobEquipmentPacket: 20
+    PlayerActionPacket: 40
+    MovePlayerPacket: 60
+    LevelSoundEventPacket: 120
+    EntityEventPacket: 40
+    BlockPickRequestPacket: 15
+    PlayerSkinPacket: 5
+    ModalFormResponsePacket: 10
+    SetLocalPlayerAsInitializedPacket: 4
+
+# ---------------- بازگشت به لابی / Lobby Fallback ----------------
+# وقتی سروری کرش می‌کند بازیکن به اولین لابی آزاد منتقل می‌شود
+# به جای اینکه از کل پروکسی کیک شود.
+lobby-fallback:
+  enabled: true
+  # اگر خالی باشد این ماژول غیرفعال می‌شود و ReconnectHandler پیش‌فرض پروکسی دست‌نخورده می‌ماند
+  lobby-servers:
+    - "lobby1"
+    - "lobby2"
+  # first = اولین لابی سالم | least-players = لابی با کمترین بازیکن (توزیع بار)
+  strategy: least-players
+  # دلایل فعال بودن fallback
+  # (unknown, timeout, exception, server_kick, transfer_failed, incompatible)
+  fallback-on:
+    - "unknown"
+    - "timeout"
+    - "exception"
+    - "server_kick"
+  # اگر پیام کیک سرور شامل این عبارت‌ها باشد، بازیکن به لابی منتقل نمی‌شود
+  # (مثلاً بن کردن بازیکن باید واقعی بماند)
+  ignore-kick-messages:
+    - "banned"
+    - "ban"
+  transfer-message: "§eServer is restarting - sending you to the lobby..."
+  no-lobby-message: "§cNo lobby available right now. Please rejoin in a few seconds."
+
+# ---------------- بانک اطلاعات بازیکن‌ها / Player store ----------------
+player-store:
+  enabled: true
+  # هشدار دادن وقتی یک XUID با نام دیگری وارد شود (نشانه اسپوف/اکانت اشتراکی)
+  alerts-on-name-change: true
