@@ -1,8 +1,8 @@
-name: Build Plugin JAR
+name: Build PocketMine-MP Plugin PHAR
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, "arena/**" ]
   workflow_dispatch:
 
 jobs:
@@ -11,18 +11,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up PHP 8.2
+        uses: shivammathur/setup-php@v2
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          php-version: '8.2'
+          extensions: mbstring, phar
+          ini-values: phar.readonly=0
 
-      - name: Build with Maven
-        run: mvn -B clean package
+      - name: Lint PHP files
+        run: |
+          find src scripts -name "*.php" -print0 | xargs -0 -n1 php -l
 
-      - name: Upload JAR artifact
+      - name: Build AntiAdvertising.phar
+        run: |
+          php -d phar.readonly=0 scripts/build_phar.php
+
+      - name: Upload PHAR Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: waterdog-lobbyfallback-jar
-          path: target/*.jar
-          
+          name: AntiAdvertising-PM5-phar
+          path: AntiAdvertising.phar

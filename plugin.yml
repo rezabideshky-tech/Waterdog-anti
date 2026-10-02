@@ -1,0 +1,28 @@
+name: AntiAdvertising
+main: AntiAdvertising\Main
+version: 1.0.0
+api: 5.0.0
+load: POSTWORLD
+author: RezaBideshky
+description: Advanced Anti-Advertising plugin for Minecraft Bedrock PocketMine-MP API 5
+website: https://github.com/rezabideshky-tech/Waterdog-anti
+
+permissions:
+  antiadvertising.admin:
+    description: Allows full access to /antiad management commands
+    default: op
+  antiadvertising.bypass:
+    description: Allows players to bypass all anti-advertising checks
+    default: op
+  antiadvertising.notify:
+    description: Allows staff members to receive real-time advertising alerts
+    default: op
+
+commands:
+  antiad:
+    description: مدیریت پلاگین ضد تبلیغات (AntiAdvertising)
+    usage: "/antiad <reload|status|warns|clearwarns|unmute|whitelist|test>"
+    aliases:
+      - aa
+      - antiadvertise
+    permission: antiadvertising.admin
