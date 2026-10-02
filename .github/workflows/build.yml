@@ -1,28 +1,41 @@
-name: Build Plugin JAR
+name: Build Waterdog Lobby Fallback JAR
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - main
+      - master
+      - arena/01a0fbb8-waterdog-anti
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: '21'
+          distribution: temurin
+          cache: maven
 
       - name: Build with Maven
-        run: mvn -B clean package
+        run: mvn -B -U clean package
 
-      - name: Upload JAR artifact
+      - name: Upload WaterdogPE plugin JAR
         uses: actions/upload-artifact@v4
         with:
-          name: waterdog-lobbyfallback-jar
-          path: target/*.jar
-          
+          name: WaterdogLobbyFallback-JAR
+          path: target/waterdog-lobby-fallback-1.0.0.jar
+          if-no-files-found: error
+          retention-days: 30

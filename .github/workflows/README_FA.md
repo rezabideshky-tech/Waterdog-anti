@@ -1,3 +1,3 @@
-فایل `build-android-apk.yml` اپ مکعب‌آموز را با GitHub Actions کامپایل می‌کند. پس از Push سورس به شاخهٔ کاری Arena، APK آزمایشی از بخش **Actions → اجرای workflow → Artifacts** قابل دریافت است.
+`build.yml` افزونهٔ WaterdogLobbyFallback را با Java 21 و Maven می‌سازد و JAR را با نام `WaterdogLobbyFallback-JAR` به‌صورت Artifact ذخیره می‌کند.
 
-فایل `build.yml` موجود مربوط به ساخت JAR افزونهٔ اصلی Waterdog است و جداگانه کار می‌کند.
+`build-android-apk.yml` پروژهٔ آموزشی اندروید را جداگانه می‌سازد. هر خروجی را از بخش **Actions → اجرای workflow → Artifacts** در GitHub می‌توان دریافت کرد.

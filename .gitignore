@@ -1,0 +1,9 @@
+# Maven
+/target/
+
+# Local IDE files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
