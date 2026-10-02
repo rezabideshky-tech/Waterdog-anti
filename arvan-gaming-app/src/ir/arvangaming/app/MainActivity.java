@@ -15,7 +15,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.CalendarContract;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +38,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -83,6 +87,23 @@ public final class MainActivity extends Activity {
     private TextView[] navItems;
     private TextView[] navIcons;
     private LinearLayout[] navContainers;
+    private int homeSlideIndex;
+    private FrameLayout homeCarousel;
+    private FrameLayout phoneMockup;
+    private LinearLayout phonePreviewScreen;
+    private TextView carouselTitle;
+    private TextView carouselSubtitle;
+    private View[] carouselDots;
+    private LinearLayout searchResults;
+    private String activeSearchQuery = "";
+
+    private final Runnable homeCarouselTicker = new Runnable() {
+        @Override
+        public void run() {
+            if (homeCarousel == null || !"home".equals(currentPage) || isFinishing()) return;
+            showHomeSlide(homeSlideIndex + 1, true);
+        }
+    };
 
     private final Runnable countdownRunnable = new Runnable() {
         @Override
@@ -103,9 +124,9 @@ public final class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setStatusBarColor(BG);
-        getWindow().setNavigationBarColor(BG);
-        int systemUi = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        getWindow().setStatusBarColor(PURPLE_DARK);
+        getWindow().setNavigationBarColor(android.os.Build.VERSION.SDK_INT >= 26 ? Color.WHITE : PURPLE_DARK);
+        int systemUi = 0;
         if (android.os.Build.VERSION.SDK_INT >= 26) {
             systemUi |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         }
@@ -124,17 +145,20 @@ public final class MainActivity extends Activity {
         super.onResume();
         if ("home".equals(currentPage)) refreshServerStatus(false);
         startCountdownTicker();
+        startHomeCarouselTicker();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mainHandler.removeCallbacks(countdownRunnable);
+        mainHandler.removeCallbacks(homeCarouselTicker);
     }
 
     @Override
     protected void onDestroy() {
         mainHandler.removeCallbacks(countdownRunnable);
+        mainHandler.removeCallbacks(homeCarouselTicker);
         mainHandler.removeCallbacks(linkPollRunnable);
         ioExecutor.shutdownNow();
         super.onDestroy();
@@ -215,12 +239,18 @@ public final class MainActivity extends Activity {
 
     private void renderPage() {
         mainHandler.removeCallbacks(countdownRunnable);
+        mainHandler.removeCallbacks(homeCarouselTicker);
         homeCountdown = null;
         homeCountdownAt = 0L;
+        homeCarousel = null;
+        phoneMockup = null;
+        phonePreviewScreen = null;
+        searchResults = null;
         pageHost.removeAllViews();
 
         LinearLayout page;
         if ("guide".equals(currentPage)) page = buildGuidePage();
+        else if ("search".equals(currentPage)) page = buildSearchPage();
         else if ("events".equals(currentPage)) page = buildEventsPage();
         else if ("profile".equals(currentPage)) page = buildProfilePage();
         else if ("news".equals(currentPage)) page = buildNewsPage();
@@ -245,6 +275,7 @@ public final class MainActivity extends Activity {
         animatePageChildren(page);
         updateNavigationColors();
         startCountdownTicker();
+        startHomeCarouselTicker();
     }
 
     private void animatePageChildren(LinearLayout page) {
@@ -272,51 +303,72 @@ public final class MainActivity extends Activity {
     private void addHeader(LinearLayout column) {
         LinearLayout row = horizontal();
         row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(18), dp(9), dp(18), dp(9));
+        row.setBackgroundColor(PURPLE_DARK);
+
         TextView mark = centered("آ", 23, Color.WHITE, true);
-        mark.setBackground(gradient(new int[]{0xff7549d2, 0xffb15fe3}, 16, 0));
-        mark.setElevation(dp(4));
-        LinearLayout.LayoutParams markParams = new LinearLayout.LayoutParams(dp(47), dp(47));
+        mark.setBackground(rounded(0x28ffffff, 15, 0));
+        LinearLayout.LayoutParams markParams = new LinearLayout.LayoutParams(dp(43), dp(43));
         row.addView(mark, markParams);
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.setPadding(0, 0, dp(11), 0);
-        titles.addView(label("آروان گیمینگ", 17, TEXT, true));
-        titles.addView(label("همراه سرور Bedrock", 10, MUTED, false));
+        titles.setPadding(0, 0, dp(10), 0);
+        titles.addView(label("آروان گیمینگ", 16, Color.WHITE, true));
+        titles.addView(label("سرور Minecraft Bedrock", 9, 0xffe7def6, false));
         row.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        TextView refresh = centered("↻", 22, PURPLE, true);
-        refresh.setBackground(rounded(PANEL, 15, BORDER));
-        refresh.setElevation(dp(2));
-        row.addView(refresh, new LinearLayout.LayoutParams(dp(44), dp(44)));
+
+        TextView search = centered("⌕", 25, Color.WHITE, true);
+        search.setContentDescription("جستجو در برنامه");
+        search.setBackground(rounded(0x24ffffff, 14, 0x44ffffff));
+        LinearLayout.LayoutParams searchParams = new LinearLayout.LayoutParams(dp(40), dp(40));
+        searchParams.leftMargin = dp(7);
+        row.addView(search, searchParams);
+        setAnimatedClick(search, new Runnable() {
+            @Override public void run() {
+                if (!"search".equals(currentPage)) navigate("search");
+            }
+        });
+
+        TextView refresh = centered("↻", 21, Color.WHITE, true);
+        refresh.setContentDescription("به‌روزرسانی اطلاعات");
+        refresh.setBackground(rounded(0x24ffffff, 14, 0x44ffffff));
+        row.addView(refresh, new LinearLayout.LayoutParams(dp(40), dp(40)));
         setAnimatedClick(refresh, new Runnable() {
             @Override public void run() {
+                refresh.animate().rotationBy(360f).setDuration(450).start();
                 refreshPublicFeed(true);
                 refreshServerStatus(true);
             }
         });
-        addColumn(column, row, 0);
-        space(column, 16);
+
+        LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(62));
+        headerParams.setMargins(-dp(18), -dp(13), -dp(18), dp(15));
+        column.addView(row, headerParams);
     }
 
     private LinearLayout buildHomePage() {
         LinearLayout column = newPage();
         addHeader(column);
-        column.addView(buildHero(), matchWrap());
-        space(column, 14);
+        column.addView(buildHomeCarousel(), matchWrap());
+        space(column, 16);
         column.addView(buildServerCard(), matchWrap());
         space(column, 14);
         column.addView(buildNextEventCard(), matchWrap());
         space(column, 14);
         column.addView(buildNewsPreview(), matchWrap());
         space(column, 14);
+        column.addView(label("دسترسی سریع", 16, TEXT, true), matchWrap());
+        space(column, 9);
         LinearLayout quick = horizontal();
         quick.addView(actionCard("راهنمای اتصال", "قدم‌به‌قدم وارد سرور شو", "➜", PURPLE,
                 new Runnable() { @Override public void run() { navigate("guide"); } }),
-                new LinearLayout.LayoutParams(0, dp(102), 1f));
+                new LinearLayout.LayoutParams(0, dp(104), 1f));
         View gap = new View(this);
         quick.addView(gap, new LinearLayout.LayoutParams(dp(10), 1));
-        quick.addView(actionCard("اخبار و نظرسنجی", "تازه‌های جامعه", "✦", ORANGE,
+        quick.addView(actionCard("اخبار و نظرسنجی", "تازه‌های جامعه", "✦", BLUE,
                 new Runnable() { @Override public void run() { navigate("news"); } }),
-                new LinearLayout.LayoutParams(0, dp(102), 1f));
+                new LinearLayout.LayoutParams(0, dp(104), 1f));
         column.addView(quick, matchWrap());
         space(column, 10);
         TextView privacy = centered("وضعیت و آمار فقط با پاسخ واقعی سرور نمایش داده می‌شود.", 10, MUTED, false);
@@ -324,53 +376,324 @@ public final class MainActivity extends Activity {
         return column;
     }
 
-    private View buildHero() {
-        FrameLayout hero = new FrameLayout(this);
-        hero.setMinimumHeight(dp(225));
-        hero.setBackground(gradient(new int[]{0xff7549d2, 0xff9659df, 0xffb55fe2}, 27, 0));
-        hero.setClipToOutline(true);
+    private View buildHomeCarousel() {
+        FrameLayout stage = new FrameLayout(this);
+        homeCarousel = stage;
+        stage.setMinimumHeight(dp(510));
+        stage.setBackground(gradient(new int[]{0xfff8f5ff, 0xffeee6fb, 0xffe9def8}, 29, 0xffe9e0f4));
+        stage.setClipToOutline(true);
 
-        TextView sparkle = centered("✦", 86, 0x38ffffff, true);
-        FrameLayout.LayoutParams sparkleParams = new FrameLayout.LayoutParams(dp(118), dp(118),
-                Gravity.BOTTOM | Gravity.LEFT);
-        sparkleParams.leftMargin = dp(3);
-        sparkleParams.bottomMargin = dp(-8);
-        hero.addView(sparkle, sparkleParams);
-        TextView orb = centered("✧", 31, 0x66ffffff, true);
-        FrameLayout.LayoutParams orbParams = new FrameLayout.LayoutParams(dp(54), dp(54), Gravity.TOP | Gravity.LEFT);
-        orbParams.leftMargin = dp(20);
-        orbParams.topMargin = dp(18);
-        orb.setBackground(rounded(0x22ffffff, 30, 0));
-        hero.addView(orb, orbParams);
+        TextView ornament = centered("✧", 105, 0x247c51d2, true);
+        FrameLayout.LayoutParams ornamentParams = new FrameLayout.LayoutParams(dp(130), dp(130),
+                Gravity.TOP | Gravity.LEFT);
+        ornamentParams.leftMargin = dp(-18);
+        ornamentParams.topMargin = dp(58);
+        stage.addView(ornament, ornamentParams);
+        TextView ornament2 = centered("✦", 58, 0x307c51d2, true);
+        FrameLayout.LayoutParams ornament2Params = new FrameLayout.LayoutParams(dp(80), dp(80),
+                Gravity.BOTTOM | Gravity.RIGHT);
+        ornament2Params.rightMargin = dp(4);
+        ornament2Params.bottomMargin = dp(55);
+        stage.addView(ornament2, ornament2Params);
 
-        LinearLayout content = new LinearLayout(this);
-        content.setOrientation(LinearLayout.VERTICAL);
-        content.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        content.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        content.setPadding(dp(21), dp(21), dp(21), dp(20));
-        TextView tag = pill("BEDROCK  •  POCKETMINE", Color.WHITE, 0x2cffffff);
-        content.addView(tag, wrap());
-        space(content, 14);
-        TextView title = label("ماجراجویی از\nآروان شروع می‌شه!", 25, Color.WHITE, true);
-        title.setLineSpacing(dp(2), 1f);
-        content.addView(title, matchWrap());
-        space(content, 7);
-        TextView sub = label("سرور، رویدادها و خبرهای واقعی؛ همه یک‌جا.", 11, 0xfff5efff, false);
-        content.addView(sub, matchWrap());
-        space(content, 15);
-        TextView guide = button("راهنمای ورود  ←", Color.WHITE, PURPLE_DARK, true);
-        guide.setElevation(dp(3));
-        content.addView(guide, wrap());
-        setAnimatedClick(guide, new Runnable() {
-            @Override public void run() { navigate("guide"); }
+        LinearLayout heading = new LinearLayout(this);
+        heading.setOrientation(LinearLayout.VERTICAL);
+        heading.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        heading.setGravity(Gravity.CENTER);
+        carouselTitle = centered("", 25, PURPLE_DARK, true);
+        carouselSubtitle = centered("", 12, MUTED, false);
+        heading.addView(carouselTitle, matchWrap());
+        space(heading, 4);
+        heading.addView(carouselSubtitle, matchWrap());
+        FrameLayout.LayoutParams headingParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+        headingParams.setMargins(dp(14), dp(23), dp(14), 0);
+        stage.addView(heading, headingParams);
+
+        phoneMockup = buildPhonePreview();
+        FrameLayout.LayoutParams phoneParams = new FrameLayout.LayoutParams(dp(218), dp(332),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        phoneParams.bottomMargin = dp(43);
+        stage.addView(phoneMockup, phoneParams);
+        setAnimatedClick(phoneMockup, new Runnable() {
+            @Override public void run() { openCurrentHomeSlide(); }
         });
-        hero.addView(content, new FrameLayout.LayoutParams(
+
+        TextView previous = centered("‹", 31, Color.WHITE, true);
+        previous.setBackground(rounded(withAlpha(PURPLE_DARK, 0.80f), 30, 0));
+        previous.setElevation(dp(4));
+        previous.setContentDescription("صفحهٔ قبلی");
+        FrameLayout.LayoutParams previousParams = new FrameLayout.LayoutParams(dp(40), dp(40),
+                Gravity.CENTER_VERTICAL | Gravity.LEFT);
+        previousParams.leftMargin = dp(9);
+        stage.addView(previous, previousParams);
+        setAnimatedClick(previous, new Runnable() {
+            @Override public void run() { showHomeSlide(homeSlideIndex - 1, true); }
+        });
+
+        TextView next = centered("›", 31, Color.WHITE, true);
+        next.setBackground(rounded(withAlpha(PURPLE_DARK, 0.80f), 30, 0));
+        next.setElevation(dp(4));
+        next.setContentDescription("صفحهٔ بعدی");
+        FrameLayout.LayoutParams nextParams = new FrameLayout.LayoutParams(dp(40), dp(40),
+                Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+        nextParams.rightMargin = dp(9);
+        stage.addView(next, nextParams);
+        setAnimatedClick(next, new Runnable() {
+            @Override public void run() { showHomeSlide(homeSlideIndex + 1, true); }
+        });
+
+        LinearLayout dots = new LinearLayout(this);
+        dots.setOrientation(LinearLayout.HORIZONTAL);
+        dots.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        dots.setGravity(Gravity.CENTER);
+        dots.setPadding(dp(8), dp(5), dp(8), dp(5));
+        carouselDots = new View[4];
+        for (int i = 0; i < carouselDots.length; i++) {
+            final int slide = i;
+            View dot = new View(this);
+            LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(dp(7), dp(7));
+            dotParams.setMargins(dp(5), 0, dp(5), 0);
+            dots.addView(dot, dotParams);
+            carouselDots[i] = dot;
+            setAnimatedClick(dot, new Runnable() {
+                @Override public void run() { showHomeSlide(slide, true); }
+            });
+        }
+        FrameLayout.LayoutParams dotsParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, dp(28), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        dotsParams.bottomMargin = dp(8);
+        stage.addView(dots, dotsParams);
+        showHomeSlide(homeSlideIndex, false);
+        return stage;
+    }
+
+    private FrameLayout buildPhonePreview() {
+        FrameLayout device = new FrameLayout(this);
+        device.setPadding(dp(7), dp(8), dp(7), dp(8));
+        device.setBackground(rounded(PURPLE_DARK, 34, 0));
+        device.setElevation(dp(13));
+        device.setRotation(-5f);
+        device.setContentDescription("پیش‌نمایش تعاملی بخش‌های آروان گیمینگ");
+
+        phonePreviewScreen = new LinearLayout(this);
+        phonePreviewScreen.setOrientation(LinearLayout.VERTICAL);
+        phonePreviewScreen.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        phonePreviewScreen.setPadding(dp(9), dp(16), dp(9), dp(8));
+        phonePreviewScreen.setBackground(rounded(Color.WHITE, 27, 0));
+        device.addView(phonePreviewScreen, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        hero.setAlpha(0f);
-        hero.setTranslationY(dp(10));
-        hero.animate().alpha(1f).translationY(0f).setDuration(470)
-                .setInterpolator(new DecelerateInterpolator()).start();
-        return hero;
+
+        TextView notch = new TextView(this);
+        notch.setBackground(rounded(PURPLE_DARK, 10, 0));
+        FrameLayout.LayoutParams notchParams = new FrameLayout.LayoutParams(dp(58), dp(9),
+                Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+        notchParams.topMargin = dp(5);
+        device.addView(notch, notchParams);
+        renderPhonePreview();
+        return device;
+    }
+
+    private void renderPhonePreview() {
+        if (phonePreviewScreen == null) return;
+        phonePreviewScreen.removeAllViews();
+        LinearLayout appBar = horizontal();
+        appBar.setGravity(Gravity.CENTER_VERTICAL);
+        TextView appMark = centered("آ", 12, Color.WHITE, true);
+        appMark.setBackground(rounded(PURPLE, 10, 0));
+        appBar.addView(appMark, new LinearLayout.LayoutParams(dp(24), dp(24)));
+        TextView appName = label("آروان گیمینگ", 10, TEXT, true);
+        LinearLayout.LayoutParams appNameParams = new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        appNameParams.rightMargin = dp(6);
+        appBar.addView(appName, appNameParams);
+        appBar.addView(centered("⋯", 17, MUTED, true), new LinearLayout.LayoutParams(dp(22), dp(24)));
+        phonePreviewScreen.addView(appBar, matchWrap());
+        space(phonePreviewScreen, 6);
+        View divider = new View(this);
+        divider.setBackgroundColor(BORDER);
+        phonePreviewScreen.addView(divider, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(1)));
+        space(phonePreviewScreen, 7);
+
+        if (homeSlideIndex == 0) renderStationPreview();
+        else if (homeSlideIndex == 1) renderSearchPreview();
+        else if (homeSlideIndex == 2) renderNewsPreview();
+        else renderPagesPreview();
+    }
+
+    private void renderStationPreview() {
+        phonePreviewScreen.addView(label("ایستگاه خدمات", 11, TEXT, true), matchWrap());
+        space(phonePreviewScreen, 7);
+        LinearLayout tiles = horizontal();
+        tiles.addView(miniTile("➜", "راهنمای ورود", PURPLE), new LinearLayout.LayoutParams(0, dp(76), 1f));
+        View gap = new View(this);
+        tiles.addView(gap, new LinearLayout.LayoutParams(dp(7), 1));
+        tiles.addView(miniTile("✎", "ثبت گزارش", BLUE), new LinearLayout.LayoutParams(0, dp(76), 1f));
+        phonePreviewScreen.addView(tiles, matchWrap());
+        space(phonePreviewScreen, 7);
+        phonePreviewScreen.addView(miniCard("✦", "پشتیبانی جامعه", "گزارش و پیشنهاد از بخش انجمن", PURPLE), matchWrap());
+        space(phonePreviewScreen, 7);
+        phonePreviewScreen.addView(miniCard("🎁", "کد هدیه", "پس از فعال‌شدن سرویس رسمی", ORANGE), matchWrap());
+    }
+
+    private void renderSearchPreview() {
+        phonePreviewScreen.addView(label("جستجو", 12, TEXT, true), matchWrap());
+        space(phonePreviewScreen, 6);
+        TextView searchField = label("⌕   جستجو کن...", 9, MUTED, false);
+        searchField.setPadding(dp(9), dp(8), dp(9), dp(8));
+        searchField.setBackground(rounded(PANEL_HI, 13, BORDER));
+        phonePreviewScreen.addView(searchField, matchWrap());
+        space(phonePreviewScreen, 8);
+        phonePreviewScreen.addView(label("پیشنهادهای دسترسی سریع", 9, MUTED, true), matchWrap());
+        space(phonePreviewScreen, 5);
+        phonePreviewScreen.addView(miniCard("➜", "راهنمای اتصال", "آدرس، پورت و مراحل ورود", PURPLE), matchWrap());
+        space(phonePreviewScreen, 5);
+        phonePreviewScreen.addView(miniCard("✦", "رویدادها", "برنامه‌های اعلام‌شده", BLUE), matchWrap());
+        space(phonePreviewScreen, 5);
+        phonePreviewScreen.addView(miniCard("◉", "اخبار رسمی", "اطلاعیه‌های مدیریت", PINK), matchWrap());
+    }
+
+    private void renderNewsPreview() {
+        JSONArray news = array(publicFeed, "news");
+        JSONObject latest = news.optJSONObject(0);
+        String title = latest == null ? "هنوز اطلاعیهٔ رسمی ثبت نشده"
+                : compactText(safeText(latest.optString("title"), "اطلاعیهٔ آروان"), 42);
+        String summary = latest == null ? "خبرهای مدیریت پس از انتشار اینجا نمایش داده می‌شوند."
+                : compactText(safeText(latest.optString("summary"), latest.optString("body")), 86);
+        phonePreviewScreen.addView(pill("اخبار سرور", PURPLE, PURPLE_LIGHT), wrap());
+        space(phonePreviewScreen, 7);
+        FrameLayout newsArtwork = new FrameLayout(this);
+        newsArtwork.setBackground(gradient(new int[]{0xff7950d2, 0xffaa64df}, 15, 0));
+        TextView artwork = centered("✦", 36, 0x66ffffff, true);
+        newsArtwork.addView(artwork, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        phonePreviewScreen.addView(newsArtwork, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(75)));
+        space(phonePreviewScreen, 7);
+        phonePreviewScreen.addView(label(title, 10, TEXT, true), matchWrap());
+        space(phonePreviewScreen, 4);
+        phonePreviewScreen.addView(label(summary, 8, MUTED, false), matchWrap());
+        space(phonePreviewScreen, 8);
+        phonePreviewScreen.addView(miniCard("◉", "نظرسنجی جامعه", "رأی واقعی پس از اتصال API", BLUE), matchWrap());
+    }
+
+    private void renderPagesPreview() {
+        TextView banner = centered("همه‌چیز برای جامعهٔ آروان", 10, Color.WHITE, true);
+        banner.setPadding(dp(7), dp(12), dp(7), dp(12));
+        banner.setBackground(gradient(new int[]{0xff7549d2, 0xffa85bdf}, 14, 0));
+        phonePreviewScreen.addView(banner, matchWrap());
+        space(phonePreviewScreen, 8);
+        LinearLayout firstRow = horizontal();
+        firstRow.addView(miniTile("✦", "رویدادها", BLUE), new LinearLayout.LayoutParams(0, dp(70), 1f));
+        View gap1 = new View(this);
+        firstRow.addView(gap1, new LinearLayout.LayoutParams(dp(6), 1));
+        firstRow.addView(miniTile("◉", "پروفایل", PURPLE), new LinearLayout.LayoutParams(0, dp(70), 1f));
+        phonePreviewScreen.addView(firstRow, matchWrap());
+        space(phonePreviewScreen, 6);
+        LinearLayout secondRow = horizontal();
+        secondRow.addView(miniTile("➜", "راهنما", ORANGE), new LinearLayout.LayoutParams(0, dp(70), 1f));
+        View gap2 = new View(this);
+        secondRow.addView(gap2, new LinearLayout.LayoutParams(dp(6), 1));
+        secondRow.addView(miniTile("♧", "انجمن", PINK), new LinearLayout.LayoutParams(0, dp(70), 1f));
+        phonePreviewScreen.addView(secondRow, matchWrap());
+    }
+
+    private LinearLayout miniCard(String icon, String title, String subtitle, int accent) {
+        LinearLayout row = horizontal();
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(7), dp(7), dp(7), dp(7));
+        row.setBackground(rounded(Color.WHITE, 13, BORDER));
+        TextView mark = centered(icon, 14, accent, true);
+        mark.setBackground(rounded(withAlpha(accent, 0.13f), 11, 0));
+        row.addView(mark, new LinearLayout.LayoutParams(dp(31), dp(31)));
+        LinearLayout copy = new LinearLayout(this);
+        copy.setOrientation(LinearLayout.VERTICAL);
+        copy.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        copy.addView(label(title, 9, TEXT, true));
+        copy.addView(label(subtitle, 7, MUTED, false));
+        LinearLayout.LayoutParams copyParams = new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        copyParams.rightMargin = dp(6);
+        row.addView(copy, copyParams);
+        return row;
+    }
+
+    private LinearLayout miniTile(String icon, String title, int accent) {
+        LinearLayout tile = new LinearLayout(this);
+        tile.setOrientation(LinearLayout.VERTICAL);
+        tile.setGravity(Gravity.CENTER);
+        tile.setPadding(dp(4), dp(5), dp(4), dp(5));
+        tile.setBackground(rounded(Color.WHITE, 13, BORDER));
+        TextView mark = centered(icon, 19, accent, true);
+        mark.setBackground(rounded(withAlpha(accent, 0.12f), 11, 0));
+        tile.addView(mark, new LinearLayout.LayoutParams(dp(34), dp(34)));
+        TextView caption = centered(title, 8, TEXT, true);
+        LinearLayout.LayoutParams captionParams = wrap();
+        captionParams.topMargin = dp(4);
+        tile.addView(caption, captionParams);
+        return tile;
+    }
+
+    private void showHomeSlide(int requestedIndex, boolean animate) {
+        homeSlideIndex = (requestedIndex % 4 + 4) % 4;
+        String[] titles = new String[]{"ایستگاه", "جستجو", "اخبار", "صفحه‌ها"};
+        String[] subtitles = new String[]{
+                "ثبت گزارش، کد هدیه و خدمات سرور",
+                "مطالب و راهنماهای تازه را پیدا کن!",
+                "از خبرهای رسمی سرور مطلع باش!",
+                "راهنما، رویداد و پروفایل؛ همه یک‌جا"
+        };
+        if (carouselTitle != null) carouselTitle.setText(titles[homeSlideIndex]);
+        if (carouselSubtitle != null) carouselSubtitle.setText(subtitles[homeSlideIndex]);
+        renderPhonePreview();
+        if (carouselDots != null) {
+            for (int i = 0; i < carouselDots.length; i++) {
+                boolean active = i == homeSlideIndex;
+                View dot = carouselDots[i];
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) dot.getLayoutParams();
+                params.width = dp(active ? 22 : 7);
+                params.height = dp(7);
+                dot.setLayoutParams(params);
+                dot.setBackground(rounded(active ? PURPLE : withAlpha(PURPLE, 0.28f), 12, 0));
+            }
+        }
+        if (animate) {
+            if (carouselTitle != null) {
+                carouselTitle.setAlpha(0f);
+                carouselTitle.setTranslationY(dp(8));
+                carouselTitle.animate().alpha(1f).translationY(0f).setDuration(260)
+                        .setInterpolator(new DecelerateInterpolator()).start();
+            }
+            if (carouselSubtitle != null) {
+                carouselSubtitle.setAlpha(0f);
+                carouselSubtitle.animate().alpha(1f).setStartDelay(55).setDuration(250).start();
+            }
+            if (phoneMockup != null) {
+                phoneMockup.animate().cancel();
+                phoneMockup.setAlpha(0.55f);
+                phoneMockup.setTranslationY(dp(12));
+                phoneMockup.setRotation(homeSlideIndex % 2 == 0 ? -4.5f : -6.5f);
+                phoneMockup.animate().alpha(1f).translationY(0f).rotation(-5f)
+                        .setDuration(350).setInterpolator(new DecelerateInterpolator()).start();
+            }
+        }
+        startHomeCarouselTicker();
+    }
+
+    private void startHomeCarouselTicker() {
+        mainHandler.removeCallbacks(homeCarouselTicker);
+        if (homeCarousel != null && "home".equals(currentPage) && !isFinishing()) {
+            mainHandler.postDelayed(homeCarouselTicker, 6500L);
+        }
+    }
+
+    private void openCurrentHomeSlide() {
+        if (homeSlideIndex == 0) navigate("community");
+        else if (homeSlideIndex == 1) navigate("search");
+        else if (homeSlideIndex == 2) navigate("news");
+        else navigate("more");
     }
 
     private View buildServerCard() {
@@ -538,6 +861,123 @@ public final class MainActivity extends Activity {
             }
         }
         return card;
+    }
+
+    private LinearLayout buildSearchPage() {
+        LinearLayout column = newPage();
+        addHeader(column);
+        pageTitle(column, "جستجو", "راهنما، خبر و برنامه‌های رسمی را پیدا کن.", PURPLE);
+        space(column, 14);
+
+        LinearLayout searchBar = horizontal();
+        searchBar.setGravity(Gravity.CENTER_VERTICAL);
+        EditText input = new EditText(this);
+        input.setSingleLine(true);
+        input.setTextSize(14);
+        input.setTextColor(TEXT);
+        input.setHintTextColor(MUTED);
+        input.setHint("جستجو کن...");
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG_RTL);
+        input.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        input.setPadding(dp(14), dp(8), dp(14), dp(8));
+        input.setBackground(rounded(Color.WHITE, 16, BORDER));
+        searchBar.addView(input, new LinearLayout.LayoutParams(0, dp(52), 1f));
+        View searchGap = new View(this);
+        searchBar.addView(searchGap, new LinearLayout.LayoutParams(dp(8), 1));
+        TextView searchButton = button("⌕", PURPLE, Color.WHITE, true);
+        searchBar.addView(searchButton, new LinearLayout.LayoutParams(dp(52), dp(52)));
+        setAnimatedClick(searchButton, new Runnable() {
+            @Override public void run() {
+                input.requestFocus();
+                android.view.inputmethod.InputMethodManager keyboard =
+                        (android.view.inputmethod.InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (keyboard != null) keyboard.showSoftInput(input,
+                        android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+        column.addView(searchBar, matchWrap());
+        space(column, 17);
+        TextView resultsTitle = label("پیشنهادهای دسترسی سریع", 15, TEXT, true);
+        column.addView(resultsTitle, matchWrap());
+        space(column, 8);
+        searchResults = new LinearLayout(this);
+        searchResults.setOrientation(LinearLayout.VERTICAL);
+        searchResults.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        column.addView(searchResults, matchWrap());
+        input.setText(activeSearchQuery);
+        renderSearchResults(activeSearchQuery);
+
+        input.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                activeSearchQuery = s == null ? "" : s.toString();
+                renderSearchResults(activeSearchQuery);
+            }
+            @Override public void afterTextChanged(Editable s) { }
+        });
+        return column;
+    }
+
+    private void renderSearchResults(String query) {
+        if (searchResults == null) return;
+        searchResults.removeAllViews();
+        String normalizedQuery = normalizeSearch(query);
+        List<SearchItem> items = searchableItems();
+        int shown = 0;
+        for (final SearchItem item : items) {
+            String haystack = normalizeSearch(item.title + " " + item.subtitle);
+            boolean visible = normalizedQuery.isEmpty() ? item.featured : haystack.contains(normalizedQuery);
+            if (!visible) continue;
+            LinearLayout.LayoutParams params = matchWrap();
+            params.bottomMargin = dp(9);
+            searchResults.addView(actionCard(item.title, item.subtitle, item.icon, item.accent,
+                    new Runnable() { @Override public void run() { navigate(item.destination); } }), params);
+            shown++;
+        }
+        if (shown == 0) {
+            searchResults.addView(emptyCard("چیزی پیدا نشد",
+                    "عبارت دیگری را جستجو کن؛ محتوای سرور فقط از فید رسمی می‌آید.", "⌕"), matchWrap());
+        }
+    }
+
+    private List<SearchItem> searchableItems() {
+        ArrayList<SearchItem> items = new ArrayList<>();
+        items.add(new SearchItem("آموزش اتصال", "آدرس، پورت و مراحل ورود Bedrock", "➜", PURPLE, "guide", true));
+        items.add(new SearchItem("رویدادهای آروان", "برنامه‌های رسمی و زمان‌بندی‌شده", "✦", BLUE, "events", true));
+        items.add(new SearchItem("اخبار رسمی", "اطلاعیه‌های سرور و نظرسنجی‌ها", "◉", PINK, "news", true));
+        items.add(new SearchItem("پروفایل پلیر", "نام نمایشی و اتصال امن حساب", "♙", PURPLE, "profile", true));
+        items.add(new SearchItem("انجمن و پشتیبانی", "کانال‌ها و ثبت پیشنهاد", "♧", ORANGE, "community", true));
+
+        JSONArray news = array(publicFeed, "news");
+        for (int i = 0; i < news.length() && i < 20; i++) {
+            JSONObject item = news.optJSONObject(i);
+            if (item == null) continue;
+            String title = safeText(item.optString("title"), "اطلاعیهٔ آروان گیمینگ");
+            String body = safeText(item.optString("summary"), item.optString("body"));
+            items.add(new SearchItem(title, body, "◉", PINK, "news", false));
+        }
+        JSONArray events = array(publicFeed, "events");
+        for (int i = 0; i < events.length() && i < 20; i++) {
+            JSONObject item = events.optJSONObject(i);
+            if (item == null) continue;
+            String title = safeText(item.optString("title"), "رویداد آروان گیمینگ");
+            String body = safeText(item.optString("description"), "رویداد رسمی سرور");
+            items.add(new SearchItem(title, body, "✦", BLUE, "events", false));
+        }
+        JSONArray rules = array(publicFeed, "rules");
+        for (int i = 0; i < rules.length() && i < 20; i++) {
+            String rule = rules.optString(i, "");
+            if (!rule.trim().isEmpty()) {
+                items.add(new SearchItem("قانون سرور", rule, "✓", GREEN, "guide", false));
+            }
+        }
+        return items;
+    }
+
+    private String normalizeSearch(String value) {
+        if (value == null) return "";
+        return value.trim().toLowerCase(Locale.ROOT).replace('ي', 'ی').replace('ك', 'ک');
     }
 
     private LinearLayout buildGuidePage() {
@@ -1590,6 +2030,12 @@ public final class MainActivity extends Activity {
         return value.trim();
     }
 
+    private String compactText(String value, int maxLength) {
+        String text = value == null ? "" : value.trim();
+        if (text.length() <= maxLength) return text;
+        return text.substring(0, Math.max(0, maxLength - 1)).trim() + "…";
+    }
+
     private boolean hasAnyOfficialLink(JSONObject links) {
         return nonEmpty(links.optString("support")) || nonEmpty(links.optString("telegram"))
                 || nonEmpty(links.optString("discord")) || nonEmpty(links.optString("instagram"))
@@ -1719,5 +2165,23 @@ public final class MainActivity extends Activity {
 
     private void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private static final class SearchItem {
+        final String title;
+        final String subtitle;
+        final String icon;
+        final int accent;
+        final String destination;
+        final boolean featured;
+
+        SearchItem(String title, String subtitle, String icon, int accent, String destination, boolean featured) {
+            this.title = title;
+            this.subtitle = subtitle;
+            this.icon = icon;
+            this.accent = accent;
+            this.destination = destination;
+            this.featured = featured;
+        }
     }
 }
