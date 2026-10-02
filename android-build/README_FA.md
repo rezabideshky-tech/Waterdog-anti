@@ -1,19 +1,23 @@
 # ساخت APK با GitHub Actions
 
-این پروژه فقط به‌عنوان لایهٔ ساخت Gradle برای سورس کلاسیک AIDE وجود دارد؛ فایل‌های جاوا، مانیفست و منابع از `../minecraft-academy-aide` خوانده می‌شوند تا یک نسخهٔ جداگانه از اپ نگه‌داری نشود.
+این پوشه لایهٔ ساخت Gradle است؛ سورس AIDE هر اپ فقط یک نسخه دارد و از این مسیرها خوانده می‌شود:
 
-با Push تغییرات اپ به شاخهٔ `arena/01a0fbb8-waterdog-anti`، workflow زیر اجرا می‌شود:
+- `:app` از `../minecraft-academy-aide`
+- `:arvan-gaming` از `../arvan-gaming-app`
+
+با Push تغییرات به شاخهٔ `arena/01a0fbb8-waterdog-anti`، workflow زیر هر دو اپ را می‌سازد:
 
 `.github/workflows/build-android-apk.yml`
 
-پس از موفقیت، از صفحهٔ **Actions** در GitHub وارد اجرای **Build Minecraft Academy APK** شو و artifact با نام `MinecraftAcademy-debug-apk` را دانلود کن. داخل فایل دانلودشده، `app-debug.apk` قرار دارد و برای نصب آزمایشی با کلید debug امضا شده است.
+در **Actions → اجرای workflow → Artifacts**، APK آروان گیمینگ را با نام `ArvanGaming-debug-apk` دریافت کنید؛ فایل APK داخل ZIP، `arvan-gaming-debug.apk` است. Artifact اپ قدیمی نیز جداگانه با نام `MinecraftAcademy-debug-apk` حفظ شده است. هر دو برای نصب آزمایشی با کلید debug امضا می‌شوند.
 
-برای ساخت روی رایانه‌ای که JDK 17 و Android SDK نصب دارد:
+برای ساخت دستی با JDK 17 و Android SDK:
 
 ```bash
+gradle --no-daemon -p android-build :arvan-gaming:assembleDebug
 gradle --no-daemon -p android-build :app:assembleDebug
 ```
 
-خروجی:
+مسیر خروجی آروان گیمینگ:
 
-`android-build/app/build/outputs/apk/debug/app-debug.apk`
+`android-build/arvan-gaming/build/outputs/apk/debug/arvan-gaming-debug.apk`
