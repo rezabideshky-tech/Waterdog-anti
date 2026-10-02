@@ -24,7 +24,10 @@ jobs:
         run: mvn -B -U clean package
 
       - name: Show build result
-        run: ls -lh target/*.jar
+        run: |
+          ls -lh target/*.jar
+          echo "--- jar contents ---"
+          unzip -l target/*.jar
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
