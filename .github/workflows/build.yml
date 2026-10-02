@@ -37,8 +37,8 @@ jobs:
       - name: Build WaterdogLobbyFallback
         run: mvn -B -U -f pom.xml clean package
 
-      - name: Build ArvanShield
-        run: mvn -B -U -f arvanshield/pom.xml clean package
+      - name: Build and test ArvanShield
+        run: mvn -B -U -f arvanshield/pom.xml clean verify
 
       - name: Upload WaterdogLobbyFallback JAR
         uses: actions/upload-artifact@v4

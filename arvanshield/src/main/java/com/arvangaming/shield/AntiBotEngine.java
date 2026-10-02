@@ -240,14 +240,11 @@ final class AntiBotEngine {
     }
 
     private boolean exceedsThreshold(Decision decision, AntiBotConfig currentConfig, AntiBotConfig.Mode targetMode) {
-        if (decision.hardReject) {
-            return true;
-        }
         int threshold = targetMode == AntiBotConfig.Mode.ATTACK
                 ? currentConfig.attackThreshold
                 : currentConfig.balancedThreshold;
-        return decision.score >= threshold
-                && decision.signals.size() >= currentConfig.minimumIndependentSignals;
+        return RiskPolicy.shouldReject(decision.score, decision.signals.size(), threshold,
+                currentConfig.minimumIndependentSignals, decision.hardReject);
     }
 
     private void logRejected(AntiBotConfig.Mode rejectedMode, Decision decision) {
@@ -341,31 +338,4 @@ final class AntiBotEngine {
         }
     }
 
-    private static final class TokenBucket {
-        private double tokens;
-        private long lastRefillNanos;
-        private volatile long lastAccessNanos;
-
-        private TokenBucket(int capacity, long now) {
-            this.tokens = capacity;
-            this.lastRefillNanos = now;
-            this.lastAccessNanos = now;
-        }
-
-        private synchronized boolean tryConsume(int capacity, double refillPerSecond, long now) {
-            double elapsedSeconds = Math.max(0L, now - this.lastRefillNanos) / 1_000_000_000.0;
-            this.tokens = Math.min(capacity, this.tokens + elapsedSeconds * refillPerSecond);
-            this.lastRefillNanos = now;
-            this.lastAccessNanos = now;
-            if (this.tokens < 1.0) {
-                return false;
-            }
-            this.tokens -= 1.0;
-            return true;
-        }
-
-        private long lastAccessNanos() {
-            return this.lastAccessNanos;
-        }
-    }
 }
