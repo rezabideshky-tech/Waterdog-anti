@@ -26,12 +26,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ViolationManager {
 
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final int MAX_PENDING_LOGS = 512;
 
     private final WaterdogAnti plugin;
     private final Path logFile;
     private final Map<UUID, Offense> offenses = new ConcurrentHashMap<>();
     private final Set<UUID> alertsDisabled = ConcurrentHashMap.newKeySet();
     private final Map<String, Long> lastAlert = new ConcurrentHashMap<>();
+    private final java.util.concurrent.ConcurrentLinkedQueue<String> pendingLogs = new java.util.concurrent.ConcurrentLinkedQueue<>();
 
     public ViolationManager(WaterdogAnti plugin) {
         this.plugin = plugin;
@@ -94,10 +96,28 @@ public class ViolationManager {
         }
     }
 
+    /**
+     * Alerts can be raised from netty event loop threads (packet handling), so the actual disk write is
+     * queued and flushed once per second from the scheduler thread.
+     */
     private void appendToFile(String line) {
-        String timestamped = LocalDateTime.now().format(TIME_FORMAT) + " " + line + System.lineSeparator();
+        if (this.pendingLogs.size() > MAX_PENDING_LOGS) {
+            this.pendingLogs.poll(); // drop the oldest line instead of growing without a bound
+        }
+        this.pendingLogs.add(LocalDateTime.now().format(TIME_FORMAT) + " " + line);
+    }
+
+    private void flushLogs() {
+        if (this.pendingLogs.isEmpty()) {
+            return;
+        }
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = this.pendingLogs.poll()) != null) {
+            builder.append(line).append(System.lineSeparator());
+        }
         try {
-            Files.writeString(this.logFile, timestamped, StandardCharsets.UTF_8,
+            Files.writeString(this.logFile, builder.toString(), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             this.plugin.getLogger().error("Could not write to alerts.log", e);
@@ -131,6 +151,7 @@ public class ViolationManager {
      * Decays points and drops records of players that are long gone. Called once per second.
      */
     public void tick(long now) {
+        this.flushLogs();
         this.offenses.entrySet().removeIf(entry -> {
             Offense offense = entry.getValue();
             offense.decay(now);

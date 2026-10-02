@@ -130,11 +130,12 @@ public class PacketGuard {
             this.evaluate(player, points);
         }
 
-        double cancelAbove = limit * this.cancelFactor;
-        if (count > cancelAbove) {
+        // \u00abHANDLED\u00bb would make the proxy re-encode the packet, only \u00abCANCEL\u00bb drops it and
+        // \u00abUNHANDLED\u00bb forwards the original buffer - which is what we want for everything we keep.
+        if (count > limit * this.cancelFactor) {
             return Signals.CANCEL;
         }
-        return PacketSignal.HANDLED;
+        return PacketSignal.UNHANDLED;
     }
 
     private void evaluate(ProxiedPlayer player, int points) {

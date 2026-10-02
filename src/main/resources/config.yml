@@ -94,6 +94,9 @@ chat-guard:
   blocked-message: "§cThat message is not allowed."
   # بعد از چند تخلف در همان پنجره، بازیکن تا اتمام پنجره سایلنت می‌شود
   auto-mute-violations: 4
+  # اگر امتیاز تخلف بازیکن به این عدد برسد، از پروکسی کیک می‌شود
+  kick-at-points: 40
+  kick-message: "§cKicked: chat abuse."
 
 # ---------------- محافظت پکت / Packet Guard ----------------
 packet-guard:
