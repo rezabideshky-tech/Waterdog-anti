@@ -6,6 +6,7 @@ import dev.waterdog.waterdogpe.event.EventManager;
 import dev.waterdog.waterdogpe.event.EventPriority;
 import dev.waterdog.waterdogpe.event.defaults.DispatchCommandEvent;
 import dev.waterdog.waterdogpe.event.defaults.PlayerChatEvent;
+import dev.waterdog.waterdogpe.event.defaults.PlayerDisconnectedEvent;
 import dev.waterdog.waterdogpe.player.ProxiedPlayer;
 
 import java.util.Map;
@@ -39,6 +40,7 @@ public class ChatGuard {
         EventManager events = this.plugin.getProxy().getEventManager();
         events.subscribe(PlayerChatEvent.class, this::onChat, EventPriority.LOW);
         events.subscribe(DispatchCommandEvent.class, this::onCommand, EventPriority.LOW);
+        events.subscribe(PlayerDisconnectedEvent.class, this::onDisconnect);
         this.plugin.getLogger().info("ChatGuard enabled.");
     }
 
@@ -125,6 +127,14 @@ public class ChatGuard {
             event.setConsumeState(DispatchCommandEvent.ConsumeState.CONSUME);
             this.notify(player, this.setting("chat-guard.too-fast-message", "§cSlow down!"));
             this.punish(player, record, "command spam");
+        }
+    }
+
+    private void onDisconnect(PlayerDisconnectedEvent event) {
+        ProxiedPlayer player = event.getPlayer();
+        if (player != null) {
+            this.records.remove(player.getUniqueId());
+            this.lastNotify.remove(player.getUniqueId());
         }
     }
 

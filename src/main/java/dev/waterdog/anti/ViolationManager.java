@@ -152,6 +152,7 @@ public class ViolationManager {
      */
     public void tick(long now) {
         this.flushLogs();
+        this.lastAlert.entrySet().removeIf(entry -> now - entry.getValue() > 300_000L);
         this.offenses.entrySet().removeIf(entry -> {
             Offense offense = entry.getValue();
             offense.decay(now);
