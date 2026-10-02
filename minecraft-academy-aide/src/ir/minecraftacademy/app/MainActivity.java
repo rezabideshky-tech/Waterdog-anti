@@ -320,7 +320,7 @@ public class MainActivity extends Activity {
         brand.setOrientation(LinearLayout.VERTICAL);
         brand.setPadding(0, 0, dp(10), 0);
         brand.addView(label("مکعب‌آموز", 18, TEXT, true));
-        TextView sub = label("آکادمی فارسی ماینکرفت", 11, MUTED, false);
+        TextView sub = label("آموزش فارسی • آروان گیمینگ", 11, MUTED, false);
         brand.addView(sub);
         row.addView(brand, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
