@@ -1,4 +1,4 @@
-name: Build Minecraft Academy APK
+name: Build Arvan Gaming and Academy APKs
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - arena/01a0fbb8-waterdog-anti
     paths:
       - 'minecraft-academy-aide/**'
+      - 'arvan-gaming-app/**'
       - 'android-build/**'
       - '.github/workflows/build-android-apk.yml'
   workflow_dispatch:
@@ -15,14 +16,14 @@ permissions:
 
 jobs:
   build-apk:
-    name: Build debug APK
+    name: Build debug APKs
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -37,13 +38,24 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build APK
+      - name: Build Minecraft Academy APK
         run: gradle --no-daemon -p android-build :app:assembleDebug
 
-      - name: Upload installable debug APK
+      - name: Build Arvan Gaming APK
+        run: gradle --no-daemon -p android-build :arvan-gaming:assembleDebug
+
+      - name: Upload Minecraft Academy debug APK
         uses: actions/upload-artifact@v4
         with:
           name: MinecraftAcademy-debug-apk
           path: android-build/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload Arvan Gaming debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArvanGaming-debug-apk
+          path: android-build/arvan-gaming/build/outputs/apk/debug/arvan-gaming-debug.apk
           if-no-files-found: error
           retention-days: 30

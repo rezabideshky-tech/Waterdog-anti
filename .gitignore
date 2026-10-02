@@ -2,6 +2,11 @@
 /target/
 /arvanshield/target/
 
+# Gradle / Android
+.gradle/
+**/build/
+local.properties
+
 # Local IDE files
 .idea/
 *.iml

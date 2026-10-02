@@ -1,0 +1,30 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'ir.arvangaming.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'ir.arvangaming.app'
+        minSdk 21
+        targetSdk 28
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    // Keep the AIDE-compatible Java/manifest/resources in one source of truth.
+    sourceSets {
+        main {
+            manifest.srcFile '../../arvan-gaming-app/AndroidManifest.xml'
+            java.srcDirs = ['../../arvan-gaming-app/src']
+            res.srcDirs = ['../../arvan-gaming-app/res']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = 'MinecraftAcademyAndroidBuild'
-include ':app'
+rootProject.name = 'ArvanGamingAndroidBuild'
+include ':app', ':arvan-gaming'
