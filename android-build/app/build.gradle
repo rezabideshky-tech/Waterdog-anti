@@ -1,0 +1,30 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'ir.minecraftacademy.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'ir.minecraftacademy.app'
+        minSdk 21
+        targetSdk 28
+        versionCode 1
+        versionName '1.0'
+    }
+
+    // Reuse the same Java, manifest, and resources as the classic AIDE project.
+    sourceSets {
+        main {
+            manifest.srcFile '../../minecraft-academy-aide/AndroidManifest.xml'
+            java.srcDirs = ['../../minecraft-academy-aide/src']
+            res.srcDirs = ['../../minecraft-academy-aide/res']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
