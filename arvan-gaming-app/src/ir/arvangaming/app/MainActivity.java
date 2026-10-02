@@ -43,18 +43,20 @@ import java.util.concurrent.Executors;
 
 /** Arvan Gaming's Persian companion app for the Minecraft Bedrock/PocketMine community. */
 public final class MainActivity extends Activity {
-    private static final int BG = Color.rgb(7, 17, 29);
-    private static final int PANEL = Color.rgb(15, 30, 47);
-    private static final int PANEL_HI = Color.rgb(21, 42, 62);
-    private static final int BORDER = Color.rgb(36, 65, 87);
-    private static final int TEXT = Color.rgb(244, 248, 252);
-    private static final int MUTED = Color.rgb(153, 176, 194);
-    private static final int CYAN = Color.rgb(72, 219, 224);
-    private static final int BLUE = Color.rgb(91, 127, 255);
-    private static final int GREEN = Color.rgb(74, 225, 163);
-    private static final int ORANGE = Color.rgb(255, 190, 98);
-    private static final int GOLD = Color.rgb(246, 198, 109);
-    private static final int PINK = Color.rgb(255, 123, 173);
+    private static final int BG = Color.rgb(248, 246, 253);
+    private static final int PANEL = Color.rgb(255, 255, 255);
+    private static final int PANEL_HI = Color.rgb(244, 239, 252);
+    private static final int BORDER = Color.rgb(233, 226, 245);
+    private static final int TEXT = Color.rgb(44, 32, 70);
+    private static final int MUTED = Color.rgb(125, 112, 145);
+    private static final int PURPLE = Color.rgb(124, 81, 210);
+    private static final int PURPLE_DARK = Color.rgb(91, 56, 167);
+    private static final int PURPLE_LIGHT = Color.rgb(239, 232, 252);
+    private static final int BLUE = Color.rgb(92, 116, 218);
+    private static final int GREEN = Color.rgb(42, 151, 99);
+    private static final int ORANGE = Color.rgb(206, 134, 39);
+    private static final int GOLD = Color.rgb(181, 126, 31);
+    private static final int PINK = Color.rgb(202, 84, 142);
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final ExecutorService ioExecutor = Executors.newFixedThreadPool(2);
@@ -79,6 +81,8 @@ public final class MainActivity extends Activity {
     private TextView homeCountdown;
     private long homeCountdownAt;
     private TextView[] navItems;
+    private TextView[] navIcons;
+    private LinearLayout[] navContainers;
 
     private final Runnable countdownRunnable = new Runnable() {
         @Override
@@ -101,6 +105,11 @@ public final class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(BG);
         getWindow().setNavigationBarColor(BG);
+        int systemUi = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        if (android.os.Build.VERSION.SDK_INT >= 26) {
+            systemUi |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        }
+        getWindow().getDecorView().setSystemUiVisibility(systemUi);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         preferences = getSharedPreferences("arvan_gaming_app", MODE_PRIVATE);
         loadCachedFeed();
@@ -149,8 +158,10 @@ public final class MainActivity extends Activity {
         pageHost = new FrameLayout(this);
         root.addView(pageHost, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
-        root.addView(buildBottomNavigation(), new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, dp(72)));
+        LinearLayout.LayoutParams navigationParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(74));
+        navigationParams.setMargins(dp(12), dp(3), dp(12), dp(8));
+        root.addView(buildBottomNavigation(), navigationParams);
         setContentView(root);
     }
 
@@ -159,9 +170,12 @@ public final class MainActivity extends Activity {
         bar.setOrientation(LinearLayout.HORIZONTAL);
         bar.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         bar.setGravity(Gravity.CENTER_VERTICAL);
-        bar.setPadding(dp(8), dp(6), dp(8), dp(6));
-        bar.setBackground(gradient(new int[]{0xff0b1928, 0xff0e2030}, 20, 0xff1b3547));
+        bar.setPadding(dp(7), dp(6), dp(7), dp(6));
+        bar.setBackground(rounded(PANEL, 25, BORDER));
+        bar.setElevation(dp(8));
         navItems = new TextView[4];
+        navIcons = new TextView[4];
+        navContainers = new LinearLayout[4];
         String[] titles = new String[]{"خانه", "رویدادها", "پروفایل", "بیشتر"};
         String[] icons = new String[]{"⌂", "✦", "◉", "⋯"};
         final String[] pages = new String[]{"home", "events", "profile", "more"};
@@ -170,13 +184,19 @@ public final class MainActivity extends Activity {
             LinearLayout item = new LinearLayout(this);
             item.setOrientation(LinearLayout.VERTICAL);
             item.setGravity(Gravity.CENTER);
-            item.setPadding(dp(4), dp(5), dp(4), dp(4));
-            TextView icon = centered(icons[i], 19, i == 0 ? CYAN : MUTED, true);
-            TextView title = centered(titles[i], 10, i == 0 ? TEXT : MUTED, i == 0);
+            item.setPadding(dp(4), dp(4), dp(4), dp(4));
+            item.setBackground(rounded(Color.TRANSPARENT, 19, 0));
+            TextView icon = centered(icons[i], 19, MUTED, true);
+            TextView title = centered(titles[i], 10, MUTED, false);
             item.addView(icon);
             item.addView(title);
             navItems[i] = title;
-            bar.addView(item, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
+            navIcons[i] = icon;
+            navContainers[i] = item;
+            LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+            itemParams.setMargins(dp(3), 0, dp(3), 0);
+            bar.addView(item, itemParams);
             setAnimatedClick(item, new Runnable() {
                 @Override public void run() { navigate(page); }
             });
@@ -212,17 +232,32 @@ public final class MainActivity extends Activity {
         scroll.setFillViewport(true);
         scroll.setVerticalScrollBarEnabled(false);
         scroll.setClipToPadding(false);
+        scroll.setBackgroundColor(BG);
         scroll.setPadding(0, 0, 0, dp(12));
         scroll.addView(page, new ScrollView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         pageHost.addView(scroll, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         scroll.setAlpha(0f);
-        scroll.setTranslationY(dp(12));
-        scroll.animate().alpha(1f).translationY(0f).setDuration(300)
+        scroll.setTranslationY(dp(10));
+        scroll.animate().alpha(1f).translationY(0f).setDuration(320)
                 .setInterpolator(new DecelerateInterpolator()).start();
+        animatePageChildren(page);
         updateNavigationColors();
         startCountdownTicker();
+    }
+
+    private void animatePageChildren(LinearLayout page) {
+        for (int i = 0; i < page.getChildCount(); i++) {
+            View child = page.getChildAt(i);
+            child.setAlpha(0f);
+            child.setTranslationY(dp(12));
+            child.animate().alpha(1f).translationY(0f)
+                    .setStartDelay(Math.min(300, i * 42L))
+                    .setDuration(360)
+                    .setInterpolator(new DecelerateInterpolator())
+                    .start();
+        }
     }
 
     private LinearLayout newPage() {
@@ -237,19 +272,21 @@ public final class MainActivity extends Activity {
     private void addHeader(LinearLayout column) {
         LinearLayout row = horizontal();
         row.setGravity(Gravity.CENTER_VERTICAL);
-        TextView mark = centered("◆", 23, CYAN, true);
-        mark.setBackground(gradient(new int[]{0xff164e68, 0xff342e77}, 15, 0xff35647b));
-        LinearLayout.LayoutParams markParams = new LinearLayout.LayoutParams(dp(46), dp(46));
+        TextView mark = centered("آ", 23, Color.WHITE, true);
+        mark.setBackground(gradient(new int[]{0xff7549d2, 0xffb15fe3}, 16, 0));
+        mark.setElevation(dp(4));
+        LinearLayout.LayoutParams markParams = new LinearLayout.LayoutParams(dp(47), dp(47));
         row.addView(mark, markParams);
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.setPadding(0, 0, dp(10), 0);
+        titles.setPadding(0, 0, dp(11), 0);
         titles.addView(label("آروان گیمینگ", 17, TEXT, true));
-        titles.addView(label("جامعهٔ Minecraft Bedrock", 10, MUTED, false));
+        titles.addView(label("همراه سرور Bedrock", 10, MUTED, false));
         row.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        TextView refresh = centered("↻", 22, CYAN, true);
-        refresh.setBackground(rounded(PANEL_HI, 14, BORDER));
-        row.addView(refresh, new LinearLayout.LayoutParams(dp(43), dp(43)));
+        TextView refresh = centered("↻", 22, PURPLE, true);
+        refresh.setBackground(rounded(PANEL, 15, BORDER));
+        refresh.setElevation(dp(2));
+        row.addView(refresh, new LinearLayout.LayoutParams(dp(44), dp(44)));
         setAnimatedClick(refresh, new Runnable() {
             @Override public void run() {
                 refreshPublicFeed(true);
@@ -257,7 +294,7 @@ public final class MainActivity extends Activity {
             }
         });
         addColumn(column, row, 0);
-        space(column, 15);
+        space(column, 16);
     }
 
     private LinearLayout buildHomePage() {
@@ -272,7 +309,7 @@ public final class MainActivity extends Activity {
         column.addView(buildNewsPreview(), matchWrap());
         space(column, 14);
         LinearLayout quick = horizontal();
-        quick.addView(actionCard("راهنمای اتصال", "قدم‌به‌قدم وارد سرور شو", "➜", CYAN,
+        quick.addView(actionCard("راهنمای اتصال", "قدم‌به‌قدم وارد سرور شو", "➜", PURPLE,
                 new Runnable() { @Override public void run() { navigate("guide"); } }),
                 new LinearLayout.LayoutParams(0, dp(102), 1f));
         View gap = new View(this);
@@ -288,29 +325,51 @@ public final class MainActivity extends Activity {
     }
 
     private View buildHero() {
-        LinearLayout hero = new LinearLayout(this);
-        hero.setOrientation(LinearLayout.VERTICAL);
-        hero.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        hero.setPadding(dp(19), dp(20), dp(19), dp(19));
-        hero.setBackground(gradient(new int[]{0xff102f50, 0xff273374, 0xff522c70}, 24, 0xff365178));
-        TextView tag = pill("POCKETMINE • BEDROCK", CYAN, 0x261dd8e0);
-        hero.addView(tag, wrap());
-        space(hero, 13);
-        TextView title = label("دنیای آروان،\nیک قدم با تو فاصله دارد", 24, TEXT, true);
+        FrameLayout hero = new FrameLayout(this);
+        hero.setMinimumHeight(dp(225));
+        hero.setBackground(gradient(new int[]{0xff7549d2, 0xff9659df, 0xffb55fe2}, 27, 0));
+        hero.setClipToOutline(true);
+
+        TextView sparkle = centered("✦", 86, 0x38ffffff, true);
+        FrameLayout.LayoutParams sparkleParams = new FrameLayout.LayoutParams(dp(118), dp(118),
+                Gravity.BOTTOM | Gravity.LEFT);
+        sparkleParams.leftMargin = dp(3);
+        sparkleParams.bottomMargin = dp(-8);
+        hero.addView(sparkle, sparkleParams);
+        TextView orb = centered("✧", 31, 0x66ffffff, true);
+        FrameLayout.LayoutParams orbParams = new FrameLayout.LayoutParams(dp(54), dp(54), Gravity.TOP | Gravity.LEFT);
+        orbParams.leftMargin = dp(20);
+        orbParams.topMargin = dp(18);
+        orb.setBackground(rounded(0x22ffffff, 30, 0));
+        hero.addView(orb, orbParams);
+
+        LinearLayout content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        content.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        content.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        content.setPadding(dp(21), dp(21), dp(21), dp(20));
+        TextView tag = pill("BEDROCK  •  POCKETMINE", Color.WHITE, 0x2cffffff);
+        content.addView(tag, wrap());
+        space(content, 14);
+        TextView title = label("ماجراجویی از\nآروان شروع می‌شه!", 25, Color.WHITE, true);
         title.setLineSpacing(dp(2), 1f);
-        hero.addView(title, matchWrap());
-        space(hero, 7);
-        TextView sub = label("رویدادها، راهنما و خبرهای رسمی سرور در یک جا.", 12, 0xffd4e4f1, false);
-        hero.addView(sub, matchWrap());
-        space(hero, 15);
-        TextView guide = button("راهنمای ورود  ←", CYAN, 0xff09202d, true);
-        hero.addView(guide, wrap());
+        content.addView(title, matchWrap());
+        space(content, 7);
+        TextView sub = label("سرور، رویدادها و خبرهای واقعی؛ همه یک‌جا.", 11, 0xfff5efff, false);
+        content.addView(sub, matchWrap());
+        space(content, 15);
+        TextView guide = button("راهنمای ورود  ←", Color.WHITE, PURPLE_DARK, true);
+        guide.setElevation(dp(3));
+        content.addView(guide, wrap());
         setAnimatedClick(guide, new Runnable() {
             @Override public void run() { navigate("guide"); }
         });
+        hero.addView(content, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         hero.setAlpha(0f);
-        hero.setTranslationY(dp(8));
-        hero.animate().alpha(1f).translationY(0f).setDuration(420).start();
+        hero.setTranslationY(dp(10));
+        hero.animate().alpha(1f).translationY(0f).setDuration(470)
+                .setInterpolator(new DecelerateInterpolator()).start();
         return hero;
     }
 
@@ -325,14 +384,14 @@ public final class MainActivity extends Activity {
         LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
         titleParams.rightMargin = dp(8);
         heading.addView(title, titleParams);
-        TextView state = pill(statusLabel(), pingColor(), 0x1f48dba0);
+        TextView state = pill(statusLabel(), pingColor(), withAlpha(pingColor(), 0.13f));
         heading.addView(state, wrap());
         card.addView(heading, matchWrap());
         space(card, 13);
 
         String address = displayAddress();
         TextView addressLine = label(hasServerAddress() ? address : "آدرس سرور هنوز توسط مدیریت تنظیم نشده", 13,
-                hasServerAddress() ? CYAN : MUTED, hasServerAddress());
+                hasServerAddress() ? PURPLE : MUTED, hasServerAddress());
         addressLine.setTextDirection(View.TEXT_DIRECTION_LTR);
         addressLine.setGravity(Gravity.RIGHT);
         card.addView(addressLine, matchWrap());
@@ -357,7 +416,7 @@ public final class MainActivity extends Activity {
         } else if (lastStatusCheckedAt > 0) {
             countCaption = "پاسخی دریافت نشد؛ وضعیت نامشخص است";
         }
-        TextView number = centered(playerCount, 21, TEXT, true);
+        TextView number = centered(playerCount, 23, PURPLE_DARK, true);
         stats.addView(number, new LinearLayout.LayoutParams(dp(92), ViewGroup.LayoutParams.WRAP_CONTENT));
         LinearLayout countText = new LinearLayout(this);
         countText.setOrientation(LinearLayout.VERTICAL);
@@ -378,12 +437,12 @@ public final class MainActivity extends Activity {
 
         space(card, 13);
         LinearLayout actions = horizontal();
-        TextView copy = button("کپی آدرس", hasServerAddress() ? PANEL_HI : 0xff253442,
+        TextView copy = button("کپی آدرس", hasServerAddress() ? PANEL_HI : 0xfff2eef8,
                 hasServerAddress() ? TEXT : MUTED, true);
         actions.addView(copy, new LinearLayout.LayoutParams(0, dp(43), 1f));
         View gap = new View(this);
         actions.addView(gap, new LinearLayout.LayoutParams(dp(9), 1));
-        TextView refresh = button(pingLoading ? "در حال بررسی…" : "بررسی دوباره", 0xff154c61, CYAN, true);
+        TextView refresh = button(pingLoading ? "در حال بررسی…" : "بررسی دوباره", PURPLE, Color.WHITE, true);
         actions.addView(refresh, new LinearLayout.LayoutParams(0, dp(43), 1f));
         card.addView(actions, matchWrap());
         setAnimatedClick(copy, new Runnable() {
@@ -421,7 +480,7 @@ public final class MainActivity extends Activity {
             long startsAt = event.optLong("startsAt", 0L);
             if (startsAt > 0L) {
                 space(card, 11);
-                homeCountdown = label(formatCountdown(startsAt), 17, CYAN, true);
+                homeCountdown = label(formatCountdown(startsAt), 17, PURPLE, true);
                 homeCountdownAt = startsAt;
                 card.addView(homeCountdown, matchWrap());
                 space(card, 5);
@@ -439,7 +498,7 @@ public final class MainActivity extends Activity {
             if (!registrationUrl.isEmpty()) {
                 View gap = new View(this);
                 row.addView(gap, new LinearLayout.LayoutParams(dp(8), 1));
-                TextView register = button("ثبت‌نام", 0xff244f84, TEXT, true);
+                TextView register = button("ثبت‌نام", PURPLE, Color.WHITE, true);
                 row.addView(register, new LinearLayout.LayoutParams(0, dp(40), 1f));
                 setAnimatedClick(register, new Runnable() {
                     @Override public void run() { openHttpsUrl(registrationUrl); }
@@ -456,7 +515,7 @@ public final class MainActivity extends Activity {
         row.setGravity(Gravity.CENTER_VERTICAL);
         row.addView(label("خبرهای تازه", 15, TEXT, true),
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        TextView more = label("همهٔ خبرها  ←", 10, CYAN, true);
+        TextView more = label("همهٔ خبرها  ←", 10, PURPLE, true);
         row.addView(more, wrap());
         setAnimatedClick(more, new Runnable() {
             @Override public void run() { navigate("news"); }
@@ -470,8 +529,8 @@ public final class MainActivity extends Activity {
             JSONObject latest = news.optJSONObject(0);
             if (latest != null) {
                 card.addView(pill(latest.optBoolean("important", false) ? "اطلاعیهٔ مهم" : "اطلاعیهٔ سرور",
-                        latest.optBoolean("important", false) ? ORANGE : CYAN,
-                        latest.optBoolean("important", false) ? 0x30ffbe62 : 0x2848dbe0), wrap());
+                        latest.optBoolean("important", false) ? ORANGE : PURPLE,
+                        latest.optBoolean("important", false) ? 0xfffff2df : 0xffeee8fb), wrap());
                 space(card, 7);
                 card.addView(label(safeText(latest.optString("title"), ""), 14, TEXT, true), matchWrap());
                 space(card, 4);
@@ -484,16 +543,16 @@ public final class MainActivity extends Activity {
     private LinearLayout buildGuidePage() {
         LinearLayout column = newPage();
         addHeader(column);
-        pageTitle(column, "راهنمای ورود", "در چند قدم ساده وارد دنیای Bedrock آروان شو.", CYAN);
+        pageTitle(column, "راهنمای ورود", "در چند قدم ساده وارد دنیای Bedrock آروان شو.", PURPLE);
         space(column, 14);
         LinearLayout address = card();
         address.addView(label("آدرس و پورت سرور", 15, TEXT, true), matchWrap());
         space(address, 8);
         address.addView(label(hasServerAddress() ? displayAddress()
-                : "آدرس و پورت رسمی هنوز در برنامه تنظیم نشده‌اند.", 13, hasServerAddress() ? CYAN : MUTED, true), matchWrap());
+                : "آدرس و پورت رسمی هنوز در برنامه تنظیم نشده‌اند.", 13, hasServerAddress() ? PURPLE : MUTED, true), matchWrap());
         space(address, 11);
-        TextView copy = button("کپی آدرس سرور", hasServerAddress() ? 0xff164b62 : 0xff253442,
-                hasServerAddress() ? TEXT : MUTED, true);
+        TextView copy = button("کپی آدرس سرور", hasServerAddress() ? PURPLE : 0xfff2eef8,
+                hasServerAddress() ? Color.WHITE : MUTED, true);
         address.addView(copy, matchWrap());
         setAnimatedClick(copy, new Runnable() {
             @Override public void run() { copyServerAddress(); }
@@ -569,13 +628,13 @@ public final class MainActivity extends Activity {
 
     private View buildEventCard(final JSONObject event) {
         LinearLayout card = card();
-        card.addView(pill(event.optBoolean("important", false) ? "رویداد مهم" : "رویداد", ORANGE, 0x2affbe62), wrap());
+        card.addView(pill(event.optBoolean("important", false) ? "رویداد مهم" : "رویداد", ORANGE, 0xfffff2df), wrap());
         space(card, 9);
         card.addView(label(safeText(event.optString("title"), "رویداد آروان گیمینگ"), 17, TEXT, true), matchWrap());
         long start = event.optLong("startsAt", 0L);
         if (start > 0) {
             space(card, 5);
-            card.addView(label(formatDate(start), 11, CYAN, true), matchWrap());
+            card.addView(label(formatDate(start), 11, PURPLE, true), matchWrap());
             space(card, 4);
             card.addView(label(formatCountdown(start), 13, ORANGE, true), matchWrap());
         }
@@ -601,7 +660,7 @@ public final class MainActivity extends Activity {
         if (!registrationUrl.isEmpty()) {
             View gap = new View(this);
             buttons.addView(gap, new LinearLayout.LayoutParams(dp(8), 1));
-            TextView register = button("ثبت‌نام", 0xff28588e, TEXT, true);
+            TextView register = button("ثبت‌نام", PURPLE_DARK, Color.WHITE, true);
             buttons.addView(register, new LinearLayout.LayoutParams(0, dp(42), 1f));
             setAnimatedClick(register, new Runnable() {
                 @Override public void run() { openHttpsUrl(registrationUrl); }
@@ -614,18 +673,29 @@ public final class MainActivity extends Activity {
     private LinearLayout buildProfilePage() {
         LinearLayout column = newPage();
         addHeader(column);
-        pageTitle(column, "پروفایل پلیر", "آمار سروری فقط پس از اتصال امن نمایش داده می‌شود.", CYAN);
+        pageTitle(column, "پروفایل پلیر", "آمار سروری فقط پس از اتصال امن نمایش داده می‌شود.", PURPLE);
         space(column, 14);
 
         final String localName = preferences.getString("player_name", "").trim();
         LinearLayout local = card();
-        local.addView(label("شناسهٔ نمایشی داخل اپ", 13, MUTED, true), matchWrap());
-        space(local, 5);
-        local.addView(label(localName.isEmpty() ? "نامت را برای کارت اشتراک‌گذاری تنظیم کن" : localName,
-                18, TEXT, true), matchWrap());
-        space(local, 10);
+        LinearLayout identity = horizontal();
+        identity.setGravity(Gravity.CENTER_VERTICAL);
+        TextView avatar = centered(localName.isEmpty() ? "آ" : "✦", 24, Color.WHITE, true);
+        avatar.setBackground(gradient(new int[]{0xff7549d2, 0xffb15fe3}, 19, 0));
+        identity.addView(avatar, new LinearLayout.LayoutParams(dp(58), dp(58)));
+        LinearLayout identityText = new LinearLayout(this);
+        identityText.setOrientation(LinearLayout.VERTICAL);
+        identityText.addView(label("پروفایل ماجراجو", 11, MUTED, true));
+        identityText.addView(label(localName.isEmpty() ? "نامت را برای کارتت انتخاب کن" : localName,
+                17, TEXT, true));
+        LinearLayout.LayoutParams identityTextParams = new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        identityTextParams.rightMargin = dp(12);
+        identity.addView(identityText, identityTextParams);
+        local.addView(identity, matchWrap());
+        space(local, 12);
         TextView editName = button(localName.isEmpty() ? "ثبت نام نمایشی" : "ویرایش نام", PANEL_HI, TEXT, true);
-        local.addView(editName, wrap());
+        local.addView(editName, matchWrap());
         setAnimatedClick(editName, new Runnable() {
             @Override public void run() { editLocalPlayerName(); }
         });
@@ -646,8 +716,8 @@ public final class MainActivity extends Activity {
                     11, MUTED, false), matchWrap());
             space(onlineProfile, 10);
             TextView connect = button(ArvanGamingConfig.hasSecureApi() ? "اتصال با کد یک‌بارمصرف" : "اتصال امن پس از راه‌اندازی API سرور",
-                    ArvanGamingConfig.hasSecureApi() ? 0xff16576a : 0xff263645,
-                    ArvanGamingConfig.hasSecureApi() ? CYAN : MUTED, true);
+                    ArvanGamingConfig.hasSecureApi() ? PURPLE : 0xfff2eef8,
+                    ArvanGamingConfig.hasSecureApi() ? Color.WHITE : MUTED, true);
             onlineProfile.addView(connect, matchWrap());
             setAnimatedClick(connect, new Runnable() {
                 @Override public void run() { startAccountLink(); }
@@ -676,7 +746,7 @@ public final class MainActivity extends Activity {
                 10, MUTED, false), matchWrap());
         column.addView(badges, matchWrap());
         space(column, 12);
-        TextView share = button("اشتراک‌گذاری کارت پلیر", 0xff43366f, TEXT, true);
+        TextView share = button("اشتراک‌گذاری کارت پلیر", 0xffeee8fb, TEXT, true);
         column.addView(share, matchWrap());
         setAnimatedClick(share, new Runnable() {
             @Override public void run() { shareProfileCard(); }
@@ -716,7 +786,7 @@ public final class MainActivity extends Activity {
             space(column, 10);
         }
         space(column, 12);
-        TextView report = button("گزارش مشکل یا پیشنهاد", 0xff463256, TEXT, true);
+        TextView report = button("گزارش مشکل یا پیشنهاد", PURPLE_DARK, Color.WHITE, true);
         column.addView(report, matchWrap());
         setAnimatedClick(report, new Runnable() {
             @Override public void run() { showReportDialog(); }
@@ -727,8 +797,8 @@ public final class MainActivity extends Activity {
     private View buildNewsCard(JSONObject item) {
         LinearLayout card = card();
         boolean important = item.optBoolean("important", false);
-        card.addView(pill(important ? "خبر مهم" : "اطلاعیه", important ? ORANGE : CYAN,
-                important ? 0x2affbe62 : 0x2448dbe0), wrap());
+        card.addView(pill(important ? "خبر مهم" : "اطلاعیه", important ? ORANGE : PURPLE,
+                important ? 0xfffff2df : 0xfff0eaff), wrap());
         space(card, 8);
         card.addView(label(safeText(item.optString("title"), "اطلاعیهٔ آروان گیمینگ"), 15, TEXT, true), matchWrap());
         String summary = safeText(item.optString("summary"), item.optString("body"));
@@ -804,18 +874,18 @@ public final class MainActivity extends Activity {
             invite.addView(label("کد دعوت هنوز توسط سرور ساخته نشده؛ می‌توانی لینک و آدرس تأییدشدهٔ سرور را به اشتراک بگذاری.",
                     11, MUTED, false), matchWrap());
         } else {
-            invite.addView(label("کد دعوت: " + inviteCode, 18, CYAN, true), matchWrap());
+            invite.addView(label("کد دعوت: " + inviteCode, 18, PURPLE, true), matchWrap());
             space(invite, 5);
         }
         space(invite, 11);
-        TextView share = button("اشتراک‌گذاری آروان گیمینگ", 0xff244c83, TEXT, true);
+        TextView share = button("اشتراک‌گذاری آروان گیمینگ", PURPLE, Color.WHITE, true);
         invite.addView(share, matchWrap());
         setAnimatedClick(share, new Runnable() {
             @Override public void run() { shareInvite(); }
         });
         column.addView(invite, matchWrap());
         space(column, 12);
-        TextView report = button("ارسال گزارش یا پیشنهاد", 0xff463256, TEXT, true);
+        TextView report = button("ارسال گزارش یا پیشنهاد", PURPLE_DARK, Color.WHITE, true);
         column.addView(report, matchWrap());
         setAnimatedClick(report, new Runnable() {
             @Override public void run() { showReportDialog(); }
@@ -826,9 +896,9 @@ public final class MainActivity extends Activity {
     private LinearLayout buildMorePage() {
         LinearLayout column = newPage();
         addHeader(column);
-        pageTitle(column, "بیشتر", "همهٔ ابزارهای همراه سرور در دسترس توست.", CYAN);
+        pageTitle(column, "بیشتر", "همهٔ ابزارهای همراه سرور در دسترس توست.", PURPLE);
         space(column, 14);
-        column.addView(actionCard("راهنمای ورود", "آدرس، پورت، نسخه‌ها و مراحل اتصال", "➜", CYAN,
+        column.addView(actionCard("راهنمای ورود", "آدرس، پورت، نسخه‌ها و مراحل اتصال", "➜", PURPLE,
                 new Runnable() { @Override public void run() { navigate("guide"); } }), matchWrap());
         space(column, 10);
         column.addView(actionCard("اخبار و نظرسنجی", "به‌روزرسانی‌ها، رویدادها و رأی‌گیری", "✦", PINK,
@@ -855,7 +925,7 @@ public final class MainActivity extends Activity {
         if (!support.isEmpty()) {
             card.addView(label("برای کمک، صفحهٔ رسمی پشتیبانی را باز کن.", 11, MUTED, false), matchWrap());
             space(card, 9);
-            TextView button = button("ارتباط با پشتیبانی", 0xff164b62, CYAN, true);
+            TextView button = button("ارتباط با پشتیبانی", PURPLE, Color.WHITE, true);
             card.addView(button, matchWrap());
             setAnimatedClick(button, new Runnable() {
                 @Override public void run() { openHttpsUrl(support); }
@@ -871,7 +941,7 @@ public final class MainActivity extends Activity {
         LinearLayout row = horizontal();
         row.setGravity(Gravity.CENTER_VERTICAL);
         TextView symbol = centered(icon, 18, accent, true);
-        symbol.setBackground(rounded(0x223d9bc2, 12, 0));
+        symbol.setBackground(rounded(withAlpha(accent, 0.12f), 12, 0));
         row.addView(symbol, new LinearLayout.LayoutParams(dp(38), dp(38)));
         LinearLayout copy = new LinearLayout(this);
         copy.setOrientation(LinearLayout.VERTICAL);
@@ -888,7 +958,7 @@ public final class MainActivity extends Activity {
     private View emptyCard(String title, String body, String icon) {
         LinearLayout box = card();
         box.setGravity(Gravity.CENTER);
-        TextView symbol = centered(icon, 23, CYAN, true);
+        TextView symbol = centered(icon, 23, PURPLE, true);
         symbol.setBackground(rounded(PANEL_HI, 18, 0));
         box.addView(symbol, new LinearLayout.LayoutParams(dp(50), dp(50)));
         space(box, 9);
@@ -902,7 +972,7 @@ public final class MainActivity extends Activity {
         LinearLayout row = horizontal();
         row.setGravity(Gravity.TOP);
         TextView badge = centered(String.valueOf(number), 12, BG, true);
-        badge.setBackground(rounded(CYAN, 20, 0));
+        badge.setBackground(rounded(PURPLE, 20, 0));
         row.addView(badge, new LinearLayout.LayoutParams(dp(28), dp(28)));
         TextView text = label(description, 11, TEXT, false);
         text.setPadding(dp(9), dp(4), 0, 0);
@@ -915,7 +985,7 @@ public final class MainActivity extends Activity {
         box.setOrientation(LinearLayout.VERTICAL);
         box.setGravity(Gravity.CENTER);
         box.setPadding(dp(4), dp(6), dp(4), dp(6));
-        box.setBackground(rounded(unlocked ? 0xff164437 : PANEL_HI, 14, unlocked ? 0xff2e886e : BORDER));
+        box.setBackground(rounded(unlocked ? 0xffe8f5ed : PANEL_HI, 14, unlocked ? 0xffa8dec2 : BORDER));
         box.addView(centered(icon, 17, unlocked ? GREEN : MUTED, true));
         box.addView(centered(title, 9, unlocked ? TEXT : MUTED, unlocked));
         return box;
@@ -924,7 +994,7 @@ public final class MainActivity extends Activity {
     private void addProfileValue(LinearLayout box, String label, JSONObject profile, String key) {
         if (profile == null || !profile.has(key)) return;
         space(box, 5);
-        box.addView(label(label + ": " + safeText(profile.optString(key), "—"), 12, CYAN, true), matchWrap());
+        box.addView(label(label + ": " + safeText(profile.optString(key), "—"), 12, PURPLE, true), matchWrap());
     }
 
     private void addExternalLink(LinearLayout parent, String label, String url) {
@@ -1026,7 +1096,7 @@ public final class MainActivity extends Activity {
         LinearLayout content = new LinearLayout(this);
         content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(dp(20), dp(8), dp(20), dp(8));
-        content.addView(centered(linkCode, 28, CYAN, true), matchWrap());
+        content.addView(centered(linkCode, 28, PURPLE, true), matchWrap());
         space(content, 8);
         content.addView(centered("در بازی فرمان زیر را اجرا کن:", 12, MUTED, false), matchWrap());
         space(content, 4);
@@ -1353,12 +1423,23 @@ public final class MainActivity extends Activity {
     private void setAnimatedClick(final View view, final Runnable action) {
         view.setClickable(true);
         view.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                v.animate().scaleX(0.96f).scaleY(0.96f).setDuration(75)
+            @Override public void onClick(final View tapped) {
+                tapped.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+                tapped.animate().cancel();
+                tapped.setScaleX(1f);
+                tapped.setScaleY(1f);
+                tapped.animate().scaleX(0.94f).scaleY(0.94f).setDuration(80)
                         .withEndAction(new Runnable() {
                             @Override public void run() {
-                                v.animate().scaleX(1f).scaleY(1f).setDuration(110).start();
-                                if (action != null) action.run();
+                                tapped.animate().scaleX(1.035f).scaleY(1.035f)
+                                        .setInterpolator(new android.view.animation.OvershootInterpolator(1.7f))
+                                        .setDuration(210)
+                                        .withEndAction(new Runnable() {
+                                            @Override public void run() {
+                                                tapped.animate().scaleX(1f).scaleY(1f).setDuration(90).start();
+                                                if (action != null) action.run();
+                                            }
+                                        }).start();
                             }
                         }).start();
             }
@@ -1366,11 +1447,30 @@ public final class MainActivity extends Activity {
     }
 
     private void updateNavigationColors() {
-        if (navItems == null) return;
-        String[] pages = new String[]{"home", "events", "profile", "more"};
+        if (navItems == null || navIcons == null || navContainers == null) return;
+        int selected = 0;
+        if ("events".equals(currentPage)) selected = 1;
+        else if ("profile".equals(currentPage)) selected = 2;
+        else if (!("home".equals(currentPage))) selected = 3;
+        final int activeIndex = selected;
         for (int i = 0; i < navItems.length; i++) {
-            navItems[i].setTextColor(currentPage.equals(pages[i]) ? CYAN : MUTED);
-            navItems[i].setTypeface(Typeface.create("sans-serif", currentPage.equals(pages[i]) ? Typeface.BOLD : Typeface.NORMAL));
+            boolean active = i == activeIndex;
+            int activeColor = active ? PURPLE_DARK : MUTED;
+            navItems[i].setTextColor(activeColor);
+            navIcons[i].setTextColor(active ? PURPLE : MUTED);
+            navItems[i].setTypeface(Typeface.create("sans-serif", active ? Typeface.BOLD : Typeface.NORMAL));
+            navContainers[i].setBackground(rounded(active ? PURPLE_LIGHT : Color.TRANSPARENT, 19, 0));
+            if (active) {
+                navContainers[i].animate().scaleX(1.04f).scaleY(1.04f).setDuration(150)
+                        .withEndAction(new Runnable() {
+                            @Override public void run() {
+                                navContainers[activeIndex].animate().scaleX(1f).scaleY(1f).setDuration(150).start();
+                            }
+                        }).start();
+            } else {
+                navContainers[i].setScaleX(1f);
+                navContainers[i].setScaleY(1f);
+            }
         }
     }
 
@@ -1519,9 +1619,9 @@ public final class MainActivity extends Activity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        layout.setPadding(dp(15), dp(14), dp(15), dp(14));
-        layout.setBackground(rounded(PANEL, 19, BORDER));
-        if (android.os.Build.VERSION.SDK_INT >= 21) layout.setElevation(dp(2));
+        layout.setPadding(dp(17), dp(16), dp(17), dp(16));
+        layout.setBackground(rounded(PANEL, 21, BORDER));
+        if (android.os.Build.VERSION.SDK_INT >= 21) layout.setElevation(dp(3));
         return layout;
     }
 
@@ -1552,17 +1652,32 @@ public final class MainActivity extends Activity {
 
     private TextView button(String value, int background, int textColor, boolean bold) {
         TextView view = centered(value, 12, textColor, bold);
-        view.setPadding(dp(12), dp(10), dp(12), dp(10));
-        view.setMinHeight(dp(40));
-        view.setBackground(rounded(background, 13, background == PANEL_HI ? BORDER : 0));
+        view.setPadding(dp(15), dp(10), dp(15), dp(10));
+        view.setMinHeight(dp(45));
+        int stroke = (background == PANEL_HI || background == PANEL || background == Color.WHITE
+                || Color.luminance(background) > 0.88f) ? BORDER : 0;
+        GradientDrawable shape = rounded(background, 15, stroke);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            int rippleColor = (background == PURPLE || background == PURPLE_DARK)
+                    ? 0x33ffffff : 0x227c51d2;
+            view.setBackground(new android.graphics.drawable.RippleDrawable(
+                    android.content.res.ColorStateList.valueOf(rippleColor), shape, null));
+            view.setElevation(dp(1));
+        } else {
+            view.setBackground(shape);
+        }
         return view;
     }
 
     private TextView pill(String value, int color, int background) {
         TextView view = centered(value, 9, color, true);
-        view.setPadding(dp(9), dp(6), dp(9), dp(6));
+        view.setPadding(dp(10), dp(7), dp(10), dp(7));
         view.setBackground(rounded(background, 20, 0));
         return view;
+    }
+
+    private int withAlpha(int color, float alpha) {
+        return Color.argb(Math.round(255f * alpha), Color.red(color), Color.green(color), Color.blue(color));
     }
 
     private GradientDrawable rounded(int color, int radius, int stroke) {
