@@ -1,4 +1,4 @@
-name: Build Waterdog Lobby Fallback JAR
+name: Build WaterdogPE plugins
 
 on:
   push:
@@ -9,6 +9,8 @@ on:
     paths:
       - 'src/**'
       - 'pom.xml'
+      - 'README_FA.md'
+      - 'arvanshield/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
 
@@ -28,14 +30,28 @@ jobs:
           java-version: '21'
           distribution: temurin
           cache: maven
+          cache-dependency-path: |
+            pom.xml
+            arvanshield/pom.xml
 
-      - name: Build with Maven
-        run: mvn -B -U clean package
+      - name: Build WaterdogLobbyFallback
+        run: mvn -B -U -f pom.xml clean package
 
-      - name: Upload WaterdogPE plugin JAR
+      - name: Build ArvanShield
+        run: mvn -B -U -f arvanshield/pom.xml clean package
+
+      - name: Upload WaterdogLobbyFallback JAR
         uses: actions/upload-artifact@v4
         with:
           name: WaterdogLobbyFallback-JAR
           path: target/waterdog-lobby-fallback-1.0.0.jar
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload ArvanShield JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArvanShield-JAR
+          path: arvanshield/target/arvanshield-1.0.0.jar
           if-no-files-found: error
           retention-days: 30

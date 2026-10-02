@@ -1,0 +1,54 @@
+# ArvanShield for WaterdogPE — Java 21
+# Safe starting point: OBSERVE never rejects players; it records how BALANCED would behave.
+# After reviewing the logs during normal peak hours, change mode to balanced if appropriate.
+mode: observe
+
+# Xbox-auth enforcement is opt-in. Keep false unless every legitimate player must authenticate
+# with Xbox Live on this network. Enabling it can reject players on offline/floodgate-style setups.
+security:
+  require-xbox-authentication: false
+
+# XUIDs here only receive a risk-score discount; this is not a bypass for global pressure or
+# the explicit Xbox-authentication policy above. Do not put device IDs or IP addresses here.
+trusted-xuids: []
+
+# Token-bucket limits. A single IP/subnet signal is never enough to reject a login.
+# Tune these to your real peak traffic; the defaults are intentionally permissive.
+limits:
+  ip:
+    burst: 12
+    refill-per-second: 1.0
+  subnet:
+    burst: 80
+    refill-per-second: 10.0
+  xuid:
+    burst: 6
+    refill-per-second: 0.5
+  global:
+    burst: 300
+    refill-per-second: 75.0
+
+# Risk is counted across independent categories: network (IP + subnet), identity (XUID),
+# and global pressure. IP and subnet are deliberately one category to reduce NAT false positives.
+risk:
+  balanced-threshold: 75
+  attack-threshold: 60
+  minimum-independent-signals: 2
+  scores:
+    ip-rate: 25
+    subnet-rate: 15
+    xuid-rate: 55
+    global-rate: 15
+    trusted-xuid-discount: 20
+
+# Resource bounds and log noise controls.
+storage:
+  max-tracked-buckets: 50000
+  idle-expiry-seconds: 600
+  known-player-trust-seconds: 3600
+
+logging:
+  observe-sample-every: 50
+
+messages:
+  rejected: "§cورود شما موقتاً محدود شد؛ لطفاً چند لحظه بعد دوباره تلاش کنید."

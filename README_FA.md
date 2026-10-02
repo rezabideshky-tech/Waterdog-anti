@@ -59,3 +59,15 @@ keep-current-lobby-on-transfer-failure: true
 - اگر در کنسول `Lobby '...' is not configured` دیدی، نام را با کلید دقیق سرور در کانفیگ پراکسی تطبیق بده.
 - اگر لابی در دسترس نیست، یک لابی دوم اضافه کن تا افزونه بتواند آن را هم امتحان کند.
 - این افزونه اتصال نسخه‌های ناسازگار Bedrock را تبدیل یا آپدیت نمی‌کند؛ اول مطمئن شو خود WaterdogPE از پروتکل کلاینت و نسخهٔ backend پشتیبانی می‌کند.
+
+---
+
+## افزونهٔ مستقل آنتی‌بات: ArvanShield
+
+در مسیر [`arvanshield/`](arvanshield/README.md) یک افزونهٔ جداگانهٔ Java 21 برای بررسی زودهنگام ورود و rate-limit محافظه‌کارانه قرار دارد. این افزونه با `WaterdogLobbyFallback` یکی نیست و باید به‌صورت JAR مستقل نصب شود. حالت پیش‌فرض آن `observe` است و تا وقتی خودت `balanced` را فعال نکنی، اتصال بازیکن را رد نمی‌کند.
+
+```bash
+mvn -f arvanshield/pom.xml clean package
+```
+
+خروجی `arvanshield/target/arvanshield-1.0.0.jar` است. جزئیات نصب، حالت‌ها و محدودیت‌ها در [راهنمای ArvanShield](arvanshield/README.md) آمده است. این افزونه سازگاری پروتکل Bedrock اضافه نمی‌کند و نسخهٔ کلاینت را سیگنال بات نمی‌داند.

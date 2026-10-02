@@ -1,0 +1,5 @@
+name: ArvanShield
+main: com.arvangaming.shield.ArvanShieldPlugin
+version: 1.0.0
+author: ArvanGaming
+description: Early-login anti-bot risk scoring and conservative rate limiting for WaterdogPE.
