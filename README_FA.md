@@ -5,6 +5,7 @@
 ## نکتهٔ نسخه
 
 - برای **WaterdogPE** و Java 21 ساخته می‌شود؛ این افزونه باید داخل پوشهٔ `plugins/` خود پراکسی نصب شود، نه پوشهٔ پلاگین‌های PocketMine.
+- `WaterdogLobbyFallback` و `ArvanShield` هر دو با API رسمی `dev.waterdog.waterdogpe:waterdog:2.0.4-SNAPSHOT` ساخته می‌شوند. از build رسمی جدید WaterdogPE با همین API استفاده کن؛ نسخهٔ قدیمی `v2.0.3` برای API متریک ArvanShield مناسب نیست. [نسخه‌های رسمی WaterdogPE](https://github.com/WaterdogPE/WaterdogPE/releases)
 - نام لابی‌ها باید دقیقاً با نام سرورها در بخش `servers` کانفیگ WaterdogPE یکی باشد.
 - نسخهٔ Minecraft/Bedrock مثل 1.20 یا 1.26.30 را خود افزونه تعیین نمی‌کند؛ سازگاری پروتکل را نسخهٔ خود WaterdogPE و نرم‌افزار سرورهای backend تعیین می‌کند.
 

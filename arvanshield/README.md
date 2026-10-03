@@ -2,6 +2,10 @@
 
 ArvanShield افزونه‌ای برای WaterdogPE است که ضدربات و محافظ ورود را با پایش تجمیعی ترافیک شبکه ترکیب می‌کند. پیام‌های بازیکن و مدیر به انگلیسی رنگی نمایش داده می‌شوند.
 
+### نسخهٔ پراکسی موردنیاز
+
+هر دو افزونهٔ `ArvanShield` و `WaterdogLobbyFallback` با API رسمی `dev.waterdog.waterdogpe:waterdog:2.0.4-SNAPSHOT` کامپایل می‌شوند. برای اجرا از build جدید رسمی WaterdogPE که همین API را دارد استفاده کن؛ `v2.0.3` قدیمی‌تر با API متریک موردنیاز ArvanShield سازگار نیست. [نسخه‌های رسمی WaterdogPE](https://github.com/WaterdogPE/WaterdogPE/releases)
+
 ## قابلیت‌ها
 
 - محدودسازی ورود بر پایهٔ IP، زیرشبکه، XUID و فشار کلی ورود با token bucket بدون قفل سراسری.
