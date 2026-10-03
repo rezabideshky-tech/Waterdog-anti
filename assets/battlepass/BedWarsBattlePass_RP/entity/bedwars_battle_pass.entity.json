@@ -19,7 +19,7 @@
         "animate": [
           "idle"
         ],
-        "scale": "1.5"
+        "scale": "2.6"
       },
       "render_controllers": [
         "controller.render.bedwars_battle_pass"

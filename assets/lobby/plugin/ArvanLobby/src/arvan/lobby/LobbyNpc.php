@@ -13,7 +13,7 @@ use pocketmine\player\Player;
 abstract class LobbyNpc extends Entity{
 	abstract protected function key() : string;
 
-	protected function getInitialSizeInfo() : EntitySizeInfo{ return new EntitySizeInfo(3.0, 2.5); }
+	protected function getInitialSizeInfo() : EntitySizeInfo{ return new EntitySizeInfo(7.0, 7.0); }
 
 	protected function getInitialDragMultiplier() : float{ return 0.0; }
 

@@ -6,11 +6,11 @@
         "identifier": "geometry.arvan_bedwars_duos",
         "texture_width": 256,
         "texture_height": 256,
-        "visible_bounds_width": 4,
-        "visible_bounds_height": 4.5,
+        "visible_bounds_width": 19.200000000000003,
+        "visible_bounds_height": 21.6,
         "visible_bounds_offset": [
           0,
-          1.75,
+          7.2,
           0
         ]
       },

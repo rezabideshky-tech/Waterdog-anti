@@ -5,7 +5,7 @@ import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-NS = uuid.UUID("c65793a9-05da-4cea-a2d7-a000a5bc4282")
+NS = uuid.UUID("769f9960-5025-4c72-be41-101e54197141")
 WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
 RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
@@ -163,8 +163,8 @@ def build(name, ident, atlas, bones, cubes, anim, length, scale, bounds):
         gb.append(bone)
     geo = {"format_version": "1.12.0", "minecraft:geometry": [{
         "description": {"identifier": f"geometry.{name}", "texture_width": atlas.W, "texture_height": atlas.H,
-                        "visible_bounds_width": bounds[0], "visible_bounds_height": bounds[1],
-                        "visible_bounds_offset": [0, bounds[1] / 2 - 0.5, 0]}, "bones": gb}]}
+                        "visible_bounds_width": bounds[0] * scale * 1.5, "visible_bounds_height": bounds[1] * scale * 1.5,
+                        "visible_bounds_offset": [0, bounds[1] * scale / 2, 0]}, "bones": gb}]}
     an = {"format_version": "1.8.0", "animations": {aname: {"loop": True, "bones": {
         bn: {ch: [x if isinstance(x, (int, float)) else x for x in v] for ch, v in chans.items()}
         for bn, chans in anim.items()}}}}
@@ -518,7 +518,7 @@ def bedwars_duos():
         anim[f"lleg_{t}"] = {"rotation": [f"math.sin(query.anim_time * 360 + {ph}) * -20", 0, 0]}
         anim[f"fighter_{t}"] = {"position": [f"math.sin(query.anim_time * 360 + {ph}) * {'0.6' if t == 'r' else '-0.6'}",
                                              f"math.abs(math.sin(query.anim_time * 360 + {ph})) * 0.5", 0]}
-    return build("arvan_bedwars_duos", "arvan:bedwars_duos", A, bones, C, anim, 4, 1.2, [4, 4.5, 2])
+    return build("arvan_bedwars_duos", "arvan:bedwars_duos", A, bones, C, anim, 4, 3.2, [4, 4.5, 2])
 
 
 # ================================================================== ROLEPLAY CITY
@@ -625,7 +625,7 @@ def roleplay_city():
             "taxi": {"position": ["math.sin(query.anim_time * 90 + 180) * 7", 0, 0]},
             "siren": {"scale": ["1 + math.abs(math.sin(query.anim_time * 720)) * 0.3"] * 3},
             "sign": {"rotation": ["math.sin(query.anim_time * 90) * 2", 0, 0]}}
-    return build("arvan_roleplay_city", "arvan:roleplay_city", A, bones, C, anim, 4, 1.3, [3.5, 4, 2])
+    return build("arvan_roleplay_city", "arvan:roleplay_city", A, bones, C, anim, 4, 3.2, [3.5, 4, 2])
 
 
 models = [bedwars_duos(), roleplay_city()]

@@ -327,7 +327,7 @@ for bn, piv, _ in BONES:
     bones.append({"name": bn, "pivot": piv, "cubes": cs})
 GEO = {"format_version": "1.12.0", "minecraft:geometry": [{
     "description": {"identifier": "geometry.bedwars_battle_pass", "texture_width": S, "texture_height": S,
-                    "visible_bounds_width": 4, "visible_bounds_height": 4, "visible_bounds_offset": [0, 1.5, 0]},
+                    "visible_bounds_width": 10, "visible_bounds_height": 10, "visible_bounds_offset": [0, 1.5, 0]},
     "bones": bones}]}
 ANIMJ = {"format_version": "1.8.0", "animations": {"animation.bedwars_battle_pass.idle": {
     "loop": True, "bones": {bn: {ch: [v if v != "0" else 0 for v in vals] for ch, vals in chans.items()}
@@ -355,7 +355,7 @@ json.dump({"format_version": "1.10.0", "minecraft:client_entity": {"description"
     "textures": {"default": "textures/entity/bedwars_battle_pass"},
     "geometry": {"default": "geometry.bedwars_battle_pass"},
     "animations": {"idle": "animation.bedwars_battle_pass.idle"},
-    "scripts": {"animate": ["idle"], "scale": "1.5"},
+    "scripts": {"animate": ["idle"], "scale": "2.6"},
     "render_controllers": ["controller.render.bedwars_battle_pass"],
     "spawn_egg": {"base_color": "#DC282D", "overlay_color": "#2864E6"}}}},
     open(os.path.join(RP, "entity/bedwars_battle_pass.entity.json"), "w"), indent=2)
