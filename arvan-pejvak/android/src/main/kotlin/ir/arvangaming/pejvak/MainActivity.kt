@@ -213,7 +213,7 @@ class MainActivity : Activity() {
             isVerticalScrollBarEnabled = false
             clipToPadding = false
             setPadding(0, 0, 0, dp(12))
-            addView(content, ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            addView(content, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
         }
         pageHost.addView(scroll, FrameLayout.LayoutParams(-1, -1))
         scroll.alpha = 0f
@@ -824,5 +824,4 @@ class MainActivity : Activity() {
         private const val RED_WASH = 0xffffeeee.toInt()
         private const val ORANGE = 0xffd58a16.toInt()
     }
-}
 }
