@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "\u00a7l\u00a7cBed\u00a79Wars \u00a76Battle Pass",
+    "description": "\u00a7eBedWars Battle Pass NPC model \u00a77- Season 1",
+    "uuid": "33e7f4a6-03e5-5586-a812-c3d5c01df73b",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "815624d6-0857-5ec9-888b-a02c9faf2dbb",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

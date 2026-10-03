@@ -1,213 +1,330 @@
 #!/usr/bin/env python3
-"""Generates the Battle Pass Blockbench model, Bedrock geometry, animation and texture."""
-import base64, io, json, math, os, uuid
+"""BedWars Battle Pass: builds texture, Blockbench model, and a Bedrock resource pack (.mcpack + .zip)."""
+import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-S = 128  # texture size
+S = 128
 img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
 d = ImageDraw.Draw(img)
 
-GOLD = [(255, 236, 140), (250, 204, 60), (222, 160, 30), (160, 100, 20)]
-PURP = [(40, 10, 80), (90, 30, 160), (150, 70, 230), (210, 150, 255)]
+GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
+RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
+BLUE = [(120, 190, 255), (40, 110, 230), (20, 50, 150), (8, 18, 60)]
+WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 
 
 def lerp(a, b, t):
     return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
 
 
-def gradient(box, top, bot):
+def grad(box, top, bot):
     x0, y0, x1, y1 = box
     for y in range(y0, y1):
         d.line([(x0, y), (x1 - 1, y)], fill=lerp(top, bot, (y - y0) / max(1, y1 - y0 - 1)))
 
 
-def frame(box, w=3):
+def frame(box):
     x0, y0, x1, y1 = box
-    for i in range(w):
-        c = GOLD[min(i, 3)] if i < w - 1 else GOLD[3]
-        d.rectangle([x0 + i, y0 + i, x1 - 1 - i, y1 - 1 - i], outline=c)
-    d.line([(x0, y0), (x1 - 1, y0)], fill=GOLD[0])
-    d.line([(x0, y0), (x0, y1 - 1)], fill=GOLD[0])
+    d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=GOLD[3])
+    d.rectangle([x0 + 1, y0 + 1, x1 - 2, y1 - 2], outline=GOLD[1])
+    d.rectangle([x0 + 2, y0 + 2, x1 - 3, y1 - 3], outline=GOLD[2])
+    d.line([(x0 + 1, y0 + 1), (x1 - 2, y0 + 1)], fill=GOLD[0])
+    for cx, cy in [(x0 + 1, y0 + 1), (x1 - 4, y0 + 1), (x0 + 1, y1 - 4), (x1 - 4, y1 - 4)]:
+        d.rectangle([cx, cy, cx + 2, cy + 2], fill=(90, 255, 140))  # emerald corners
+        d.point([(cx, cy)], fill=WHITE)
 
 
-def star(cx, cy, r, fill, outline):
-    pts = []
-    for i in range(10):
-        a = -math.pi / 2 + i * math.pi / 5
-        rr = r if i % 2 == 0 else r * 0.45
-        pts.append((cx + rr * math.cos(a), cy + rr * math.sin(a)))
-    d.polygon(pts, fill=fill, outline=outline)
+def noise(box, cols, step=3):
+    x0, y0, x1, y1 = box
+    for y in range(y0, y1):
+        for x in range(x0, x1):
+            h = (x * 73856093 ^ y * 19349663) & 0xFF
+            if h % step == 0:
+                d.point([(x, y)], fill=cols[h % len(cols)])
 
 
-# pixel font 3x5
 FONT = {
     "B": ["110", "101", "110", "101", "110"], "A": ["010", "101", "111", "101", "101"],
     "T": ["111", "010", "010", "010", "010"], "L": ["100", "100", "100", "100", "111"],
     "E": ["111", "100", "110", "100", "111"], "P": ["110", "101", "110", "100", "100"],
-    "S": ["011", "100", "010", "001", "110"], "I": ["111", "010", "010", "010", "111"],
+    "S": ["011", "100", "010", "001", "110"], "D": ["110", "101", "101", "101", "110"],
+    "W": ["101", "101", "111", "111", "101"], "R": ["110", "101", "110", "101", "101"],
     "O": ["010", "101", "101", "101", "010"], "N": ["101", "111", "111", "101", "101"],
     "1": ["010", "110", "010", "010", "111"], " ": ["000"] * 5,
 }
 
 
-def text(s, cx, y, col, shadow, scale=1):
-    w = len(s) * 4 * scale - scale
-    x = cx - w // 2
+def text(s, cx, y, col, sh, sc=1):
+    x = cx - (len(s) * 4 * sc - sc) // 2
     for ch in s:
-        g = FONT[ch]
-        for ry, row in enumerate(g):
+        for ry, row in enumerate(FONT[ch]):
             for rx, v in enumerate(row):
                 if v == "1":
-                    px, py = x + rx * scale, y + ry * scale
-                    d.rectangle([px + 1, py + 1, px + scale, py + scale], fill=shadow)
-                    d.rectangle([px, py, px + scale - 1, py + scale - 1], fill=col)
-        x += 4 * scale
+                    px, py = x + rx * sc, y + ry * sc
+                    d.rectangle([px + 1, py + 1, px + sc, py + sc], fill=sh)
+                    d.rectangle([px, py, px + sc - 1, py + sc - 1], fill=col)
+        x += 4 * sc
 
 
-# ---- FRONT (0,0)-(48,64)
-gradient((0, 0, 48, 64), PURP[2], PURP[0])
-for i in range(0, 120, 6):  # diagonal shine stripes
-    d.line([(i - 60, 64), (i, 0)], fill=(120, 50, 200, 255))
-frame((0, 0, 48, 64), 3)
-text("BATTLE", 24, 6, GOLD[0], GOLD[3])
-text("PASS", 24, 13, GOLD[0], GOLD[3], 1)
-d.ellipse([10, 21, 38, 49], fill=PURP[0], outline=GOLD[2])
-d.ellipse([12, 23, 36, 47], outline=PURP[3])
-star(24, 35, 11, GOLD[1], GOLD[3])
-star(24, 35, 5, GOLD[0], GOLD[0])
-text("SEASON 1", 24, 53, (255, 255, 255), PURP[0])
-for (x, y) in [(6, 22), (41, 24), (8, 46), (40, 45)]:  # sparkles
-    d.point([(x, y)], fill=(255, 255, 255)); d.point([(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)], fill=PURP[3])
+def bed_icon(x, y):  # 20x10 pixel-art bed
+    d.rectangle([x, y + 3, x + 19, y + 7], fill=RED[1])
+    d.rectangle([x, y + 3, x + 19, y + 3], fill=RED[0])
+    d.rectangle([x, y + 1, x + 6, y + 5], fill=WHITE)
+    d.rectangle([x, y + 1, x + 6, y + 1], fill=(230, 230, 240))
+    d.rectangle([x + 7, y + 4, x + 19, y + 7], fill=RED[1])
+    d.line([(x + 7, y + 7), (x + 19, y + 7)], fill=RED[2])
+    for lx in (x, x + 19):
+        d.rectangle([lx, y + 8, lx, y + 9], fill=(110, 70, 35))
+    d.rectangle([x - 1, y, x + 20, y + 10], outline=BLACK)
 
-# ---- BACK (48,0)-(96,64)
-gradient((48, 0, 96, 64), PURP[1], PURP[0])
-for yy in range(4, 64, 8):
-    for xx in range(52, 96, 8):
-        star(xx + (4 if (yy // 8) % 2 else 0), yy, 2, PURP[2], None)
-frame((48, 0, 96, 64), 3)
-text("PASS", 72, 29, GOLD[1], GOLD[3], 2)
 
-# ---- EDGE gold (96,0)-(128,64)
-gradient((96, 0, 128, 64), GOLD[0], GOLD[2])
+def sword(x0, y0, x1, y1, blade, hilt):
+    n = max(abs(x1 - x0), abs(y1 - y0))
+    for i in range(n + 1):
+        px, py = x0 + (x1 - x0) * i // n, y0 + (y1 - y0) * i // n
+        c = blade if i < n * 0.72 else hilt
+        d.rectangle([px, py, px + 1, py + 1], fill=c)
+        if i < n * 0.72:
+            d.point([(px, py)], fill=WHITE)
+    gx, gy = x0 + (x1 - x0) * 72 // 100, y0 + (y1 - y0) * 72 // 100
+    d.line([(gx - 3, gy + 3 * (1 if x1 > x0 else -1) * -1), (gx + 3, gy - 3 * (1 if x1 > x0 else -1) * -1)], fill=GOLD[2], width=2)
+
+
+def gemtex(box, light, mid, dark):
+    x0, y0, x1, y1 = box
+    grad(box, light, dark)
+    cx, cy = (x0 + x1) // 2, (y0 + y1) // 2
+    d.polygon([(cx, y0 + 2), (x1 - 3, cy), (cx, y1 - 3), (x0 + 2, cy)], fill=mid, outline=light)
+    d.line([(x0 + 4, y0 + 4), (cx - 1, y0 + 4)], fill=WHITE)
+    d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=dark)
+
+
+# ---------- FRONT (0,0,48,64) : red team ----------
+grad((0, 0, 48, 64), RED[1], RED[3])
+for i in range(-64, 64, 8):
+    d.line([(i, 64), (i + 64, 0)], fill=(170, 25, 40), width=2)
+# glow behind bed
+for r, c in [(16, (180, 40, 50)), (12, (220, 80, 60)), (8, (255, 150, 80))]:
+    d.ellipse([24 - r, 32 - r * 0.8, 24 + r, 32 + r * 0.8], fill=c)
+sword(7, 47, 21, 21, (210, 255, 255), (120, 70, 30))   # diamond sword
+sword(41, 47, 27, 21, (210, 255, 255), (120, 70, 30))
+bed_icon(14, 27)
+d.rectangle([3, 3, 44, 18], fill=BLACK)
+d.rectangle([3, 18, 44, 18], fill=GOLD[2])
+text("BEDWARS", 24, 5, GOLD[0], GOLD[3])
+text("PASS", 24, 11, WHITE, RED[2])
+d.rectangle([3, 50, 44, 60], fill=BLACK)
+d.rectangle([3, 50, 44, 50], fill=GOLD[2])
+text("SEASON 1", 24, 53, (110, 255, 150), (10, 70, 30))
+for x, y in [(6, 22), (42, 23), (9, 44), (39, 43), (24, 21)]:
+    d.point([(x, y)], fill=WHITE)
+    d.point([(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)], fill=GOLD[0])
+frame((0, 0, 48, 64))
+
+# ---------- BACK (48,0,96,64) : blue team wool ----------
+grad((48, 0, 96, 64), BLUE[1], BLUE[3])
+for yy in range(0, 64, 8):
+    for xx in range(48, 96, 8):
+        if ((xx // 8) + (yy // 8)) % 2:
+            d.rectangle([xx, yy, xx + 7, yy + 7], fill=(30, 80, 190))
+noise((48, 0, 96, 64), [(60, 130, 240), (20, 50, 140)], 5)
+d.rectangle([52, 22, 91, 42], fill=BLACK)
+text("PASS", 72, 27, GOLD[0], GOLD[3], 2)
+frame((48, 0, 96, 64))
+
+# ---------- EDGE (96,0,128,64) ----------
+grad((96, 0, 128, 64), GOLD[0], GOLD[2])
 for y in range(0, 64, 4):
     d.line([(96, y), (127, y)], fill=GOLD[3])
+    d.point([(96 + (y * 7) % 32, y + 2)], fill=WHITE)
 
-# ---- GEM (0,64)-(32,96)
-gradient((0, 64, 32, 96), (120, 255, 255), (20, 120, 220))
-d.line([(0, 64), (31, 95)], fill=(220, 255, 255)); d.line([(31, 64), (0, 95)], fill=(60, 180, 240))
-d.rectangle([0, 64, 31, 95], outline=(10, 60, 140))
+# ---------- small textures (16x16) row y=64 ----------
+gemtex((0, 64, 16, 80), (170, 255, 190), (40, 210, 100), (5, 90, 40))     # emerald
+gemtex((16, 64, 32, 80), (220, 255, 255), (80, 220, 230), (20, 110, 140))  # diamond
+# end stone (top of island) 32,64
+grad((32, 64, 48, 80), (238, 236, 175), (215, 210, 150)); noise((32, 64, 48, 80), [(200, 195, 130), (250, 250, 200)], 3)
+# grass top 48,64
+grad((48, 64, 64, 80), (110, 190, 70), (85, 160, 50)); noise((48, 64, 64, 80), [(70, 140, 40), (140, 210, 90)], 2)
+# grass side 64,64
+grad((64, 64, 80, 80), (135, 95, 60), (100, 70, 45)); noise((64, 64, 80, 80), [(80, 55, 35), (160, 120, 80)], 3)
+for x in range(64, 80):
+    d.line([(x, 64), (x, 66 + (x * 5) % 3)], fill=(100, 180, 60))
+# red wool 80,64 / blue wool 96,64 / white wool 112,64
+for x0, pal in [(80, RED), (96, BLUE), (112, [(250, 250, 250), (235, 235, 240), (210, 210, 220)])]:
+    grad((x0, 64, x0 + 16, 80), pal[0], pal[2]); noise((x0, 64, x0 + 16, 80), [pal[1], pal[2]], 2)
+# row y=80: wood 0, gold block 16, iron blade 32, hilt 48, bed top 64 (32x16)
+grad((0, 80, 16, 96), (160, 110, 60), (110, 75, 40))
+for y in range(80, 96, 4): d.line([(0, y), (15, y)], fill=(90, 60, 30))
+grad((16, 80, 32, 96), GOLD[0], GOLD[2]); d.rectangle([16, 80, 31, 95], outline=GOLD[3]); d.line([(18, 82), (24, 82)], fill=WHITE)
+grad((32, 80, 48, 96), (230, 255, 255), (90, 210, 220))
+grad((48, 80, 64, 96), (130, 80, 40), (80, 50, 25))
+# bed top: pillow left 10px, red blanket
+d.rectangle([64, 80, 95, 95], fill=RED[1]); noise((64, 80, 96, 96), [RED[0], RED[2]], 3)
+d.rectangle([64, 80, 75, 95], fill=WHITE); d.line([(76, 80), (76, 95)], fill=RED[0])
+# shine for orbit (row 96): glow tile
+grad((0, 96, 16, 112), (255, 255, 200), (255, 190, 60))
 
-# ---- PEDESTAL (32,64)-(96,96)
-gradient((32, 64, 96, 96), (70, 60, 90), (30, 25, 45))
-for y in range(64, 96, 8):
-    d.line([(32, y), (95, y)], fill=(20, 15, 30))
-d.rectangle([32, 64, 95, 65], fill=GOLD[1])
-for x in range(36, 96, 10):
-    d.point([(x, 70 + (x % 7))], fill=PURP[3])
+TEX = os.path.join(OUT, "battle_pass.png")
+img.save(TEX)
 
-# ---- RIBBON (96,64)-(128,96)
-gradient((96, 64, 128, 96), (255, 80, 120), (170, 20, 60))
-d.line([(96, 66), (127, 66)], fill=(255, 170, 190))
-
-png = os.path.join(OUT, "battle_pass.png")
-img.save(png)
-
-# ---------- geometry (units = pixels, texture uv in 128 space) ----------
-REG = {  # name: (x, y, w, h)
-    "front": (0, 0, 48, 64), "back": (48, 0, 48, 64), "edge": (96, 0, 32, 64),
-    "gem": (0, 64, 32, 32), "ped": (32, 64, 64, 32), "rib": (96, 64, 32, 32),
-}
+# ---------- geometry ----------
+R = {"front": (0, 0, 48, 64), "back": (48, 0, 48, 64), "edge": (96, 0, 32, 64),
+     "emerald": (0, 64, 16, 16), "diamond": (16, 64, 16, 16), "endstone": (32, 64, 16, 16),
+     "grass": (48, 64, 16, 16), "grass_side": (64, 64, 16, 16), "red": (80, 64, 16, 16),
+     "blue": (96, 64, 16, 16), "white": (112, 64, 16, 16), "wood": (0, 80, 16, 16),
+     "goldb": (16, 80, 16, 16), "blade": (32, 80, 16, 16), "hilt": (48, 80, 16, 16),
+     "bedtop": (64, 80, 32, 16)}
 
 
-def faces(n, s, e, w, u, dn):
+def F(n, s=None, e=None, w=None, u=None, dn=None):
+    s = s or n; e = e or n; w = w or e; u = u or n; dn = dn or u
     return dict(north=n, south=s, east=e, west=w, up=u, down=dn)
 
 
-cubes = [  # name, bone, from, to, face regions
-    ("card", "pass", (-6, 10, -0.75), (6, 26, 0.75), faces("front", "back", "edge", "edge", "edge", "edge")),
-    ("gem", "pass", (-1.5, 26, -1.5), (1.5, 29, 1.5), faces(*["gem"] * 6)),
-    ("ribbon_l", "pass", (-8, 18, -0.5), (-6, 22, 0.5), faces(*["rib"] * 6)),
-    ("ribbon_r", "pass", (6, 18, -0.5), (8, 22, 0.5), faces(*["rib"] * 6)),
-    ("base", "pedestal", (-6, 0, -6), (6, 2, 6), faces(*["ped"] * 6)),
-    ("column", "pedestal", (-2.5, 2, -2.5), (2.5, 7, 2.5), faces(*["ped"] * 6)),
-    ("top", "pedestal", (-4, 7, -4), (4, 8, 4), faces(*["ped"] * 6)),
+# (name, bone, from, to, faces, rotation(optional), pivot)
+C = [
+    # island
+    ("island", "island", (-8, 0, -8), (8, 4, 8), F("grass_side", u="grass", dn="grass_side")),
+    ("island_low", "island", (-6, -2, -6), (6, 0, 6), F("grass_side")),
+    ("wool_r", "island", (-8, 4, -8), (-5, 7, -5), F("red")),
+    ("wool_b", "island", (5, 4, -8), (8, 7, -5), F("blue")),
+    ("wool_w", "island", (5, 4, 5), (8, 6, 8), F("white")),
+    ("gold_blk", "island", (-8, 4, 5), (-5, 7, 8), F("goldb")),
+    ("bed", "island", (-4, 4, 2), (4, 6, 7), F("red", u="bedtop", dn="wood")),
+    ("bed_leg1", "island", (-4, 4, 2), (-3, 5, 3), F("wood")),
+    ("stand", "island", (-2, 4, -3), (2, 9, 1), F("endstone")),
+    # pass
+    ("card", "pass", (-6, 12, -0.75), (6, 28, 0.75), F("front", s="back", e="edge", u="edge")),
+    ("emerald", "pass", (-1.5, 28.5, -1.5), (1.5, 31.5, 1.5), F("emerald"), (0, 45, 0), (0, 30, 0)),
+    ("sword_l_blade", "pass", (-0.75, 14, -1.25), (0.75, 30, -0.75), F("blade"), (0, 0, 35), (-4, 16, 0)),
+    ("sword_r_blade", "pass", (-0.75, 14, -1.25), (0.75, 30, -0.75), F("blade"), (0, 0, -35), (4, 16, 0)),
+    ("sword_l_hilt", "pass", (-2.5, 13, -1.4), (2.5, 14, -0.6), F("goldb"), (0, 0, 35), (-4, 16, 0)),
+    ("sword_r_hilt", "pass", (-2.5, 13, -1.4), (2.5, 14, -0.6), F("goldb"), (0, 0, -35), (4, 16, 0)),
+    # orbit gems
+    ("orb_diamond", "orbit", (8, 19, -1), (10, 21, 1), F("diamond"), (45, 0, 45), (9, 20, 0)),
+    ("orb_emerald", "orbit", (-10, 19, -1), (-8, 21, 1), F("emerald"), (45, 0, 45), (-9, 20, 0)),
+    ("orb_gold", "orbit", (-1, 19, 8), (1, 21, 10), F("goldb"), (45, 0, 45), (0, 20, 9)),
+    ("orb_iron", "orbit", (-1, 19, -10), (1, 21, -8), F("white"), (45, 0, 45), (0, 20, -9)),
 ]
+# sword positions offset: shift blades sideways
+OFF = {"sword_l_blade": -4, "sword_l_hilt": -4, "sword_r_blade": 4, "sword_r_hilt": 4}
+C = [(n, b, (f[0] + OFF.get(n, 0), f[1], f[2]), (t[0] + OFF.get(n, 0), t[1], t[2]), fc, *rest)
+     for (n, b, f, t, fc, *rest) in C]
+BONES = [("island", [0, 0, 0], None), ("pass", [0, 20, 0], None), ("orbit", [0, 20, 0], None)]
 
-# Blockbench project
-elements, bone_children = [], {"pedestal": [], "pass": []}
-for name, bone, f, t, fc in cubes:
-    uid = str(uuid.uuid4())
-    bone_children[bone].append(uid)
-    elements.append({
-        "name": name, "type": "cube", "uuid": uid, "box_uv": False, "rescale": False,
-        "from": list(f), "to": list(t), "origin": [0, 0, 0], "color": 0,
-        "faces": {k: {"uv": [REG[v][0], REG[v][1], REG[v][0] + REG[v][2], REG[v][1] + REG[v][3]], "texture": 0}
-                  for k, v in fc.items()},
-    })
-
-with open(png, "rb") as fh:
-    b64 = base64.b64encode(fh.read()).decode()
-
-anim_uuid = str(uuid.uuid4())
-bone_uuid = {"pedestal": str(uuid.uuid4()), "pass": str(uuid.uuid4())}
+# --- Blockbench project
+els, kids = [], {b[0]: [] for b in BONES}
+for n, b, f, t, fc, *rest in C:
+    u = str(uuid.uuid4()); kids[b].append(u)
+    e = {"name": n, "type": "cube", "uuid": u, "box_uv": False, "from": list(f), "to": list(t),
+         "origin": list(rest[1]) if rest else [0, 0, 0],
+         "faces": {k: {"uv": [R[v][0], R[v][1], R[v][0] + R[v][2], R[v][1] + R[v][3]], "texture": 0}
+                   for k, v in fc.items()}}
+    if rest:
+        e["rotation"] = list(rest[0])
+    els.append(e)
+buid = {b[0]: str(uuid.uuid4()) for b in BONES}
+ANIM = {"pass": {"rotation": ["0", "math.sin(query.anim_time * 60) * 25", "0"],
+                 "position": ["0", "math.sin(query.anim_time * 120) * 1.2", "0"]},
+        "orbit": {"rotation": ["0", "query.anim_time * -120", "0"],
+                  "position": ["0", "math.cos(query.anim_time * 120) * 1", "0"]}}
+b64 = base64.b64encode(open(TEX, "rb").read()).decode()
 bb = {
     "meta": {"format_version": "4.10", "model_format": "bedrock", "box_uv": False},
-    "name": "battle_pass", "model_identifier": "battle_pass",
-    "visible_box": [2, 3, 1], "variable_placeholders": "", "variable_placeholder_buttons": [],
-    "resolution": {"width": S, "height": S},
-    "elements": elements,
-    "outliner": [
-        {"name": "pedestal", "origin": [0, 0, 0], "uuid": bone_uuid["pedestal"], "export": True,
-         "isOpen": True, "visibility": True, "children": bone_children["pedestal"]},
-        {"name": "pass", "origin": [0, 18, 0], "uuid": bone_uuid["pass"], "export": True,
-         "isOpen": True, "visibility": True, "children": bone_children["pass"]},
-    ],
-    "textures": [{
-        "path": "", "name": "battle_pass.png", "folder": "", "namespace": "", "id": "0",
-        "width": S, "height": S, "uv_width": S, "uv_height": S, "particle": False,
-        "render_mode": "default", "render_sides": "auto", "frame_time": 1, "frame_order_type": "loop",
-        "visible": True, "internal": True, "saved": True, "uuid": str(uuid.uuid4()),
-        "source": "data:image/png;base64," + b64,
-    }],
-    "animations": [{
-        "uuid": anim_uuid, "name": "animation.battle_pass.idle", "loop": "loop", "override": False,
-        "length": 4, "snapping": 24, "selected": False, "anim_time_update": "", "blend_weight": "",
-        "start_delay": "", "loop_delay": "",
-        "animators": {bone_uuid["pass"]: {"name": "pass", "type": "bone", "keyframes": [
-            {"channel": "rotation", "data_points": [{"x": "0", "y": "query.anim_time * 90", "z": "0"}],
-             "uuid": str(uuid.uuid4()), "time": 0, "color": -1, "interpolation": "linear"},
-            {"channel": "position", "data_points": [{"x": "0", "y": "math.sin(query.anim_time * 90) * 1.5", "z": "0"}],
-             "uuid": str(uuid.uuid4()), "time": 0, "color": -1, "interpolation": "linear"},
-        ]}},
-    }],
+    "name": "bedwars_battle_pass", "model_identifier": "bedwars_battle_pass", "visible_box": [3, 3, 1],
+    "resolution": {"width": S, "height": S}, "elements": els,
+    "outliner": [{"name": n, "origin": p, "uuid": buid[n], "export": True, "isOpen": True,
+                  "visibility": True, "children": kids[n]} for n, p, _ in BONES],
+    "textures": [{"path": "", "name": "battle_pass.png", "id": "0", "width": S, "height": S,
+                  "uv_width": S, "uv_height": S, "render_mode": "default", "visible": True,
+                  "internal": True, "saved": True, "uuid": str(uuid.uuid4()),
+                  "source": "data:image/png;base64," + b64}],
+    "animations": [{"uuid": str(uuid.uuid4()), "name": "animation.bedwars_battle_pass.idle", "loop": "loop",
+                    "override": False, "length": 6, "snapping": 24,
+                    "animators": {buid[bn]: {"name": bn, "type": "bone", "keyframes": [
+                        {"channel": ch, "data_points": [dict(zip("xyz", v))], "uuid": str(uuid.uuid4()),
+                         "time": 0, "color": -1, "interpolation": "linear"} for ch, v in chans.items()]}
+                        for bn, chans in ANIM.items()}}],
 }
 json.dump(bb, open(os.path.join(OUT, "battle_pass.bbmodel"), "w"), indent=1)
 
-# Bedrock geometry (north = -Z is the front face)
-geo_bones = []
-for bone, pivot in (("pedestal", [0, 0, 0]), ("pass", [0, 18, 0])):
+# --- Bedrock geometry
+bones = []
+for bn, piv, _ in BONES:
     cs = []
-    for name, b, f, t, fc in cubes:
-        if b != bone:
+    for n, b, f, t, fc, *rest in C:
+        if b != bn:
             continue
-        cs.append({
-            "origin": list(f), "size": [t[i] - f[i] for i in range(3)],
-            "uv": {k: {"uv": [REG[v][0], REG[v][1]], "uv_size": [REG[v][2], REG[v][3]]} for k, v in fc.items()},
-        })
-    geo_bones.append({"name": bone, "pivot": pivot, "cubes": cs})
-geo = {"format_version": "1.12.0", "minecraft:geometry": [{
-    "description": {"identifier": "geometry.battle_pass", "texture_width": S, "texture_height": S,
-                    "visible_bounds_width": 3, "visible_bounds_height": 3, "visible_bounds_offset": [0, 1, 0]},
-    "bones": geo_bones}]}
-json.dump(geo, open(os.path.join(OUT, "battle_pass.geo.json"), "w"), indent=2)
+        c = {"origin": list(f), "size": [round(t[i] - f[i], 3) for i in range(3)],
+             "uv": {k: {"uv": [R[v][0], R[v][1]], "uv_size": [R[v][2], R[v][3]]} for k, v in fc.items()}}
+        if rest:  # bedrock rotation sign: x,y negated vs blockbench
+            rx, ry, rz = rest[0]
+            c["rotation"] = [-rx, -ry, rz]; c["pivot"] = [-rest[1][0], rest[1][1], rest[1][2]]
+            c["origin"] = [-t[0], f[1], f[2]]
+        else:
+            c["origin"] = [-t[0], f[1], f[2]]
+        cs.append(c)
+    bones.append({"name": bn, "pivot": piv, "cubes": cs})
+GEO = {"format_version": "1.12.0", "minecraft:geometry": [{
+    "description": {"identifier": "geometry.bedwars_battle_pass", "texture_width": S, "texture_height": S,
+                    "visible_bounds_width": 4, "visible_bounds_height": 4, "visible_bounds_offset": [0, 1.5, 0]},
+    "bones": bones}]}
+ANIMJ = {"format_version": "1.8.0", "animations": {"animation.bedwars_battle_pass.idle": {
+    "loop": True, "bones": {bn: {ch: [v if v != "0" else 0 for v in vals] for ch, vals in chans.items()}
+                            for bn, chans in ANIM.items()}}}}
+json.dump(GEO, open(os.path.join(OUT, "battle_pass.geo.json"), "w"), indent=2)
+json.dump(ANIMJ, open(os.path.join(OUT, "battle_pass.animation.json"), "w"), indent=2)
 
-anim = {"format_version": "1.8.0", "animations": {"animation.battle_pass.idle": {
-    "loop": True, "bones": {"pass": {
-        "rotation": [0, "query.anim_time * 90", 0],
-        "position": [0, "math.sin(query.anim_time * 90) * 1.5", 0]}}}}}
-json.dump(anim, open(os.path.join(OUT, "battle_pass.animation.json"), "w"), indent=2)
+# ---------- Resource pack ----------
+RP = os.path.join(OUT, "BedWarsBattlePass_RP")
+shutil.rmtree(RP, ignore_errors=True)
+for sub in ["models/entity", "animations", "textures/entity", "entity", "render_controllers", "texts"]:
+    os.makedirs(os.path.join(RP, sub))
+NS = uuid.UUID("6a1f0c3e-5b8d-4c2a-9e7f-b3d1a2c4e5f6")  # stable uuids across rebuilds
+manifest = {"format_version": 2, "header": {
+    "name": "§l§cBed§9Wars §6Battle Pass", "description": "§eBedWars Battle Pass NPC model §7- Season 1",
+    "uuid": str(uuid.uuid5(NS, "header")), "version": [1, 0, 0], "min_engine_version": [1, 20, 0]},
+    "modules": [{"type": "resources", "uuid": str(uuid.uuid5(NS, "module")), "version": [1, 0, 0]}]}
+json.dump(manifest, open(os.path.join(RP, "manifest.json"), "w"), indent=2)
+shutil.copy(TEX, os.path.join(RP, "textures/entity/bedwars_battle_pass.png"))
+json.dump(GEO, open(os.path.join(RP, "models/entity/bedwars_battle_pass.geo.json"), "w"), indent=2)
+json.dump(ANIMJ, open(os.path.join(RP, "animations/bedwars_battle_pass.animation.json"), "w"), indent=2)
+json.dump({"format_version": "1.10.0", "minecraft:client_entity": {"description": {
+    "identifier": "bedwars:battle_pass",
+    "materials": {"default": "entity_alphatest"},
+    "textures": {"default": "textures/entity/bedwars_battle_pass"},
+    "geometry": {"default": "geometry.bedwars_battle_pass"},
+    "animations": {"idle": "animation.bedwars_battle_pass.idle"},
+    "scripts": {"animate": ["idle"], "scale": "1.5"},
+    "render_controllers": ["controller.render.bedwars_battle_pass"],
+    "spawn_egg": {"base_color": "#DC282D", "overlay_color": "#2864E6"}}}},
+    open(os.path.join(RP, "entity/bedwars_battle_pass.entity.json"), "w"), indent=2)
+json.dump({"format_version": "1.8.0", "render_controllers": {"controller.render.bedwars_battle_pass": {
+    "geometry": "Geometry.default", "materials": [{"*": "Material.default"}],
+    "textures": ["Texture.default"]}}},
+    open(os.path.join(RP, "render_controllers/bedwars_battle_pass.render_controllers.json"), "w"), indent=2)
+open(os.path.join(RP, "texts/en_US.lang"), "w").write(
+    "entity.bedwars:battle_pass.name=§l§6Battle Pass\nitem.spawn_egg.entity.bedwars:battle_pass.name=Spawn Battle Pass\n")
+json.dump(["en_US"], open(os.path.join(RP, "texts/languages.json"), "w"))
+# pack icon: front of card on dark background
+icon = Image.new("RGBA", (256, 256), (20, 10, 30, 255))
+ImageDraw.Draw(icon).ellipse([20, 20, 236, 236], fill=(120, 20, 35))
+card = img.crop((0, 0, 48, 64)).resize((144, 192), Image.NEAREST)
+icon.paste(card, (56, 32), card)
+icon.save(os.path.join(RP, "pack_icon.png"))
+icon.save(os.path.join(OUT, "preview_icon.png"))
+img.resize((512, 512), Image.NEAREST).save(os.path.join(OUT, "preview_texture.png"))
 
-# preview (texture x4)
-img.resize((S * 4, S * 4), Image.NEAREST).save(os.path.join(OUT, "preview_texture.png"))
+
+def zipdir(path, dest):
+    with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED) as z:
+        for root, _, files in os.walk(path):
+            for fn in files:
+                full = os.path.join(root, fn)
+                z.write(full, os.path.relpath(full, path))
+
+
+zipdir(RP, os.path.join(OUT, "BedWarsBattlePass.mcpack"))
+zipdir(RP, os.path.join(OUT, "BedWarsBattlePass_RP.zip"))
 print("done")
