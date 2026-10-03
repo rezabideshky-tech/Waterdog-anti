@@ -43,7 +43,18 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build debug APK
-        run: gradle --no-daemon -p arvan-pejvak/android-build :app:assembleDebug
+        run: |
+          set -o pipefail
+          gradle --no-daemon --console=plain --stacktrace -p arvan-pejvak/android-build :app:assembleDebug 2>&1 | tee "$RUNNER_TEMP/gradle-build.log"
+
+      - name: Upload build log for diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArvanPejvak-build-log
+          path: ${{ runner.temp }}/gradle-build.log
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Upload Arvan Pejvak APK
         uses: actions/upload-artifact@v4
