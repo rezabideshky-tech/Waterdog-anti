@@ -57,7 +57,15 @@ final class AntiBotConfig {
     final int idleExpirySeconds;
     final int knownPlayerTrustSeconds;
     final int observeSampleEvery;
+
+    final boolean packetGuardEnabled;
+    final boolean shedNewLoginsOnHighLoad;
+    final long attackInboundBytesPerSecond;
+    final int attackSustainedWindows;
+    final int attackCooldownSeconds;
+
     final String rejectedMessage;
+    final String highLoadRejectedMessage;
 
     private AntiBotConfig(Configuration source) {
         this.initialMode = Mode.parse(readString(source, "mode", "observe"));
@@ -94,8 +102,21 @@ final class AntiBotConfig {
         this.idleExpirySeconds = readInt(source, "storage.idle-expiry-seconds", 600, 30, 86_400);
         this.knownPlayerTrustSeconds = readInt(source, "storage.known-player-trust-seconds", 3_600, 0, 604_800);
         this.observeSampleEvery = readInt(source, "logging.observe-sample-every", 50, 1, 1_000_000);
+
+        this.packetGuardEnabled = readBoolean(source, "packet-guard.enabled", true);
+        this.shedNewLoginsOnHighLoad = readBoolean(source,
+                "packet-guard.shed-new-logins-on-high-load-in-attack-mode", false);
+        this.attackInboundBytesPerSecond = readLong(source,
+                "packet-guard.attack-inbound-decoded-bytes-per-second", 0L, 0L, Long.MAX_VALUE);
+        this.attackSustainedWindows = readInt(source,
+                "packet-guard.attack-sustained-windows", 5, 1, 3_600);
+        this.attackCooldownSeconds = readInt(source,
+                "packet-guard.attack-cooldown-seconds", 15, 1, 3_600);
+
         this.rejectedMessage = readString(source, "messages.rejected",
-                "§cورود شما موقتاً محدود شد؛ لطفاً چند لحظه بعد دوباره تلاش کنید.");
+                "§c§l[ArvanShield] §r§cLogin is temporarily limited. Please try again shortly.");
+        this.highLoadRejectedMessage = readString(source, "messages.high-load-rejected",
+                "§c§l[ArvanShield] §r§cThe proxy is under heavy traffic. Please reconnect in a moment.");
     }
 
     static AntiBotConfig load(Configuration source) {
@@ -123,6 +144,18 @@ final class AntiBotConfig {
     private static int readInt(Configuration source, String key, int fallback, int minimum, int maximum) {
         try {
             Integer value = source.getInt(key, fallback);
+            if (value == null) {
+                return fallback;
+            }
+            return Math.max(minimum, Math.min(maximum, value));
+        } catch (RuntimeException ignored) {
+            return fallback;
+        }
+    }
+
+    private static long readLong(Configuration source, String key, long fallback, long minimum, long maximum) {
+        try {
+            Long value = source.getLong(key, fallback);
             if (value == null) {
                 return fallback;
             }

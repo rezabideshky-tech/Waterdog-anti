@@ -38,6 +38,17 @@ class TokenBucketTest {
     }
 
     @Test
+    void concurrentConsumersCannotExceedTheBurstCapacity() {
+        TokenBucket bucket = new TokenBucket(25, SECOND);
+        long accepted = java.util.stream.IntStream.range(0, 10_000)
+                .parallel()
+                .filter(ignored -> bucket.tryConsume(25, 0.0, SECOND))
+                .count();
+
+        assertEquals(25L, accepted);
+    }
+
+    @Test
     void recordsLastAccessForIdleCleanup() {
         TokenBucket bucket = new TokenBucket(1, SECOND);
         long access = SECOND + 25;

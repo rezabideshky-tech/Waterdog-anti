@@ -64,13 +64,13 @@ keep-current-lobby-on-transfer-failure: true
 
 ## افزونهٔ مستقل آنتی‌بات: ArvanShield
 
-در مسیر [`arvanshield/`](arvanshield/README.md) یک افزونهٔ جداگانهٔ Java 21 برای بررسی زودهنگام ورود و rate-limit محافظه‌کارانه قرار دارد. این افزونه با `WaterdogLobbyFallback` یکی نیست و باید به‌صورت JAR مستقل نصب شود. حالت پیش‌فرض آن `observe` است و تا وقتی خودت `balanced` را فعال نکنی، اتصال بازیکن را رد نمی‌کند.
+در مسیر [`arvanshield/`](arvanshield/README.md) یک افزونهٔ جداگانهٔ Java 21 برای محافظه‌کاری در ورود و پایش تجمیعی ترافیک قرار دارد. این افزونه با `WaterdogLobbyFallback` یکی نیست و باید به‌صورت JAR مستقل نصب شود. حالت پیش‌فرض آن `observe` است و ورود بازیکن را رد نمی‌کند. گزینهٔ جلوگیری از ورود جدید هنگام فشار پایدار ترافیک، پیش‌فرض خاموش است و فقط در حالت `attack` و پس از تنظیم صریح مدیر فعال می‌شود.
 
 ```bash
-mvn -f arvanshield/pom.xml clean package
+mvn -f arvanshield/pom.xml clean verify
 ```
 
-خروجی `arvanshield/target/arvanshield-1.0.0.jar` است. جزئیات نصب، حالت‌ها و محدودیت‌ها در [راهنمای ArvanShield](arvanshield/README.md) آمده است. این افزونه سازگاری پروتکل Bedrock اضافه نمی‌کند و نسخهٔ کلاینت را سیگنال بات نمی‌داند.
+خروجی `arvanshield/target/arvanshield-1.1.0.jar` است. جزئیات نصب و تنظیمات در [راهنمای ArvanShield](arvanshield/README.md) آمده است. API عمومی WaterdogPE در این افزونه فقط آمار تجمیعی می‌دهد و hook لغو بستهٔ خام هر بازیکن ندارد؛ افزونه جایگزین فایروال یا محافظ DDoS حجیم UDP در لایهٔ میزبان نیست. ArvanShield سازگاری پروتکل Bedrock اضافه نمی‌کند و نسخهٔ کلاینت را سیگنال بات نمی‌داند.
 
 ---
 

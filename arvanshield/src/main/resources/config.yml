@@ -41,6 +41,17 @@ risk:
     global-rate: 15
     trusted-xuid-discount: 20
 
+# Aggregate traffic monitoring through WaterdogPE's public NetworkMetrics API.
+# This API reports proxy-wide counters; it does not expose a safe per-player raw-packet cancel hook.
+packet-guard:
+  enabled: true
+  # Automatic login shedding is deliberately opt-in and only runs in mode: attack.
+  # 0 disables the byte-rate trigger. Set a value only after observing normal peak traffic.
+  shed-new-logins-on-high-load-in-attack-mode: false
+  attack-inbound-decoded-bytes-per-second: 0
+  attack-sustained-windows: 5
+  attack-cooldown-seconds: 15
+
 # Resource bounds and log noise controls.
 storage:
   max-tracked-buckets: 50000
@@ -50,5 +61,7 @@ storage:
 logging:
   observe-sample-every: 50
 
+# Player-facing English messages use Minecraft color codes.
 messages:
-  rejected: "§cورود شما موقتاً محدود شد؛ لطفاً چند لحظه بعد دوباره تلاش کنید."
+  rejected: "§c§l[ArvanShield] §r§cLogin is temporarily limited. Please try again shortly."
+  high-load-rejected: "§c§l[ArvanShield] §r§cThe proxy is under heavy traffic. Please reconnect in a moment."

@@ -12,4 +12,8 @@ final class RiskPolicy {
         }
         return score >= threshold && independentSignals >= minimumIndependentSignals;
     }
+
+    static boolean shouldShedNewLogins(boolean attackMode, boolean explicitlyEnabled, boolean sustainedPressure) {
+        return attackMode && explicitlyEnabled && sustainedPressure;
+    }
 }

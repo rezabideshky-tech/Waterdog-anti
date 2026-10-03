@@ -22,4 +22,12 @@ class RiskPolicyTest {
     void explicitAuthenticationPolicyCanRejectIndependently() {
         assertTrue(RiskPolicy.shouldReject(0, 0, 75, 2, true));
     }
+
+    @Test
+    void loadSheddingRequiresAttackModeOptInAndConfirmedPressure() {
+        assertFalse(RiskPolicy.shouldShedNewLogins(false, true, true));
+        assertFalse(RiskPolicy.shouldShedNewLogins(true, false, true));
+        assertFalse(RiskPolicy.shouldShedNewLogins(true, true, false));
+        assertTrue(RiskPolicy.shouldShedNewLogins(true, true, true));
+    }
 }

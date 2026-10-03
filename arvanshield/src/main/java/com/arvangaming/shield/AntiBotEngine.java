@@ -15,8 +15,10 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HexFormat;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -29,16 +31,20 @@ final class AntiBotEngine {
         NETWORK,
         IDENTITY,
         GLOBAL,
-        AUTHENTICATION
+        AUTHENTICATION,
+        PACKET_PRESSURE
     }
 
     private static final HexFormat HEX = HexFormat.of();
     private static final ThreadLocal<MessageDigest> SHA_256 = ThreadLocal.withInitial(AntiBotEngine::newSha256);
 
     private final ArvanShieldPlugin plugin;
+    private final TrafficWindow trafficWindow;
     private final byte[] hashSalt = new byte[32];
     private final ConcurrentHashMap<String, TokenBucket> buckets = new ConcurrentHashMap<>();
+    private final AtomicInteger trackedBucketCount = new AtomicInteger();
     private final ConcurrentHashMap<String, Long> recentlySuccessfulXuids = new ConcurrentHashMap<>();
+    private final AtomicInteger trackedSuccessfulXuids = new AtomicInteger();
     // Kept outside the bounded per-key map so global protection remains available at its memory cap.
     private final TokenBucket globalBucket;
 
@@ -46,6 +52,7 @@ final class AntiBotEngine {
     private final LongAdder allowed = new LongAdder();
     private final LongAdder rejected = new LongAdder();
     private final LongAdder wouldReject = new LongAdder();
+    private final LongAdder pressureRejected = new LongAdder();
     private final LongAdder suppressedRejectLogs = new LongAdder();
     private final AtomicLong nextRejectLogNanos = new AtomicLong();
     private final AtomicLong lastRiskScore = new AtomicLong();
@@ -54,8 +61,9 @@ final class AntiBotEngine {
     private volatile AntiBotConfig.Mode mode;
     private volatile boolean active = true;
 
-    AntiBotEngine(ArvanShieldPlugin plugin, AntiBotConfig config) {
+    AntiBotEngine(ArvanShieldPlugin plugin, AntiBotConfig config, TrafficWindow trafficWindow) {
         this.plugin = plugin;
+        this.trafficWindow = trafficWindow;
         new SecureRandom().nextBytes(this.hashSalt);
         this.config = config;
         this.mode = config.initialMode;
@@ -73,6 +81,23 @@ final class AntiBotEngine {
         if (currentMode == AntiBotConfig.Mode.OFF) {
             this.allowed.increment();
             this.lastRiskScore.set(0);
+            return;
+        }
+
+        // Optional load shedding is deliberately opt-in and only active in explicit attack mode.
+        // It rejects new logins after sustained aggregate pressure; connected players are untouched.
+        TrafficWindow.Snapshot traffic = this.trafficWindow.snapshot();
+        if (RiskPolicy.shouldShedNewLogins(
+                currentMode == AntiBotConfig.Mode.ATTACK,
+                currentConfig.packetGuardEnabled && currentConfig.shedNewLoginsOnHighLoad
+                        && currentConfig.attackInboundBytesPerSecond > 0L,
+                traffic.highPressure())) {
+            event.setCancelReason(currentConfig.highLoadRejectedMessage);
+            event.setCancelled(true);
+            this.rejected.increment();
+            this.pressureRejected.increment();
+            this.lastRiskScore.set(currentConfig.attackThreshold);
+            this.logRejected(currentMode, packetPressureDecision());
             return;
         }
 
@@ -124,11 +149,28 @@ final class AntiBotEngine {
             return;
         }
 
-        if (this.recentlySuccessfulXuids.size() >= Math.max(100, currentConfig.maxTrackedBuckets / 2)) {
+        long now = System.nanoTime();
+        long expiresAt = now + TimeUnit.SECONDS.toNanos(trustSeconds);
+        String hashedXuid = hash("xuid", normalizedXuid);
+        Long currentExpiry = this.recentlySuccessfulXuids.get(hashedXuid);
+        if (currentExpiry != null) {
+            if (now - currentExpiry >= 0L) {
+                this.recentlySuccessfulXuids.replace(hashedXuid, currentExpiry, expiresAt);
+            }
             return;
         }
-        long expiresAt = System.nanoTime() + TimeUnit.SECONDS.toNanos(trustSeconds);
-        this.recentlySuccessfulXuids.put(hash("xuid", normalizedXuid), expiresAt);
+
+        int maximumKnownXuids = Math.max(100, currentConfig.maxTrackedBuckets / 2);
+        if (!reserveSlot(this.trackedSuccessfulXuids, maximumKnownXuids)) {
+            return;
+        }
+        Long previous = this.recentlySuccessfulXuids.putIfAbsent(hashedXuid, expiresAt);
+        if (previous != null) {
+            this.trackedSuccessfulXuids.decrementAndGet();
+            if (now - previous >= 0L) {
+                this.recentlySuccessfulXuids.replace(hashedXuid, previous, expiresAt);
+            }
+        }
     }
 
     private Decision evaluate(PlayerAuthenticatedEvent event, AntiBotConfig currentConfig, long now) {
@@ -200,6 +242,18 @@ final class AntiBotEngine {
         return decision;
     }
 
+    private static boolean reserveSlot(AtomicInteger counter, int maximum) {
+        while (true) {
+            int current = counter.get();
+            if (current >= maximum) {
+                return false;
+            }
+            if (counter.compareAndSet(current, current + 1)) {
+                return true;
+            }
+        }
+    }
+
     private static String normalizeXuid(String xuid) {
         if (xuid == null || xuid.isBlank()) {
             return "";
@@ -227,14 +281,19 @@ final class AntiBotEngine {
                                   AntiBotConfig currentConfig, long now) {
         TokenBucket bucket = this.buckets.get(key);
         if (bucket == null) {
-            // Keep memory bounded even if an attacker rotates source addresses. When the map is
-            // full, per-key accounting fails open; the independent global bucket remains active.
-            if (this.buckets.size() >= currentConfig.maxTrackedBuckets) {
+            // Bound memory even under simultaneous new keys. At capacity, per-key tracking fails
+            // open while the always-present global bucket continues to apply.
+            if (!reserveSlot(this.trackedBucketCount, currentConfig.maxTrackedBuckets)) {
                 return true;
             }
             TokenBucket fresh = new TokenBucket(capacity, now);
             TokenBucket previous = this.buckets.putIfAbsent(key, fresh);
-            bucket = previous == null ? fresh : previous;
+            if (previous == null) {
+                bucket = fresh;
+            } else {
+                this.trackedBucketCount.decrementAndGet();
+                bucket = previous;
+            }
         }
         return bucket.tryConsume(capacity, refillPerSecond, now);
     }
@@ -268,6 +327,28 @@ final class AntiBotEngine {
         }
     }
 
+    synchronized void sampleTraffic() {
+        if (!this.active) {
+            return;
+        }
+        AntiBotConfig currentConfig = this.config;
+        this.trafficWindow.sample(System.nanoTime(), currentConfig.packetGuardEnabled,
+                currentConfig.attackInboundBytesPerSecond, currentConfig.attackSustainedWindows,
+                currentConfig.attackCooldownSeconds);
+    }
+
+    TrafficWindow.Snapshot getTrafficSnapshot() {
+        return this.trafficWindow.snapshot();
+    }
+
+    private static Decision packetPressureDecision() {
+        Decision decision = new Decision();
+        decision.score = 100;
+        decision.signals.add(Signal.PACKET_PRESSURE);
+        decision.evidence.add("sustained-inbound-packet-pressure");
+        return decision;
+    }
+
     void setMode(AntiBotConfig.Mode mode) {
         this.mode = mode;
     }
@@ -276,14 +357,16 @@ final class AntiBotEngine {
         return this.mode;
     }
 
-    void reload(AntiBotConfig config) {
+    synchronized void reload(AntiBotConfig config) {
+        this.trafficWindow.resetPressure();
         this.config = config;
         this.mode = config.initialMode;
     }
 
     Snapshot snapshot() {
         return new Snapshot(this.mode, this.attempts.sum(), this.allowed.sum(), this.rejected.sum(),
-                this.wouldReject.sum(), this.lastRiskScore.get(), this.buckets.size());
+                this.wouldReject.sum(), this.lastRiskScore.get(), this.trackedBucketCount.get(),
+                this.pressureRejected.sum(), this.trafficWindow.snapshot());
     }
 
     void cleanup() {
@@ -292,14 +375,26 @@ final class AntiBotEngine {
         }
         long now = System.nanoTime();
         long idleNanos = TimeUnit.SECONDS.toNanos(this.config.idleExpirySeconds);
-        this.buckets.entrySet().removeIf(entry -> now - entry.getValue().lastAccessNanos() >= idleNanos);
-        this.recentlySuccessfulXuids.entrySet().removeIf(entry -> now - entry.getValue() >= 0);
+        for (Map.Entry<String, TokenBucket> entry : this.buckets.entrySet()) {
+            if (now - entry.getValue().lastAccessNanos() >= idleNanos
+                    && this.buckets.remove(entry.getKey(), entry.getValue())) {
+                this.trackedBucketCount.decrementAndGet();
+            }
+        }
+        for (Map.Entry<String, Long> entry : this.recentlySuccessfulXuids.entrySet()) {
+            if (now - entry.getValue() >= 0L
+                    && this.recentlySuccessfulXuids.remove(entry.getKey(), entry.getValue())) {
+                this.trackedSuccessfulXuids.decrementAndGet();
+            }
+        }
     }
 
     void shutdown() {
         this.active = false;
         this.buckets.clear();
+        this.trackedBucketCount.set(0);
         this.recentlySuccessfulXuids.clear();
+        this.trackedSuccessfulXuids.set(0);
     }
 
     private String hash(String namespace, String value) {
@@ -320,7 +415,8 @@ final class AntiBotEngine {
     }
 
     record Snapshot(AntiBotConfig.Mode mode, long attempts, long allowed, long rejected,
-                    long wouldReject, long lastRiskScore, int trackedBuckets) {
+                    long wouldReject, long lastRiskScore, int trackedBuckets,
+                    long pressureRejected, TrafficWindow.Snapshot traffic) {
     }
 
     private static final class Decision {
