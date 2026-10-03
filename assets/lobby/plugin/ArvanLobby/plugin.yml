@@ -1,0 +1,14 @@
+name: ArvanLobby
+main: arvan\lobby\Main
+version: 1.0.0
+api: 5.0.0
+depend: [Customies]
+description: ArvanGaming lobby portal NPCs (BedWars Duos, RolePlay City)
+commands:
+  lobbynpc:
+    description: Spawn/remove lobby portal NPCs
+    usage: "/lobbynpc <spawn <duos|roleplay>|remove>"
+    permission: arvanlobby.admin
+permissions:
+  arvanlobby.admin:
+    default: op

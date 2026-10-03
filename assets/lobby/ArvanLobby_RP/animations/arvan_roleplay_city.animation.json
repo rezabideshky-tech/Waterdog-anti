@@ -1,0 +1,45 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_roleplay_city.idle": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "position": [
+            0,
+            "math.sin(query.anim_time * 90) * 0.6",
+            0
+          ]
+        },
+        "car": {
+          "position": [
+            "math.sin(query.anim_time * 90) * 7",
+            0,
+            0
+          ]
+        },
+        "taxi": {
+          "position": [
+            "math.sin(query.anim_time * 90 + 180) * 7",
+            0,
+            0
+          ]
+        },
+        "siren": {
+          "scale": [
+            "1 + math.abs(math.sin(query.anim_time * 720)) * 0.3",
+            "1 + math.abs(math.sin(query.anim_time * 720)) * 0.3",
+            "1 + math.abs(math.sin(query.anim_time * 720)) * 0.3"
+          ]
+        },
+        "sign": {
+          "rotation": [
+            "math.sin(query.anim_time * 90) * 2",
+            0,
+            0
+          ]
+        }
+      }
+    }
+  }
+}

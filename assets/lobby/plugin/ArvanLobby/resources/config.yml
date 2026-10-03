@@ -1,0 +1,17 @@
+# What happens when a player taps an NPC.
+# action: "transfer" -> sends player to address:port (use your Waterdog proxy / game server)
+# action: "command"  -> runs command from console, {player} is replaced with player name
+#                       e.g. Waterdog/multi-server plugins: "transfer {player} bedwars"
+npcs:
+  duos:
+    nametag: "§l§cBED§9WARS §fDUOS\n§r§7Tap to play! §e2v2v2v2"
+    action: transfer
+    address: "play.arvangaming.ir"
+    port: 19132
+    command: "tell {player} BedWars Duos coming soon!"
+  roleplay:
+    nametag: "§l§aROLEPLAY §fCITY\n§r§7Tap to join! §bArvanGaming"
+    action: transfer
+    address: "play.arvangaming.ir"
+    port: 19133
+    command: "tell {player} RolePlay coming soon!"

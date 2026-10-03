@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "\u00a7l\u00a7bArvan\u00a7fGaming \u00a7eLobby",
+    "description": "\u00a7cBedWars Duos \u00a77& \u00a7aRolePlay City \u00a77portal models",
+    "uuid": "8a6c42ae-8717-5588-9567-fc208e8671c9",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "28e88287-275c-56da-80c7-14efdfc0e27c",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}
