@@ -1,0 +1,58 @@
+name: Validate Arvan Pejvak
+
+on:
+  push:
+    branches:
+      - arena/01a0fbb8-waterdog-anti
+    paths:
+      - 'arvan-pejvak/**'
+      - '.github/workflows/test-arvan-pejvak.yml'
+  pull_request:
+    paths:
+      - 'arvan-pejvak/**'
+      - '.github/workflows/test-arvan-pejvak.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gateway:
+    name: Gateway tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: arvan-pejvak/gateway/package-lock.json
+      - name: Install gateway dependencies
+        working-directory: arvan-pejvak/gateway
+        run: npm ci
+      - name: Check JavaScript syntax
+        working-directory: arvan-pejvak/gateway
+        run: node --check src/server.js && node --check src/core.js
+      - name: Run unit tests
+        working-directory: arvan-pejvak/gateway
+        run: npm test
+
+  pocketmine:
+    name: PocketMine PHP syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: Lint plugin PHP files
+        run: find arvan-pejvak/pocketmine -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Package PocketMine plugin PHAR
+        run: php -d phar.readonly=0 arvan-pejvak/pocketmine/build-phar.php "$RUNNER_TEMP/ArvanPejvak.phar"
+      - name: Upload PocketMine plugin PHAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArvanPejvak-PocketMine-PHAR
+          path: ${{ runner.temp }}/ArvanPejvak.phar
+          if-no-files-found: error
+          retention-days: 30

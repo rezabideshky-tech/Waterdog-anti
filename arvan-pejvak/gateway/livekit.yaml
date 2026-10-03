@@ -1,0 +1,11 @@
+# Replace this development key and secret before public deployment.
+port: 7880
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 50100
+  use_external_ip: true
+keys:
+  devkey: replace-with-a-long-random-livekit-secret
+logging:
+  level: info

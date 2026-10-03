@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">آروان پژواک</string>
+    <string name="notification_channel_voice">تماس صوتی آروان پژواک</string>
+</resources>

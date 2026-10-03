@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'ir.arvangaming.pejvak'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'ir.arvangaming.pejvak'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0-alpha1'
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile '../../android/AndroidManifest.xml'
+            java.srcDirs = ['../../android/src/main/java', '../../android/src/main/kotlin']
+            res.srcDirs = ['../../android/src/main/res']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    implementation 'io.livekit:livekit-android:2.29.0'
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'kotlinx-coroutines-android:1.9.0'
+}

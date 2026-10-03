@@ -1,0 +1,12 @@
+<resources>
+    <style name="PejvakTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#7C3AED</item>
+        <item name="android:statusBarColor">#5B21B6</item>
+        <item name="android:navigationBarColor">#F8F6FC</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowBackground">#F8F6FC</item>
+    </style>
+</resources>

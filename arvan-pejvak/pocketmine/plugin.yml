@@ -1,0 +1,19 @@
+name: ArvanPejvak
+main: Arvan\Pejvak\PejvakPlugin
+version: 0.1.0-alpha1
+api: 5.0.0
+load: POSTWORLD
+author: ArvanGaming
+description: Secure PocketMine bridge for Arvan Pejvak proximity voice chat.
+commands:
+  pejvak:
+    description: Connect your Minecraft account to Arvan Pejvak voice chat.
+    usage: "/pejvak <code|status>"
+    permission: arvanpejvak.use
+permissions:
+  arvanpejvak.use:
+    description: Allows a player to request a short-lived voice link code.
+    default: true
+  arvanpejvak.admin:
+    description: Allows administrators to inspect the voice bridge status.
+    default: op

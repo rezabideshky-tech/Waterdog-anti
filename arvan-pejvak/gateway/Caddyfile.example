@@ -1,0 +1,13 @@
+# Example for Caddy installed directly on the VPS host.
+# Point voice.example.com to this server, then replace the hostname.
+voice.example.com {
+    @gateway path /v1/* /health
+
+    handle @gateway {
+        reverse_proxy 127.0.0.1:8787
+    }
+
+    handle {
+        reverse_proxy 127.0.0.1:7880
+    }
+}

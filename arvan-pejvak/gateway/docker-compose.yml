@@ -1,0 +1,23 @@
+services:
+  livekit:
+    image: livekit/livekit-server:v1.13.7
+    command: ["--config", "/etc/livekit.yaml"]
+    restart: unless-stopped
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    ports:
+      - "127.0.0.1:7880:7880/tcp"
+      - "7881:7881/tcp"
+      - "50000-50100:50000-50100/udp"
+
+  gateway:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      LIVEKIT_API_URL: http://livekit:7880
+    depends_on:
+      - livekit
+    ports:
+      - "127.0.0.1:8787:8787/tcp"

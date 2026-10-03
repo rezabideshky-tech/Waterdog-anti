@@ -1,0 +1,10 @@
+# Use the HTTPS URL for the Arvan Pejvak gateway behind your reverse proxy.
+gateway-url: "https://voice.example.com"
+# Must exactly match CONTROL_SHARED_SECRET in the gateway's private .env file.
+# Never commit a real value here or send it in chat.
+shared-secret: "CHANGE-ME-TO-A-LONG-RANDOM-SECRET"
+# Unique stable name per PocketMine backend; use letters, numbers, dash, underscore or dot.
+server-id: "arvan-main"
+# Presence is sent in one async batch per second (20 ticks). Keep this at 20 or higher.
+presence-sync-ticks: 20
+# Proximity radius is enforced by the gateway, not trusted from the phone.
