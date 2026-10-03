@@ -115,10 +115,13 @@ def build(name, ident, atlas, bones, cubes, anim, length, scale, bounds):
 
     def outl(parent):
         res = []
-        for bn, piv, par in bones:
+        for bn, piv, par, *br in bones:
             if par == parent:
-                res.append({"name": bn, "origin": piv, "uuid": buid[bn], "export": True, "isOpen": True,
-                            "visibility": True, "children": kids[bn] + outl(bn)})
+                o = {"name": bn, "origin": piv, "uuid": buid[bn], "export": True, "isOpen": True,
+                     "visibility": True, "children": kids[bn] + outl(bn)}
+                if br:
+                    o["rotation"] = [-br[0][0], -br[0][1], br[0][2]]
+                res.append(o)
         return res
 
     b64 = base64.b64encode(open(tex_path, "rb").read()).decode()
@@ -140,7 +143,7 @@ def build(name, ident, atlas, bones, cubes, anim, length, scale, bounds):
 
     # Bedrock geometry (X mirrored like Blockbench export)
     gb = []
-    for bn, piv, par in bones:
+    for bn, piv, par, *br in bones:
         cs = []
         for n, b, f, t, fc, *rest in cubes:
             if b != bn:
@@ -155,6 +158,8 @@ def build(name, ident, atlas, bones, cubes, anim, length, scale, bounds):
         bone = {"name": bn, "pivot": [-piv[0], piv[1], piv[2]], "cubes": cs}
         if par:
             bone["parent"] = par
+        if br:
+            bone["rotation"] = list(br[0])
         gb.append(bone)
     geo = {"format_version": "1.12.0", "minecraft:geometry": [{
         "description": {"identifier": f"geometry.{name}", "texture_width": atlas.W, "texture_height": atlas.H,
@@ -173,95 +178,278 @@ def build(name, ident, atlas, bones, cubes, anim, length, scale, bounds):
 
 # ================================================================== BEDWARS DUOS
 def bedwars_duos():
-    A = Atlas(128, 128)
-    # grass top
+    A = Atlas(256, 256)
+    # ---------------- terrain / blocks
     b = A.alloc("grass", 16, 16); A.grad(b, (120, 200, 75), (90, 165, 55)); A.noise(b, [(70, 140, 40), (150, 220, 95)], 2)
     b = A.alloc("grass_side", 16, 16); A.grad(b, (140, 98, 62), (100, 70, 45)); A.noise(b, [(80, 55, 35), (165, 122, 82)], 3)
     for x in range(b[0], b[2]):
         A.d.line([(x, b[1]), (x, b[1] + 2 + (x * 7) % 3)], fill=(105, 185, 65))
     b = A.alloc("dirt", 16, 16); A.grad(b, (125, 88, 55), (85, 58, 38)); A.noise(b, [(70, 48, 30), (150, 110, 75)], 3, 2)
     b = A.alloc("stone", 16, 16); A.grad(b, (135, 135, 140), (95, 95, 105)); A.noise(b, [(80, 80, 90), (160, 160, 165)], 3, 3)
-    b = A.alloc("wood", 16, 16); A.grad(b, (165, 115, 62), (115, 78, 42))
-    for y in range(b[1], b[3], 4): A.d.line([(b[0], y), (b[2] - 1, y)], fill=(90, 60, 30))
-    for nm, pal in [("bed_red", RED), ("bed_blue", BLUE)]:
-        b = A.alloc(nm + "_top", 32, 16)
-        A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=pal[1]); A.noise(b, [pal[0], pal[2]], 4, 5)
-        A.d.rectangle([b[0], b[1], b[0] + 10, b[3] - 1], fill=WHITE)
-        A.d.line([(b[0], b[1] + 1), (b[0] + 10, b[1] + 1)], fill=(225, 225, 235))
-        A.d.line([(b[0] + 11, b[1]), (b[0] + 11, b[3] - 1)], fill=pal[0])
-        b = A.alloc(nm, 16, 16); A.grad(b, pal[0], pal[2]); A.noise(b, [pal[1], pal[2]], 3, 7)
-        A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=pal[0])
-    # heart sprite with alpha
-    b = A.alloc("heart", 16, 16)
-    H = ["0011000001100", "0122100012210", "1222210122221", "1222221222221", "1222222222221",
-         "0122222222210", "0012222222100", "0001222221000", "0000122210000", "0000012100000", "0000001000000"]
-    for y, row in enumerate(H):
-        for x, v in enumerate(row):
-            if v != "0":
-                A.d.point([(b[0] + 1 + x, b[1] + 2 + y)], fill=(90, 0, 20) if v == "1" else (255, 60, 90))
-    A.d.point([(b[0] + 4, b[1] + 4), (b[0] + 4, b[1] + 5), (b[0] + 5, b[1] + 4)], fill=(255, 200, 210))
-    b = A.alloc("none", 16, 16)
+    b = A.alloc("endstone", 16, 16); A.grad(b, (240, 238, 180), (212, 208, 148)); A.noise(b, [(195, 190, 128), (252, 250, 205)], 3, 4)
+    b = A.alloc("planks", 16, 16); A.grad(b, (178, 132, 78), (140, 100, 56))
+    for y in range(b[1] + 3, b[3], 4): A.d.line([(b[0], y), (b[2] - 1, y)], fill=(100, 70, 38))
+    for i, y in enumerate(range(b[1], b[3], 4)): A.d.point([(b[0] + (5 + i * 7) % 16, y + 1)], fill=(100, 70, 38))
+    b = A.alloc("obsidian", 16, 16); A.grad(b, (40, 25, 60), (15, 8, 25)); A.noise(b, [(90, 60, 140), (60, 35, 95)], 4, 9)
+    b = A.alloc("tnt_side", 16, 16); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(210, 45, 30))
+    A.d.rectangle([b[0], b[1] + 5, b[2] - 1, b[1] + 10], fill=(238, 238, 228))
+    for x in range(b[0], b[2], 4):
+        A.d.line([(x, b[1]), (x, b[1] + 4)], fill=(150, 20, 15)); A.d.line([(x, b[1] + 11), (x, b[3] - 1)], fill=(150, 20, 15))
+    A.text("TNT", (b[0] + b[2]) // 2, b[1] + 5, BLACK)
+    b = A.alloc("tnt_top", 16, 16); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(200, 45, 35))
+    A.d.rectangle([b[0] + 5, b[1] + 5, b[0] + 10, b[1] + 10], fill=(230, 220, 200)); A.d.rectangle([b[0] + 7, b[1] + 7, b[0] + 8, b[1] + 8], fill=BLACK)
+    for nm, pal in [("wool_red", RED), ("wool_blue", BLUE)]:
+        b = A.alloc(nm, 16, 16); A.grad(b, pal[0], pal[2]); A.noise(b, [pal[1], pal[2], pal[0]], 2, 7)
     b = A.alloc("diamond", 16, 16); A.grad(b, (220, 255, 255), (30, 130, 160))
     A.d.polygon([(b[0] + 8, b[1] + 2), (b[0] + 13, b[1] + 8), (b[0] + 8, b[1] + 13), (b[0] + 3, b[1] + 8)], fill=(90, 225, 235), outline=WHITE)
     b = A.alloc("emerald", 16, 16); A.grad(b, (170, 255, 190), (10, 100, 45))
     A.d.polygon([(b[0] + 8, b[1] + 2), (b[0] + 13, b[1] + 8), (b[0] + 8, b[1] + 13), (b[0] + 3, b[1] + 8)], fill=(40, 210, 100), outline=WHITE)
     b = A.alloc("gold", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
-    b = A.alloc("obsidian", 16, 16); A.grad(b, (40, 25, 60), (15, 8, 25)); A.noise(b, [(90, 60, 140), (60, 35, 95)], 4, 9)
-    # sign board front 64x32
+    b = A.alloc("iron", 16, 16); A.grad(b, (240, 240, 245), (170, 170, 180)); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=(120, 120, 130))
+    b = A.alloc("gen_side", 16, 16); A.grad(b, (90, 90, 100), (50, 50, 60))
+    A.d.rectangle([b[0] + 2, b[1] + 6, b[2] - 3, b[1] + 9], fill=(80, 230, 240))
+    b = A.alloc("fire", 16, 16); A.grad(b, (255, 240, 120), (230, 70, 20)); A.noise(b, [(255, 160, 40), (255, 255, 200)], 3, 11)
+    b = A.alloc("none", 16, 16)
+    b = A.alloc("trim", 16, 16); A.grad(b, GOLD[0], GOLD[2])
+
+    # ---------------- realistic beds (Minecraft style)
+    for nm, pal in [("red", RED), ("blue", BLUE)]:
+        # top: pillow end (head, +z) white, blanket with fold
+        b = A.alloc(f"bed_{nm}_top", 32, 64)
+        x0, y0, x1, y1 = b
+        A.d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=pal[1]); A.noise(b, [pal[0], pal[2]], 5, 13)
+        A.d.rectangle([x0, y0, x1 - 1, y0 + 19], fill=(245, 245, 250))           # sheet at head
+        A.d.line([(x0, y0 + 19), (x1 - 1, y0 + 19)], fill=(205, 205, 215))
+        A.d.rectangle([x0, y0 + 20, x1 - 1, y0 + 24], fill=pal[0])                # blanket fold
+        A.d.line([(x0, y0 + 25), (x1 - 1, y0 + 25)], fill=pal[2])
+        for y in range(y0 + 30, y1, 8):
+            A.d.line([(x0 + 2, y), (x1 - 3, y)], fill=pal[2])
+        A.d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=pal[3])
+        # side (long): blanket hangs over, white sheet line at top, wooden frame
+        b = A.alloc(f"bed_{nm}_side", 64, 16)
+        x0, y0, x1, y1 = b
+        A.d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=pal[1]); A.noise(b, [pal[0], pal[2]], 5, 15)
+        A.d.rectangle([x0, y0, x0 + 19, y0 + 5], fill=(245, 245, 250))
+        A.d.line([(x0, y0), (x1 - 1, y0)], fill=pal[0])
+        A.d.rectangle([x0, y1 - 5, x1 - 1, y1 - 1], fill=(160, 112, 60))         # frame
+        A.d.line([(x0, y1 - 5), (x1 - 1, y1 - 5)], fill=(110, 75, 40))
+        b = A.alloc(f"bed_{nm}_end", 32, 16)
+        x0, y0, x1, y1 = b
+        A.d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=pal[1]); A.noise(b, [pal[0], pal[2]], 5, 17)
+        A.d.rectangle([x0, y1 - 5, x1 - 1, y1 - 1], fill=(160, 112, 60))
+        A.d.line([(x0, y1 - 5), (x1 - 1, y1 - 5)], fill=(110, 75, 40))
+        A.d.line([(x0, y0), (x1 - 1, y0)], fill=pal[0])
+    b = A.alloc("pillow", 32, 16); A.grad(b, (255, 255, 255), (225, 225, 235))
+    A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=(200, 200, 212))
+    A.d.line([(b[0] + 3, b[1] + 5), (b[2] - 4, b[1] + 5)], fill=(235, 235, 242))
+    b = A.alloc("bed_leg", 8, 8); A.grad(b, (150, 105, 58), (100, 70, 38))
+    b = A.alloc("bed_bottom", 32, 32); A.grad(b, (150, 105, 58), (110, 75, 40))
+
+    # ---------------- Steve with team armor
+    SKIN, SKIN_D = (196, 140, 106), (160, 108, 80)
+    HAIR, HAIR_D = (64, 42, 22), (45, 28, 14)
+    EYE_W, EYE = (255, 255, 255), (70, 60, 155)
+    MOUTH, BEARD = (120, 60, 50), (110, 72, 48)
+    SHIRT, PANTS, SHOE = (0, 170, 170), (60, 55, 150), (80, 80, 85)
+
+    def px(box, gx, gy, col, cell):
+        x0, y0 = box[0], box[1]
+        A.d.rectangle([x0 + gx * cell, y0 + gy * cell, x0 + gx * cell + cell - 1, y0 + gy * cell + cell - 1], fill=col)
+
+    def armor_noise(box, pal):
+        A.noise(box, [pal[0], pal[2]], 6, 21)
+
+    for t, pal in [("r", RED), ("b", BLUE)]:
+        DARK = pal[3]
+        # head (8x8 grid, 2px cells = 16px)
+        b = A.alloc(f"h_front_{t}", 16, 16)
+        face = ["HHHHHHHH", "HHHHHHHH", "HSSSSSSH", "SWESSEWS", "SSSddSSS", "SSMbbMSS", "SSbbbbSS", "SSSSSSSS"]
+        cmap = {"H": HAIR, "S": SKIN, "W": EYE_W, "E": EYE, "d": SKIN_D, "M": MOUTH, "b": BEARD}
+        for gy, row in enumerate(face):
+            for gx, ch in enumerate(row):
+                px(b, gx, gy, cmap[ch], 2)
+        # helmet: top 2 rows + side columns down to row 5
+        for gx in range(8):
+            px(b, gx, 0, pal[1], 2); px(b, gx, 1, pal[2] if gx in (0, 7) else pal[1], 2)
+        for gy in range(2, 6):
+            px(b, 0, gy, pal[2], 2); px(b, 7, gy, pal[2], 2)
+        A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=pal[0])
+        A.d.line([(b[0] + 2, b[1] + 3), (b[2] - 3, b[1] + 3)], fill=DARK)
+        b = A.alloc(f"h_side_{t}", 16, 16)
+        A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 11], fill=pal[1]); armor_noise((b[0], b[1], b[2], b[1] + 12), pal)
+        A.d.rectangle([b[0], b[1] + 12, b[2] - 1, b[3] - 1], fill=HAIR)
+        A.d.rectangle([b[0], b[1] + 12, b[0] + 5, b[3] - 1], fill=SKIN)
+        A.d.line([(b[0], b[1] + 11), (b[2] - 1, b[1] + 11)], fill=DARK)
+        b = A.alloc(f"h_back_{t}", 16, 16)
+        A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 11], fill=pal[1]); armor_noise((b[0], b[1], b[2], b[1] + 12), pal)
+        A.d.rectangle([b[0], b[1] + 12, b[2] - 1, b[3] - 1], fill=HAIR_D)
+        A.d.line([(b[0], b[1] + 11), (b[2] - 1, b[1] + 11)], fill=DARK)
+        b = A.alloc(f"h_top_{t}", 16, 16); A.grad(b, pal[0], pal[1]); armor_noise(b, pal)
+        A.d.line([(b[0] + 7, b[1]), (b[0] + 7, b[3] - 1)], fill=pal[2])
+        b = A.alloc(f"h_bottom_{t}", 16, 16); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN_D)
+        # chestplate front 16x24, side 8x24, top 16x8
+        b = A.alloc(f"b_front_{t}", 16, 24)
+        A.grad(b, pal[0], pal[2]); armor_noise(b, pal)
+        A.d.rectangle([b[0] + 5, b[1], b[0] + 10, b[1] + 3], fill=SKIN)  # neck V
+        A.d.rectangle([b[0] + 6, b[1] + 4, b[0] + 9, b[1] + 4], fill=SHIRT)
+        A.d.line([(b[0], b[1] + 15), (b[2] - 1, b[1] + 15)], fill=DARK)   # belt
+        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[1] + 17], fill=(90, 60, 30))
+        A.d.rectangle([b[0] + 6, b[1] + 16, b[0] + 9, b[1] + 17], fill=GOLD[1])
+        A.d.rectangle([b[0] + 6, b[1] + 7, b[0] + 9, b[1] + 11], fill=pal[3])  # emblem
+        A.d.point([(b[0] + 7, b[1] + 8), (b[0] + 8, b[1] + 9), (b[0] + 7, b[1] + 10)], fill=GOLD[0])
+        A.d.rectangle([b[0], b[1] + 18, b[2] - 1, b[3] - 1], fill=pal[2])
+        A.d.line([(b[0] + 7, b[1] + 18), (b[0] + 7, b[3] - 1)], fill=DARK)
+        b = A.alloc(f"b_back_{t}", 16, 24); A.grad(b, pal[1], pal[2]); armor_noise(b, pal)
+        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[1] + 17], fill=(90, 60, 30))
+        b = A.alloc(f"b_side_{t}", 8, 24); A.grad(b, pal[1], pal[2]); armor_noise(b, pal)
+        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[1] + 17], fill=(90, 60, 30))
+        b = A.alloc(f"b_top_{t}", 16, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=pal[1])
+        A.d.rectangle([b[0] + 5, b[1] + 2, b[0] + 10, b[1] + 5], fill=SKIN)
+        # arm 8x24: pauldron (armor) top 10px, then skin sleeve, hand
+        b = A.alloc(f"arm_{t}", 8, 24)
+        A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 9], fill=pal[1]); armor_noise((b[0], b[1], b[2], b[1] + 10), pal)
+        A.d.line([(b[0], b[1] + 9), (b[2] - 1, b[1] + 9)], fill=DARK)
+        A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=pal[0])
+        A.d.rectangle([b[0], b[1] + 10, b[2] - 1, b[3] - 1], fill=SKIN)
+        A.d.rectangle([b[0], b[1] + 10, b[2] - 1, b[1] + 12], fill=SHIRT)
+        A.d.rectangle([b[0], b[3] - 4, b[2] - 1, b[3] - 1], fill=SKIN_D)
+        b = A.alloc(f"arm_top_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=pal[0])
+        b = A.alloc(f"hand_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN_D)
+        # leg 8x24: leggings + boots
+        b = A.alloc(f"leg_{t}", 8, 24)
+        A.grad((b[0], b[1], b[2], b[1] + 16), pal[1], pal[2]); armor_noise((b[0], b[1], b[2], b[1] + 16), pal)
+        A.d.line([(b[0], b[1] + 6), (b[2] - 1, b[1] + 6)], fill=DARK)
+        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[3] - 1], fill=pal[3])
+        A.d.line([(b[0], b[1] + 16), (b[2] - 1, b[1] + 16)], fill=pal[0])
+        A.d.rectangle([b[0], b[3] - 2, b[2] - 1, b[3] - 1], fill=(30, 20, 15))
+        b = A.alloc(f"leg_top_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=pal[2])
+        b = A.alloc(f"boot_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(30, 20, 15))
+    # diamond sword parts
+    b = A.alloc("blade", 8, 32)
+    A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(90, 230, 230))
+    A.d.rectangle([b[0] + 1, b[1], b[0] + 3, b[3] - 1], fill=(200, 255, 255))
+    A.d.rectangle([b[0] + 6, b[1], b[2] - 1, b[3] - 1], fill=(30, 140, 160))
+    A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=(10, 40, 50))
+    b = A.alloc("hilt", 8, 8); A.grad(b, (130, 85, 40), (80, 50, 25))
+    b = A.alloc("guard", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(30, 140, 160))
+    A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=(200, 255, 255))
+
+    # ---------------- sign
     b = A.alloc("sign", 64, 32)
     x0, y0, x1, y1 = b
-    for x in range(x0, x1):  # split red|blue
-        t = (x - x0) / 63
-        c = RED[1] if t < 0.5 else BLUE[1]
-        A.d.line([(x, y0), (x, y1 - 1)], fill=c)
+    for x in range(x0, x1):
+        A.d.line([(x, y0), (x, y1 - 1)], fill=RED[1] if x < (x0 + x1) // 2 else BLUE[1])
+    A.d.line([((x0 + x1) // 2, y0), ((x0 + x1) // 2, y1 - 1)], fill=WHITE)
     A.grad((x0 + 3, y0 + 3, x1 - 3, y0 + 16), (25, 15, 35), (10, 5, 15))
     A.outlined("BEDWARS", (x0 + x1) // 2, y0 + 5, GOLD[0], 1)
     A.d.line([(x0 + 3, y0 + 16), (x1 - 4, y0 + 16)], fill=GOLD[1])
     A.outlined("DUOS", (x0 + x1) // 2, y0 + 19, WHITE, 2)
     A.frame(b)
-    for cx in (x0 + 2, x1 - 3):
-        A.d.rectangle([cx - 1, y0 + 1, cx, y0 + 2], fill=(90, 255, 140))
     b = A.alloc("sign_back", 64, 32); A.grad(b, (60, 40, 25), (35, 22, 12)); A.frame(b)
     A.text("ARVAN GAMING", (b[0] + b[2]) // 2, b[1] + 13, GOLD[1], GOLD[3])
-    b = A.alloc("trim", 16, 16); A.grad(b, GOLD[0], GOLD[2])
 
-    bones = [("root", [0, 0, 0], None), ("island", [0, 0, 0], "root"), ("heart", [0, 15, 0], "root"),
-             ("orbit", [0, 10, 0], "root"), ("sign", [0, 14, 7], "root")]
-    C = [
-        # floating island (stepped underside)
-        ("top", "island", (-11, 0, -9), (11, 4, 9), F("grass_side", u="grass", dn="dirt")),
-        ("under1", "island", (-9, -3, -7), (9, 0, 7), F("dirt")),
-        ("under2", "island", (-6, -6, -5), (6, -3, 5), F("stone")),
-        ("under3", "island", (-3, -9, -2.5), (3, -6, 2.5), F("stone")),
-        ("tip", "island", (-1, -11, -1), (1, -9, 1), F("stone")),
-        # beds
-        ("bed_red", "island", (-9, 5, -5), (-1.5, 7.5, 6), F("bed_red", u="bed_red_top", dn="wood")),
-        ("bed_red_legs", "island", (-9, 4, -5), (-1.5, 5, 6), F("wood")),
-        ("bed_blue", "island", (1.5, 5, -5), (9, 7.5, 6), F("bed_blue", u="bed_blue_top", dn="wood")),
-        ("bed_blue_legs", "island", (1.5, 4, -5), (9, 5, 6), F("wood")),
-        # defense blocks
-        ("obs_l", "island", (-11, 4, -9), (-8, 7, -6), F("obsidian")),
-        ("obs_r", "island", (8, 4, -9), (11, 7, -6), F("obsidian")),
-        ("gen", "island", (-1.5, 4, -8.5), (1.5, 5, -5.5), F("gold")),
-        ("gen_gem", "island", (-1, 5.5, -7.5), (1, 7.5, -5.5), F("diamond"), (0, 45, 0), (0, 6.5, -6.5)),
-        # heart (flat sprite)
-        ("heart", "heart", (-3.5, 12, -0.25), (3.5, 19, 0.25), F("none") | dict(north="heart", south="heart")),
-        # orbit gems
-        ("o_dia", "orbit", (12, 9, -1), (14, 11, 1), F("diamond"), (45, 0, 45), (13, 10, 0)),
-        ("o_eme", "orbit", (-14, 9, -1), (-12, 11, 1), F("emerald"), (45, 0, 45), (-13, 10, 0)),
-        ("o_gld", "orbit", (-1, 9, 12), (1, 11, 14), F("gold"), (45, 0, 45), (0, 10, 13)),
-        # sign board behind beds
-        ("post_l", "sign", (-9, 4, 7), (-8, 14, 8), F("wood")),
-        ("post_r", "sign", (8, 4, 7), (9, 14, 8), F("wood")),
-        ("board", "sign", (-10, 13, 6.5), (10, 23, 7.5), F("sign", s="sign_back", e="trim", u="trim")),
+    # ---------------- geometry
+    def steve(t, cx, cz):
+        """Half-scale Steve (16 units tall) standing on y=4, built facing north (-Z). Bones are prefixed by team."""
+        y = 4
+        bones = [(f"fighter_{t}", [cx, y, cz], "root", [0, 60 if t == "r" else -60, 0]),
+                 (f"body_{t}", [cx, y + 6, cz], f"fighter_{t}"),
+                 (f"head_{t}", [cx, y + 12, cz], f"body_{t}"),
+                 (f"rarm_{t}", [cx + 3, y + 11.5, cz], f"body_{t}"),
+                 (f"larm_{t}", [cx - 3, y + 11.5, cz], f"body_{t}"),
+                 (f"rleg_{t}", [cx + 1, y + 6, cz], f"fighter_{t}"),
+                 (f"lleg_{t}", [cx - 1, y + 6, cz], f"fighter_{t}")]
+        H = F(f"h_front_{t}", s=f"h_back_{t}", e=f"h_side_{t}", u=f"h_top_{t}", dn=f"h_bottom_{t}")
+        B = F(f"b_front_{t}", s=f"b_back_{t}", e=f"b_side_{t}", u=f"b_top_{t}")
+        ARM = F(f"arm_{t}", u=f"arm_top_{t}", dn=f"hand_{t}")
+        LEG = F(f"leg_{t}", u=f"leg_top_{t}", dn=f"boot_{t}")
+        cubes = [
+            (f"head_{t}", f"head_{t}", (cx - 2, y + 12, cz - 2), (cx + 2, y + 16, cz + 2), H),
+            (f"helmet_{t}", f"head_{t}", (cx - 2.25, y + 14.5, cz - 2.25), (cx + 2.25, y + 16.25, cz + 2.25),
+             F(f"h_top_{t}", dn="none") | dict(north="none")),
+            (f"body_{t}", f"body_{t}", (cx - 2, y + 6, cz - 1), (cx + 2, y + 12, cz + 1), B),
+            (f"rarm_{t}", f"rarm_{t}", (cx + 2, y + 6, cz - 1), (cx + 4, y + 12, cz + 1), ARM),
+            (f"larm_{t}", f"larm_{t}", (cx - 4, y + 6, cz - 1), (cx - 2, y + 12, cz + 1), ARM),
+            (f"rleg_{t}", f"rleg_{t}", (cx, y, cz - 1), (cx + 2, y + 6, cz + 1), LEG),
+            (f"lleg_{t}", f"lleg_{t}", (cx - 2, y, cz - 1), (cx, y + 6, cz + 1), LEG),
+            # diamond sword in right hand, blade pointing forward (-Z) when arm hangs
+            (f"hilt_{t}", f"rarm_{t}", (cx + 2.6, y + 6.4, cz - 1.6), (cx + 3.4, y + 7.2, cz + 1.2), F("hilt")),
+            (f"guard_{t}", f"rarm_{t}", (cx + 2.2, y + 6.1, cz - 2.1), (cx + 3.8, y + 7.5, cz - 1.6), F("guard")),
+            (f"blade_{t}", f"rarm_{t}", (cx + 2.75, y + 6.4, cz - 9.1), (cx + 3.25, y + 7.2, cz - 2.1),
+             F("blade", e="blade", u="blade", dn="blade") | dict(north="guard", south="guard")),
+        ]
+        return bones, cubes
+
+    bones = [("root", [0, 0, 0], None), ("island", [0, 0, 0], "root"), ("gen", [9, 7, -9], "root"),
+             ("orbit", [0, 12, 0], "root"), ("sign", [0, 18, 13], "root"), ("fireball", [0, 22, 0], "root")]
+    BED = lambda c, x0, x1: [  # realistic bed: legs, frame+mattress, pillow; head at +z
+        (f"bed_{c}", "island", (x0, 5.5, -1), (x1, 8, 11), F(f"bed_{c}_end", e=f"bed_{c}_side", u=f"bed_{c}_top", dn="bed_bottom")),
+        (f"bed_{c}_pillow", "island", (x0 + 0.75, 8, 7.5), (x1 - 0.75, 8.75, 10.25), F("pillow")),
+        (f"bed_{c}_leg1", "island", (x0, 4, -1), (x0 + 1.5, 5.5, 0.5), F("bed_leg")),
+        (f"bed_{c}_leg2", "island", (x1 - 1.5, 4, -1), (x1, 5.5, 0.5), F("bed_leg")),
+        (f"bed_{c}_leg3", "island", (x0, 4, 9.5), (x0 + 1.5, 5.5, 11), F("bed_leg")),
+        (f"bed_{c}_leg4", "island", (x1 - 1.5, 4, 9.5), (x1, 5.5, 11), F("bed_leg")),
     ]
-    anim = {"root": {"position": [0, "math.sin(query.anim_time * 90) * 1.0", 0]},
-            "heart": {"rotation": [0, "query.anim_time * 90", 0],
-                      "scale": ["1 + math.pow(math.sin(query.anim_time * 180), 8) * 0.25"] * 3,
-                      "position": [0, "math.sin(query.anim_time * 180) * 0.5", 0]},
-            "orbit": {"rotation": [0, "query.anim_time * -90", 0]},
-            "sign": {"rotation": ["math.sin(query.anim_time * 90) * 2", 0, 0]}}
-    return build("arvan_bedwars_duos", "arvan:bedwars_duos", A, bones, C, anim, 4, 1.4, [3, 3.5, 2])
+    C = [
+        ("top", "island", (-14, 0, -12), (14, 4, 13), F("grass_side", u="grass", dn="dirt")),
+        ("under1", "island", (-12, -3, -10), (12, 0, 11), F("dirt")),
+        ("under2", "island", (-9, -6, -7), (9, -3, 8), F("stone")),
+        ("under3", "island", (-5, -9, -4), (5, -6, 5), F("stone")),
+        ("tip", "island", (-2, -12, -1.5), (2, -9, 2.5), F("stone")),
+        *BED("red", -11.5, -4), *BED("blue", 4, 11.5),
+        # bed defense (wool + endstone + planks, classic BedWars)
+        ("def_r_foot", "island", (-12.5, 4, -3), (-3, 6, -1), F("wool_red")),
+        ("def_r_side", "island", (-14, 4, -3), (-12, 7, 12), F("endstone")),
+        ("def_r_in", "island", (-3.5, 4, -1), (-2, 6.5, 12), F("planks")),
+        ("def_b_foot", "island", (3, 4, -3), (12.5, 6, -1), F("wool_blue")),
+        ("def_b_side", "island", (12, 4, -3), (14, 7, 12), F("endstone")),
+        ("def_b_in", "island", (2, 4, -1), (3.5, 6.5, 12), F("planks")),
+        ("obs_r", "island", (-14, 7, 10), (-12, 9, 12), F("obsidian")),
+        ("obs_b", "island", (12, 7, 10), (14, 9, 12), F("obsidian")),
+        # TNT + wool stack front-left
+        ("tnt", "island", (-13, 4, -11.5), (-10, 7, -8.5), F("tnt_side", u="tnt_top")),
+        ("wool_stack1", "island", (-9.5, 4, -11.5), (-7.5, 6, -9.5), F("wool_red")),
+        ("wool_stack2", "island", (7.5, 4, -11.5), (9.5, 6, -9.5), F("wool_blue")),
+        # diamond generator front-right
+        ("gen_base", "island", (10.5, 4, -11.5), (13.5, 5.5, -8.5), F("gen_side", u="obsidian")),
+        ("gen_dia", "gen", (11, 7, -11), (13, 9, -9), F("diamond"), (45, 45, 0), (12, 8, -10)),
+        ("ingot_g", "island", (6, 4, -12), (7.5, 4.6, -11.2), F("gold")),
+        ("ingot_i", "island", (6.2, 4.6, -11.9), (7.3, 5.2, -11.3), F("iron")),
+        # orbiting resources
+        ("o_dia", "orbit", (16, 11, -1), (18, 13, 1), F("diamond"), (45, 0, 45), (17, 12, 0)),
+        ("o_eme", "orbit", (-18, 11, -1), (-16, 13, 1), F("emerald"), (45, 0, 45), (-17, 12, 0)),
+        ("o_gld", "orbit", (-1, 11, 16), (1, 13, 18), F("gold"), (45, 0, 45), (0, 12, 17)),
+        ("o_iron", "orbit", (-1, 11, -18), (1, 13, -16), F("iron"), (45, 0, 45), (0, 12, -17)),
+        # fireball flying between fighters
+        ("fireball", "fireball", (-1, 21, -6), (1, 23, -4), F("fire"), (45, 45, 0), (0, 22, -5)),
+        # sign
+        ("post_l", "sign", (-9, 8, 12.5), (-8, 18, 13.5), F("planks")),
+        ("post_r", "sign", (8, 8, 12.5), (9, 18, 13.5), F("planks")),
+        ("board", "sign", (-11, 17, 12), (11, 28, 13), F("sign", s="sign_back", e="trim", u="trim")),
+    ]
+    for t, cx in (("r", -4.5), ("b", 4.5)):
+        bb_, cc = steve(t, cx, -5)
+        bones += bb_
+        C += cc
+    swing = lambda ph: f"-60 + math.sin(query.anim_time * 360 + {ph}) * 50"
+    anim = {
+        "root": {"position": [0, "math.sin(query.anim_time * 90) * 0.8", 0]},
+        "orbit": {"rotation": [0, "query.anim_time * -90", 0]},
+        "gen": {"rotation": [0, "query.anim_time * 180", 0], "position": [0, "math.sin(query.anim_time * 180) * 0.6", 0]},
+        "sign": {"rotation": ["math.sin(query.anim_time * 90) * 2", 0, 0]},
+        "fireball": {"position": ["math.sin(query.anim_time * 90) * 9", "math.abs(math.cos(query.anim_time * 90)) * -3", 0],
+                     "rotation": ["query.anim_time * 360", "query.anim_time * 360", 0]},
+    }
+    for t, ph in (("r", 0), ("b", 180)):
+        anim[f"rarm_{t}"] = {"rotation": [swing(ph), 0, 0]}
+        anim[f"larm_{t}"] = {"rotation": [f"-20 + math.sin(query.anim_time * 360 + {ph}) * -15", 0, f"{'-' if t == 'r' else ''}10"]}
+        anim[f"body_{t}"] = {"rotation": [0, f"math.sin(query.anim_time * 360 + {ph}) * 15", 0]}
+        anim[f"head_{t}"] = {"rotation": [f"math.sin(query.anim_time * 360 + {ph}) * 5", f"math.sin(query.anim_time * 360 + {ph}) * -10", 0]}
+        anim[f"rleg_{t}"] = {"rotation": [f"math.sin(query.anim_time * 360 + {ph}) * 20", 0, 0]}
+        anim[f"lleg_{t}"] = {"rotation": [f"math.sin(query.anim_time * 360 + {ph}) * -20", 0, 0]}
+        anim[f"fighter_{t}"] = {"position": [f"math.sin(query.anim_time * 360 + {ph}) * {'0.6' if t == 'r' else '-0.6'}",
+                                             f"math.abs(math.sin(query.anim_time * 360 + {ph})) * 0.5", 0]}
+    return build("arvan_bedwars_duos", "arvan:bedwars_duos", A, bones, C, anim, 4, 1.2, [4, 4.5, 2])
 
 
 # ================================================================== ROLEPLAY CITY

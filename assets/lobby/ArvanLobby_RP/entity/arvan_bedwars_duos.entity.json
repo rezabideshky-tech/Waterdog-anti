@@ -19,7 +19,7 @@
         "animate": [
           "idle"
         ],
-        "scale": "1.4"
+        "scale": "1.2"
       },
       "render_controllers": [
         "controller.render.arvan_lobby"
