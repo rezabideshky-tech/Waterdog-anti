@@ -47,6 +47,16 @@ jobs:
           set -o pipefail
           gradle --no-daemon --console=plain --stacktrace -p arvan-pejvak/android-build :app:assembleDebug 2>&1 | tee "$RUNNER_TEMP/gradle-build.log"
 
+      - name: Add Gradle failure details to the run summary
+        if: failure()
+        run: |
+          {
+            echo '## Gradle build failure details'
+            echo '```text'
+            tail -n 120 "$RUNNER_TEMP/gradle-build.log"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload build log for diagnostics
         if: always()
         uses: actions/upload-artifact@v4
