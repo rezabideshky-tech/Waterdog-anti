@@ -349,7 +349,11 @@ final class AntiBotEngine {
         return decision;
     }
 
-    void setMode(AntiBotConfig.Mode mode) {
+    synchronized void setMode(AntiBotConfig.Mode mode) {
+        if (this.mode != AntiBotConfig.Mode.ATTACK && mode == AntiBotConfig.Mode.ATTACK) {
+            // Do not carry an old observe/balanced-mode pressure window into attack mode.
+            this.trafficWindow.resetPressure();
+        }
         this.mode = mode;
     }
 
