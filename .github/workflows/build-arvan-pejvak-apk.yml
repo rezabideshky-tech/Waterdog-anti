@@ -60,9 +60,11 @@ jobs:
       - name: Report Gradle error tail as check annotations
         if: failure()
         run: |
-          tail -n 60 "$RUNNER_TEMP/gradle-build.log" | while IFS= read -r line; do
+          diagnostics=$(grep -E 'FAILURE:|What went wrong|Execution failed|Could not|Caused by:|^e: |\.kt:[0-9]+:[0-9]+' "$RUNNER_TEMP/gradle-build.log" | tail -n 60 || true)
+          if [[ -z "$diagnostics" ]]; then diagnostics=$(tail -n 20 "$RUNNER_TEMP/gradle-build.log"); fi
+          printf '%s\n' "$diagnostics" | while IFS= read -r line; do
             escaped=${line//'%'/'%25'}
-            echo "::error title=Gradle output::$escaped"
+            echo "::error title=Gradle diagnostics::$escaped"
           done
 
       - name: Upload build log for diagnostics
