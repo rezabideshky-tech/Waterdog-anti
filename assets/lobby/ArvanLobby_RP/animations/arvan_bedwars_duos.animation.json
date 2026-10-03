@@ -37,18 +37,6 @@
             0
           ]
         },
-        "fireball": {
-          "position": [
-            "math.sin(query.anim_time * 90) * 9",
-            "math.abs(math.cos(query.anim_time * 90)) * -3",
-            0
-          ],
-          "rotation": [
-            "query.anim_time * 360",
-            "query.anim_time * 360",
-            0
-          ]
-        },
         "rarm_r": {
           "rotation": [
             "-60 + math.sin(query.anim_time * 360 + 0) * 50",

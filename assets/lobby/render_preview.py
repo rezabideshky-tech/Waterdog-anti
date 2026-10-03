@@ -60,7 +60,7 @@ def render(path, out, yaw=-25, pitch=20, size=900):
                 continue
             u1, v1, u2, v2 = e["faces"][name]["uv"]
             nu, nv = max(1, int(abs(u2 - u1))), max(1, int(abs(v2 - v1)))
-            nu, nv = min(nu, 32), min(nv, 32)
+            nu, nv = min(nu, 64), min(nv, 64)
             P0, PU, PV = xf(tl), xf(tr), xf(bl)
             du = [(PU[i] - P0[i]) / nu for i in range(3)]
             dv = [(PV[i] - P0[i]) / nv for i in range(3)]

@@ -245,85 +245,131 @@ def bedwars_duos():
     b = A.alloc("bed_leg", 8, 8); A.grad(b, (150, 105, 58), (100, 70, 38))
     b = A.alloc("bed_bottom", 32, 32); A.grad(b, (150, 105, 58), (110, 75, 40))
 
-    # ---------------- Steve with team armor
-    SKIN, SKIN_D = (196, 140, 106), (160, 108, 80)
-    HAIR, HAIR_D = (64, 42, 22), (45, 28, 14)
-    EYE_W, EYE = (255, 255, 255), (70, 60, 155)
-    MOUTH, BEARD = (120, 60, 50), (110, 72, 48)
-    SHIRT, PANTS, SHOE = (0, 170, 170), (60, 55, 150), (80, 80, 85)
+    # ---------------- Steve + detailed team armor (base skin + 3D armor overlay layers)
+    SKIN, SKIN_L, SKIN_D = (199, 143, 108), (214, 160, 124), (163, 110, 82)
+    HAIR, HAIR_D = (58, 38, 20), (40, 26, 12)
+    EYE_W, EYE = (255, 255, 255), (73, 62, 160)
+    MOUTH, BEARD = (110, 58, 48), (104, 68, 46)
+    SHIRT, SHIRT_D, PANTS, PANTS_D = (0, 175, 175), (0, 130, 135), (62, 56, 158), (44, 40, 120)
+    TRIM, TRIM_L, TRIM_D = (252, 206, 60), (255, 240, 150), (170, 110, 20)
+    ARMOR = {  # light, base, shade, deep
+        "r": [(255, 145, 135), (222, 50, 52), (150, 22, 32), (75, 8, 16)],
+        "b": [(150, 205, 255), (48, 120, 240), (24, 60, 165), (10, 24, 80)],
+    }
 
-    def px(box, gx, gy, col, cell):
-        x0, y0 = box[0], box[1]
-        A.d.rectangle([x0 + gx * cell, y0 + gy * cell, x0 + gx * cell + cell - 1, y0 + gy * cell + cell - 1], fill=col)
-
-    def armor_noise(box, pal):
-        A.noise(box, [pal[0], pal[2]], 6, 21)
-
-    for t, pal in [("r", RED), ("b", BLUE)]:
-        DARK = pal[3]
-        # head (8x8 grid, 2px cells = 16px)
-        b = A.alloc(f"h_front_{t}", 16, 16)
-        face = ["HHHHHHHH", "HHHHHHHH", "HSSSSSSH", "SWESSEWS", "SSSddSSS", "SSMbbMSS", "SSbbbbSS", "SSSSSSSS"]
-        cmap = {"H": HAIR, "S": SKIN, "W": EYE_W, "E": EYE, "d": SKIN_D, "M": MOUTH, "b": BEARD}
-        for gy, row in enumerate(face):
+    def grid(box, rows, cmap, cell=2):
+        for gy, row in enumerate(rows):
             for gx, ch in enumerate(row):
-                px(b, gx, gy, cmap[ch], 2)
-        # helmet: top 2 rows + side columns down to row 5
-        for gx in range(8):
-            px(b, gx, 0, pal[1], 2); px(b, gx, 1, pal[2] if gx in (0, 7) else pal[1], 2)
-        for gy in range(2, 6):
-            px(b, 0, gy, pal[2], 2); px(b, 7, gy, pal[2], 2)
-        A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=pal[0])
-        A.d.line([(b[0] + 2, b[1] + 3), (b[2] - 3, b[1] + 3)], fill=DARK)
-        b = A.alloc(f"h_side_{t}", 16, 16)
-        A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 11], fill=pal[1]); armor_noise((b[0], b[1], b[2], b[1] + 12), pal)
-        A.d.rectangle([b[0], b[1] + 12, b[2] - 1, b[3] - 1], fill=HAIR)
-        A.d.rectangle([b[0], b[1] + 12, b[0] + 5, b[3] - 1], fill=SKIN)
-        A.d.line([(b[0], b[1] + 11), (b[2] - 1, b[1] + 11)], fill=DARK)
-        b = A.alloc(f"h_back_{t}", 16, 16)
-        A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 11], fill=pal[1]); armor_noise((b[0], b[1], b[2], b[1] + 12), pal)
-        A.d.rectangle([b[0], b[1] + 12, b[2] - 1, b[3] - 1], fill=HAIR_D)
-        A.d.line([(b[0], b[1] + 11), (b[2] - 1, b[1] + 11)], fill=DARK)
-        b = A.alloc(f"h_top_{t}", 16, 16); A.grad(b, pal[0], pal[1]); armor_noise(b, pal)
-        A.d.line([(b[0] + 7, b[1]), (b[0] + 7, b[3] - 1)], fill=pal[2])
-        b = A.alloc(f"h_bottom_{t}", 16, 16); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN_D)
-        # chestplate front 16x24, side 8x24, top 16x8
-        b = A.alloc(f"b_front_{t}", 16, 24)
-        A.grad(b, pal[0], pal[2]); armor_noise(b, pal)
-        A.d.rectangle([b[0] + 5, b[1], b[0] + 10, b[1] + 3], fill=SKIN)  # neck V
-        A.d.rectangle([b[0] + 6, b[1] + 4, b[0] + 9, b[1] + 4], fill=SHIRT)
-        A.d.line([(b[0], b[1] + 15), (b[2] - 1, b[1] + 15)], fill=DARK)   # belt
-        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[1] + 17], fill=(90, 60, 30))
-        A.d.rectangle([b[0] + 6, b[1] + 16, b[0] + 9, b[1] + 17], fill=GOLD[1])
-        A.d.rectangle([b[0] + 6, b[1] + 7, b[0] + 9, b[1] + 11], fill=pal[3])  # emblem
-        A.d.point([(b[0] + 7, b[1] + 8), (b[0] + 8, b[1] + 9), (b[0] + 7, b[1] + 10)], fill=GOLD[0])
-        A.d.rectangle([b[0], b[1] + 18, b[2] - 1, b[3] - 1], fill=pal[2])
-        A.d.line([(b[0] + 7, b[1] + 18), (b[0] + 7, b[3] - 1)], fill=DARK)
-        b = A.alloc(f"b_back_{t}", 16, 24); A.grad(b, pal[1], pal[2]); armor_noise(b, pal)
-        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[1] + 17], fill=(90, 60, 30))
-        b = A.alloc(f"b_side_{t}", 8, 24); A.grad(b, pal[1], pal[2]); armor_noise(b, pal)
-        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[1] + 17], fill=(90, 60, 30))
-        b = A.alloc(f"b_top_{t}", 16, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=pal[1])
-        A.d.rectangle([b[0] + 5, b[1] + 2, b[0] + 10, b[1] + 5], fill=SKIN)
-        # arm 8x24: pauldron (armor) top 10px, then skin sleeve, hand
-        b = A.alloc(f"arm_{t}", 8, 24)
-        A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 9], fill=pal[1]); armor_noise((b[0], b[1], b[2], b[1] + 10), pal)
-        A.d.line([(b[0], b[1] + 9), (b[2] - 1, b[1] + 9)], fill=DARK)
-        A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=pal[0])
-        A.d.rectangle([b[0], b[1] + 10, b[2] - 1, b[3] - 1], fill=SKIN)
-        A.d.rectangle([b[0], b[1] + 10, b[2] - 1, b[1] + 12], fill=SHIRT)
-        A.d.rectangle([b[0], b[3] - 4, b[2] - 1, b[3] - 1], fill=SKIN_D)
-        b = A.alloc(f"arm_top_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=pal[0])
-        b = A.alloc(f"hand_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN_D)
-        # leg 8x24: leggings + boots
-        b = A.alloc(f"leg_{t}", 8, 24)
-        A.grad((b[0], b[1], b[2], b[1] + 16), pal[1], pal[2]); armor_noise((b[0], b[1], b[2], b[1] + 16), pal)
-        A.d.line([(b[0], b[1] + 6), (b[2] - 1, b[1] + 6)], fill=DARK)
-        A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[3] - 1], fill=pal[3])
-        A.d.line([(b[0], b[1] + 16), (b[2] - 1, b[1] + 16)], fill=pal[0])
-        A.d.rectangle([b[0], b[3] - 2, b[2] - 1, b[3] - 1], fill=(30, 20, 15))
-        b = A.alloc(f"leg_top_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=pal[2])
-        b = A.alloc(f"boot_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(30, 20, 15))
+                if ch != ".":
+                    x, y = box[0] + gx * cell, box[1] + gy * cell
+                    A.d.rectangle([x, y, x + cell - 1, y + cell - 1], fill=cmap[ch])
+
+    def plate(box, pal, rivets=True, ridge=False):
+        x0, y0, x1, y1 = box
+        A.grad(box, pal[1], pal[2])
+        A.noise(box, [pal[0], pal[2]], 9, 23)
+        A.d.line([(x0, y0), (x1 - 1, y0)], fill=pal[0]); A.d.line([(x0, y0), (x0, y1 - 1)], fill=pal[0])
+        A.d.line([(x0, y1 - 1), (x1 - 1, y1 - 1)], fill=pal[3]); A.d.line([(x1 - 1, y0), (x1 - 1, y1 - 1)], fill=pal[3])
+        if ridge:
+            m = (x0 + x1) // 2
+            A.d.line([(m - 1, y0 + 1), (m - 1, y1 - 2)], fill=pal[0]); A.d.line([(m, y0 + 1), (m, y1 - 2)], fill=pal[2])
+        if rivets and x1 - x0 >= 6 and y1 - y0 >= 6:
+            for rx, ry in [(x0 + 1, y0 + 1), (x1 - 2, y0 + 1), (x0 + 1, y1 - 2), (x1 - 2, y1 - 2)]:
+                A.d.point([(rx, ry)], fill=TRIM_L)
+
+    def trim_line(x0, y, x1):
+        A.d.line([(x0, y), (x1, y)], fill=TRIM); A.d.line([(x0, y + 1), (x1, y + 1)], fill=TRIM_D)
+
+    # --- base Steve skin (shared by both fighters)
+    S = {"H": HAIR, "h": HAIR_D, "S": SKIN, "L": SKIN_L, "D": SKIN_D, "W": EYE_W, "E": EYE, "M": MOUTH, "B": BEARD}
+    b = A.alloc("st_face", 16, 16)
+    grid(b, ["HHHHHHHH", "HHHHHHHH", "HLLLLLLH", "SSSSSSSS", "SWESSEWS", "SSSDDSSS", "SSBMMBSS", "SSBBBBSS"], S)
+    b = A.alloc("st_hside", 16, 16)
+    grid(b, ["HHHHHHHH", "HHHHHHHH", "HHHHHHSS", "HHHHHSSS", "HHHHSSSS", "HHHSSSSS", "HHSSSSSS", "HSSSSSSS"], S)
+    b = A.alloc("st_hback", 16, 16)
+    grid(b, ["HHHHHHHH"] * 5 + ["hHHHHHHh", "hhHHHHhh", "hhhhhhhh"], S)
+    b = A.alloc("st_htop", 16, 16); grid(b, ["HHHHHHHH", "HhHHHHhH"] * 4, S)
+    b = A.alloc("st_hbot", 16, 16); grid(b, ["DDDDDDDD"] * 8, S)
+    b = A.alloc("st_body", 16, 24); A.grad(b, SHIRT, SHIRT_D); A.d.rectangle([b[0] + 5, b[1], b[0] + 10, b[1] + 3], fill=SKIN)
+    A.d.rectangle([b[0], b[1] + 18, b[2] - 1, b[3] - 1], fill=PANTS)
+    b = A.alloc("st_bside", 8, 24); A.grad(b, SHIRT, SHIRT_D); A.d.rectangle([b[0], b[1] + 18, b[2] - 1, b[3] - 1], fill=PANTS)
+    b = A.alloc("st_arm", 8, 24); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN)
+    A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 8], fill=SHIRT); A.d.line([(b[0], b[1] + 8), (b[2] - 1, b[1] + 8)], fill=SHIRT_D)
+    A.d.line([(b[2] - 1, b[1] + 9), (b[2] - 1, b[3] - 1)], fill=SKIN_D)
+    b = A.alloc("st_armtop", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SHIRT)
+    b = A.alloc("st_hand", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN_D)
+    b = A.alloc("st_leg", 8, 24); A.grad(b, PANTS, PANTS_D); A.d.rectangle([b[0], b[3] - 4, b[2] - 1, b[3] - 1], fill=(90, 90, 95))
+    b = A.alloc("st_legend", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=PANTS_D)
+
+    for t in ("r", "b"):
+        P = ARMOR[t]
+        # helmet overlay front: brow band + cheek guards + nose guard, face open (transparent)
+        b = A.alloc(f"hm_front_{t}", 20, 20)
+        x0, y0, x1, y1 = b
+        plate((x0, y0, x1, y0 + 7), P, rivets=False)
+        trim_line(x0, y0 + 6, x1 - 1)
+        plate((x0, y0 + 7, x0 + 4, y1 - 3), P, rivets=False)
+        plate((x1 - 4, y0 + 7, x1, y1 - 3), P, rivets=False)
+        plate((x0 + 8, y0 + 7, x0 + 12, y0 + 13), P, rivets=False)  # nose guard
+        A.d.rectangle([x0 + 9, y0 + 12, x0 + 10, y0 + 13], fill=TRIM)
+        for rx in range(x0 + 2, x1 - 2, 4):
+            A.d.point([(rx, y0 + 3)], fill=TRIM_L)
+        A.d.rectangle([x0 + 1, y0 + 1, x1 - 2, y0 + 1], fill=P[0])
+        b = A.alloc(f"hm_side_{t}", 20, 20)
+        plate((b[0], b[1], b[2], b[3] - 2), P)
+        trim_line(b[0], b[1] + 6, b[2] - 1)
+        A.d.rectangle([b[0] + 2, b[1] + 9, b[0] + 5, b[1] + 12], fill=P[3])  # ear vent
+        for vy in range(b[1] + 9, b[1] + 13, 2):
+            A.d.line([(b[0] + 2, vy), (b[0] + 5, vy)], fill=P[2])
+        b = A.alloc(f"hm_back_{t}", 20, 20); plate((b[0], b[1], b[2], b[3] - 1), P, ridge=True); trim_line(b[0], b[1] + 6, b[2] - 1)
+        b = A.alloc(f"hm_top_{t}", 20, 20); plate(b, P, ridge=True)
+        b = A.alloc(f"crest_{t}", 16, 8)
+        A.grad(b, TRIM_L, TRIM_D)
+        for x in range(b[0], b[2], 2):
+            A.d.line([(x, b[1]), (x, b[1] + 2)], fill=P[1])
+        # chestplate overlay
+        b = A.alloc(f"cp_front_{t}", 20, 28)
+        x0, y0, x1, y1 = b
+        plate((x0, y0, x1, y0 + 19), P, ridge=True)
+        A.d.polygon([(x0 + 6, y0), (x1 - 7, y0), (x0 + 10, y0 + 4)], fill=(0, 0, 0, 0))  # neck cut
+        A.d.line([(x0 + 6, y0), (x0 + 10, y0 + 4)], fill=TRIM); A.d.line([(x1 - 7, y0), (x0 + 10, y0 + 4)], fill=TRIM)
+        A.d.line([(x0 + 1, y0 + 10), (x1 - 2, y0 + 10)], fill=P[3])  # ab plates
+        A.d.line([(x0 + 2, y0 + 14), (x1 - 3, y0 + 14)], fill=P[3])
+        # emblem: small gold bed
+        A.d.rectangle([x0 + 6, y0 + 6, x0 + 13, y0 + 9], fill=TRIM_D)
+        A.d.rectangle([x0 + 7, y0 + 6, x0 + 13, y0 + 8], fill=TRIM)
+        A.d.rectangle([x0 + 7, y0 + 6, x0 + 8, y0 + 7], fill=WHITE)
+        # belt + tassets
+        A.d.rectangle([x0, y0 + 19, x1 - 1, y0 + 21], fill=(80, 52, 28)); A.d.line([(x0, y0 + 19), (x1 - 1, y0 + 19)], fill=(120, 80, 45))
+        A.d.rectangle([x0 + 8, y0 + 19, x0 + 11, y0 + 21], fill=TRIM); A.d.point([(x0 + 9, y0 + 20)], fill=TRIM_D)
+        plate((x0, y0 + 22, x0 + 9, y1), P, rivets=False); plate((x0 + 11, y0 + 22, x1, y1), P, rivets=False)
+        b = A.alloc(f"cp_back_{t}", 20, 28)
+        plate((b[0], b[1], b[2], b[1] + 19), P, ridge=True)
+        A.d.rectangle([b[0], b[1] + 19, b[2] - 1, b[1] + 21], fill=(80, 52, 28))
+        plate((b[0], b[1] + 22, b[2], b[3]), P, rivets=False)
+        b = A.alloc(f"cp_side_{t}", 12, 28)
+        plate((b[0], b[1], b[2], b[1] + 19), P)
+        A.d.rectangle([b[0], b[1] + 19, b[2] - 1, b[1] + 21], fill=(80, 52, 28))
+        plate((b[0], b[1] + 22, b[2], b[3]), P, rivets=False)
+        b = A.alloc(f"cp_top_{t}", 20, 12)
+        plate(b, P, rivets=False); A.d.rectangle([b[0] + 6, b[1] + 3, b[0] + 13, b[1] + 8], fill=(0, 0, 0, 0))
+        # pauldron (shoulder) + bracer
+        b = A.alloc(f"pd_side_{t}", 12, 12)
+        plate(b, P); trim_line(b[0], b[3] - 3, b[2] - 1)
+        A.d.line([(b[0] + 1, b[1] + 4), (b[2] - 2, b[1] + 4)], fill=P[3])
+        b = A.alloc(f"pd_top_{t}", 12, 12); plate(b, P, ridge=True)
+        b = A.alloc(f"br_side_{t}", 12, 12); plate(b, P, rivets=False); trim_line(b[0], b[1], b[2] - 1)
+        # leggings + boots
+        b = A.alloc(f"lg_side_{t}", 12, 24)
+        plate(b, P, rivets=False)
+        plate((b[0] + 2, b[1] + 9, b[2] - 2, b[1] + 15), P)  # knee plate
+        A.d.point([(b[0] + 5, b[1] + 11), (b[0] + 6, b[1] + 11)], fill=TRIM_L)
+        b = A.alloc(f"lg_top_{t}", 12, 12); plate(b, P, rivets=False)
+        b = A.alloc(f"bt_side_{t}", 12, 12)
+        A.grad(b, P[2], P[3]); trim_line(b[0], b[1], b[2] - 1)
+        A.d.rectangle([b[0], b[3] - 3, b[2] - 1, b[3] - 1], fill=(35, 24, 16))
+        A.d.line([(b[0], b[3] - 3), (b[2] - 1, b[3] - 3)], fill=(70, 50, 32))
+        b = A.alloc(f"bt_bot_{t}", 12, 12); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(35, 24, 16))
     # diamond sword parts
     b = A.alloc("blade", 8, 32)
     A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(90, 230, 230))
@@ -334,23 +380,44 @@ def bedwars_duos():
     b = A.alloc("guard", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(30, 140, 160))
     A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=(200, 255, 255))
 
-    # ---------------- sign
+    # ---------------- sign: big gold BEDWARS logo
     b = A.alloc("sign", 64, 32)
     x0, y0, x1, y1 = b
-    for x in range(x0, x1):
-        A.d.line([(x, y0), (x, y1 - 1)], fill=RED[1] if x < (x0 + x1) // 2 else BLUE[1])
-    A.d.line([((x0 + x1) // 2, y0), ((x0 + x1) // 2, y1 - 1)], fill=WHITE)
-    A.grad((x0 + 3, y0 + 3, x1 - 3, y0 + 16), (25, 15, 35), (10, 5, 15))
-    A.outlined("BEDWARS", (x0 + x1) // 2, y0 + 5, GOLD[0], 1)
-    A.d.line([(x0 + 3, y0 + 16), (x1 - 4, y0 + 16)], fill=GOLD[1])
-    A.outlined("DUOS", (x0 + x1) // 2, y0 + 19, WHITE, 2)
+    mid = (x0 + x1) // 2
+    A.grad((x0, y0, mid, y1), (235, 60, 60), (110, 10, 20))
+    A.grad((mid, y0, x1, y1), (70, 140, 255), (15, 35, 120))
+    for r, c in [(13, (60, 20, 50)), (10, (35, 10, 30))]:  # dark plate behind text
+        A.d.rounded_rectangle([x0 + 3, y0 + 16 - r // 1.6, x1 - 4, y0 + 16 + r // 1.6], radius=3, fill=c)
+    # gold gradient text, scale 2, with dark outline + drop shadow
+    word, sc, ty = "BEDWARS", 2, y0 + 11
+    for ox, oy in [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, -1), (-1, 1), (1, 1), (1, 2), (2, 2), (0, 2)]:
+        A.text(word, mid + ox, ty + oy, (25, 8, 10), None, sc)
+    tmp = Image.new("RGBA", (A.W, A.H), (0, 0, 0, 0))
+    saved_img, saved_d = A.img, A.d
+    A.img, A.d = tmp, ImageDraw.Draw(tmp)
+    A.text(word, mid, ty, WHITE, None, sc)
+    A.img, A.d = saved_img, saved_d
+    for yy in range(ty, ty + 10):
+        tcol = [GOLD[0], GOLD[0], GOLD[1], GOLD[1], GOLD[1], GOLD[2], GOLD[2], GOLD[1], GOLD[2], GOLD[3]][yy - ty]
+        for xx in range(x0, x1):
+            if tmp.getpixel((xx, yy))[3]:
+                A.d.point([(xx, yy)], fill=tcol)
+    for xx in range(x0, x1):  # top-left highlight pixel on each letter column
+        if tmp.getpixel((xx, ty))[3] and xx % 2 == 0:
+            A.d.point([(xx, ty)], fill=WHITE)
+    # sparkles + crossed-sword dots
+    for sx, sy in [(x0 + 6, y0 + 6), (x1 - 7, y0 + 6), (x0 + 6, y1 - 7), (x1 - 7, y1 - 7), (mid, y0 + 5), (mid, y1 - 6)]:
+        A.d.point([(sx, sy)], fill=WHITE)
+        A.d.point([(sx - 1, sy), (sx + 1, sy), (sx, sy - 1), (sx, sy + 1)], fill=GOLD[0])
     A.frame(b)
+    for cx_, cy_ in [(x0 + 1, y0 + 1), (x1 - 3, y0 + 1), (x0 + 1, y1 - 3), (x1 - 3, y1 - 3)]:
+        A.d.rectangle([cx_, cy_, cx_ + 1, cy_ + 1], fill=(90, 255, 140))
     b = A.alloc("sign_back", 64, 32); A.grad(b, (60, 40, 25), (35, 22, 12)); A.frame(b)
     A.text("ARVAN GAMING", (b[0] + b[2]) // 2, b[1] + 13, GOLD[1], GOLD[3])
 
     # ---------------- geometry
     def steve(t, cx, cz):
-        """Half-scale Steve (16 units tall) standing on y=4, built facing north (-Z). Bones are prefixed by team."""
+        """Half-scale Steve (16 units tall) on y=4, built facing north (-Z), with 3D armor overlays."""
         y = 4
         bones = [(f"fighter_{t}", [cx, y, cz], "root", [0, 60 if t == "r" else -60, 0]),
                  (f"body_{t}", [cx, y + 6, cz], f"fighter_{t}"),
@@ -359,20 +426,36 @@ def bedwars_duos():
                  (f"larm_{t}", [cx - 3, y + 11.5, cz], f"body_{t}"),
                  (f"rleg_{t}", [cx + 1, y + 6, cz], f"fighter_{t}"),
                  (f"lleg_{t}", [cx - 1, y + 6, cz], f"fighter_{t}")]
-        H = F(f"h_front_{t}", s=f"h_back_{t}", e=f"h_side_{t}", u=f"h_top_{t}", dn=f"h_bottom_{t}")
-        B = F(f"b_front_{t}", s=f"b_back_{t}", e=f"b_side_{t}", u=f"b_top_{t}")
-        ARM = F(f"arm_{t}", u=f"arm_top_{t}", dn=f"hand_{t}")
-        LEG = F(f"leg_{t}", u=f"leg_top_{t}", dn=f"boot_{t}")
+        HEAD = F("st_face", s="st_hback", e="st_hside", u="st_htop", dn="st_hbot")
+        HELM = F(f"hm_front_{t}", s=f"hm_back_{t}", e=f"hm_side_{t}", u=f"hm_top_{t}", dn="none")
+        BODY = F("st_body", s="st_body", e="st_bside", u="st_bside")
+        CHEST = F(f"cp_front_{t}", s=f"cp_back_{t}", e=f"cp_side_{t}", u=f"cp_top_{t}", dn="none")
+        ARM = F("st_arm", u="st_armtop", dn="st_hand")
+        PAUL = F(f"pd_side_{t}", u=f"pd_top_{t}", dn="none")
+        BRAC = F(f"br_side_{t}", u="none", dn="none")
+        LEG = F("st_leg", u="st_legend", dn="st_legend")
+        LEGG = F(f"lg_side_{t}", u=f"lg_top_{t}", dn="none")
+        BOOT = F(f"bt_side_{t}", u="none", dn=f"bt_bot_{t}")
+        i = 0.3  # armor inflate
         cubes = [
-            (f"head_{t}", f"head_{t}", (cx - 2, y + 12, cz - 2), (cx + 2, y + 16, cz + 2), H),
-            (f"helmet_{t}", f"head_{t}", (cx - 2.25, y + 14.5, cz - 2.25), (cx + 2.25, y + 16.25, cz + 2.25),
-             F(f"h_top_{t}", dn="none") | dict(north="none")),
-            (f"body_{t}", f"body_{t}", (cx - 2, y + 6, cz - 1), (cx + 2, y + 12, cz + 1), B),
+            (f"head_{t}", f"head_{t}", (cx - 2, y + 12, cz - 2), (cx + 2, y + 16, cz + 2), HEAD),
+            (f"helmet_{t}", f"head_{t}", (cx - 2 - i, y + 12.6, cz - 2 - i), (cx + 2 + i, y + 16 + i, cz + 2 + i), HELM),
+            (f"crest_{t}", f"head_{t}", (cx - 0.35, y + 16.3, cz - 2), (cx + 0.35, y + 17.4, cz + 2.6), F(f"crest_{t}")),
+            (f"body_{t}", f"body_{t}", (cx - 2, y + 6, cz - 1), (cx + 2, y + 12, cz + 1), BODY),
+            (f"chest_{t}", f"body_{t}", (cx - 2 - i, y + 5.4, cz - 1 - i), (cx + 2 + i, y + 12 + i, cz + 1 + i), CHEST),
             (f"rarm_{t}", f"rarm_{t}", (cx + 2, y + 6, cz - 1), (cx + 4, y + 12, cz + 1), ARM),
+            (f"rpaul_{t}", f"rarm_{t}", (cx + 2 - i, y + 9.6, cz - 1 - i), (cx + 4 + i + 0.2, y + 12 + i + 0.2, cz + 1 + i), PAUL),
+            (f"rbrac_{t}", f"rarm_{t}", (cx + 2 - 0.2, y + 6.6, cz - 1 - 0.2), (cx + 4 + 0.2, y + 8.2, cz + 1 + 0.2), BRAC),
             (f"larm_{t}", f"larm_{t}", (cx - 4, y + 6, cz - 1), (cx - 2, y + 12, cz + 1), ARM),
+            (f"lpaul_{t}", f"larm_{t}", (cx - 4 - i - 0.2, y + 9.6, cz - 1 - i), (cx - 2 + i, y + 12 + i + 0.2, cz + 1 + i), PAUL),
+            (f"lbrac_{t}", f"larm_{t}", (cx - 4 - 0.2, y + 6.6, cz - 1 - 0.2), (cx - 2 + 0.2, y + 8.2, cz + 1 + 0.2), BRAC),
             (f"rleg_{t}", f"rleg_{t}", (cx, y, cz - 1), (cx + 2, y + 6, cz + 1), LEG),
+            (f"rlegg_{t}", f"rleg_{t}", (cx - 0.2, y + 1.8, cz - 1 - 0.2), (cx + 2 + 0.2, y + 6, cz + 1 + 0.2), LEGG),
+            (f"rboot_{t}", f"rleg_{t}", (cx - i, y - 0.01, cz - 1 - i - 0.2), (cx + 2 + i, y + 2, cz + 1 + i), BOOT),
             (f"lleg_{t}", f"lleg_{t}", (cx - 2, y, cz - 1), (cx, y + 6, cz + 1), LEG),
-            # diamond sword in right hand, blade pointing forward (-Z) when arm hangs
+            (f"llegg_{t}", f"lleg_{t}", (cx - 2 - 0.2, y + 1.8, cz - 1 - 0.2), (cx + 0.2, y + 6, cz + 1 + 0.2), LEGG),
+            (f"lboot_{t}", f"lleg_{t}", (cx - 2 - i, y - 0.01, cz - 1 - i - 0.2), (cx + i, y + 2, cz + 1 + i), BOOT),
+            # diamond sword in right hand, blade forward (-Z) when arm hangs
             (f"hilt_{t}", f"rarm_{t}", (cx + 2.6, y + 6.4, cz - 1.6), (cx + 3.4, y + 7.2, cz + 1.2), F("hilt")),
             (f"guard_{t}", f"rarm_{t}", (cx + 2.2, y + 6.1, cz - 2.1), (cx + 3.8, y + 7.5, cz - 1.6), F("guard")),
             (f"blade_{t}", f"rarm_{t}", (cx + 2.75, y + 6.4, cz - 9.1), (cx + 3.25, y + 7.2, cz - 2.1),
@@ -381,7 +464,7 @@ def bedwars_duos():
         return bones, cubes
 
     bones = [("root", [0, 0, 0], None), ("island", [0, 0, 0], "root"), ("gen", [9, 7, -9], "root"),
-             ("orbit", [0, 12, 0], "root"), ("sign", [0, 18, 13], "root"), ("fireball", [0, 22, 0], "root")]
+             ("orbit", [0, 12, 0], "root"), ("sign", [0, 18, 13], "root")]
     BED = lambda c, x0, x1: [  # realistic bed: legs, frame+mattress, pillow; head at +z
         (f"bed_{c}", "island", (x0, 5.5, -1), (x1, 8, 11), F(f"bed_{c}_end", e=f"bed_{c}_side", u=f"bed_{c}_top", dn="bed_bottom")),
         (f"bed_{c}_pillow", "island", (x0 + 0.75, 8, 7.5), (x1 - 0.75, 8.75, 10.25), F("pillow")),
@@ -418,10 +501,6 @@ def bedwars_duos():
         # orbiting resources
         ("o_dia", "orbit", (16, 11, -1), (18, 13, 1), F("diamond"), (45, 0, 45), (17, 12, 0)),
         ("o_eme", "orbit", (-18, 11, -1), (-16, 13, 1), F("emerald"), (45, 0, 45), (-17, 12, 0)),
-        ("o_gld", "orbit", (-1, 11, 16), (1, 13, 18), F("gold"), (45, 0, 45), (0, 12, 17)),
-        ("o_iron", "orbit", (-1, 11, -18), (1, 13, -16), F("iron"), (45, 0, 45), (0, 12, -17)),
-        # fireball flying between fighters
-        ("fireball", "fireball", (-1, 21, -6), (1, 23, -4), F("fire"), (45, 45, 0), (0, 22, -5)),
         # sign
         ("post_l", "sign", (-9, 8, 12.5), (-8, 18, 13.5), F("planks")),
         ("post_r", "sign", (8, 8, 12.5), (9, 18, 13.5), F("planks")),
@@ -437,8 +516,6 @@ def bedwars_duos():
         "orbit": {"rotation": [0, "query.anim_time * -90", 0]},
         "gen": {"rotation": [0, "query.anim_time * 180", 0], "position": [0, "math.sin(query.anim_time * 180) * 0.6", 0]},
         "sign": {"rotation": ["math.sin(query.anim_time * 90) * 2", 0, 0]},
-        "fireball": {"position": ["math.sin(query.anim_time * 90) * 9", "math.abs(math.cos(query.anim_time * 90)) * -3", 0],
-                     "rotation": ["query.anim_time * 360", "query.anim_time * 360", 0]},
     }
     for t, ph in (("r", 0), ("b", 180)):
         anim[f"rarm_{t}"] = {"rotation": [swing(ph), 0, 0]}
