@@ -265,7 +265,6 @@ C = [
     ("orb_diamond", "orbit", (8, 19, -1), (10, 21, 1), F("diamond"), (45, 0, 45), (9, 20, 0)),
     ("orb_emerald", "orbit", (-10, 19, -1), (-8, 21, 1), F("emerald"), (45, 0, 45), (-9, 20, 0)),
     ("orb_gold", "orbit", (-1, 19, 8), (1, 21, 10), F("goldb"), (45, 0, 45), (0, 20, 9)),
-    ("orb_iron", "orbit", (-1, 19, -10), (1, 21, -8), F("white"), (45, 0, 45), (0, 20, -9)),
 ]
 # sword positions offset: shift blades sideways
 OFF = {}
@@ -341,7 +340,7 @@ RP = os.path.join(OUT, "BedWarsBattlePass_RP")
 shutil.rmtree(RP, ignore_errors=True)
 for sub in ["models/entity", "animations", "textures/entity", "entity", "render_controllers", "texts"]:
     os.makedirs(os.path.join(RP, sub))
-NS = uuid.UUID("6a1f0c3e-5b8d-4c2a-9e7f-b3d1a2c4e5f6")  # stable uuids across rebuilds
+NS = uuid.UUID("267e26ea-85b2-4ab9-8410-0292e2f469d8")  # stable uuids across rebuilds
 manifest = {"format_version": 2, "header": {
     "name": "§l§bArvan§fGaming §6Battle Pass", "description": "§eArvanGaming Battle Pass NPC §7- Season 1",
     "uuid": str(uuid.uuid5(NS, "header")), "version": [1, 0, 0], "min_engine_version": [1, 20, 0]},
