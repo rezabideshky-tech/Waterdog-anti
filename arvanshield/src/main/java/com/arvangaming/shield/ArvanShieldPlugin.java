@@ -56,8 +56,8 @@ public final class ArvanShieldPlugin extends Plugin {
         if (this.packetMetricsBridge != null && this.getProxy() != null
                 && this.getProxy().getNetworkMetrics() == this.packetMetricsBridge) {
             this.getProxy().setNetworkMetrics(this.packetMetricsBridge.previous());
-            this.packetMetricsBridge = null;
         }
+        this.packetMetricsBridge = null;
         if (this.engine != null) {
             this.engine.shutdown();
         }
