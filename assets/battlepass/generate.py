@@ -51,6 +51,8 @@ FONT = {
     "S": ["011", "100", "010", "001", "110"], "D": ["110", "101", "101", "101", "110"],
     "W": ["101", "101", "111", "111", "101"], "R": ["110", "101", "110", "101", "101"],
     "O": ["010", "101", "101", "101", "010"], "N": ["101", "111", "111", "101", "101"],
+    "I": ["111", "010", "010", "010", "111"], "G": ["011", "100", "101", "101", "011"],
+    "M": ["101", "111", "111", "101", "101"], "V": ["101", "101", "101", "101", "010"],
     "1": ["010", "110", "010", "010", "111"], " ": ["000"] * 5,
 }
 
@@ -139,21 +141,31 @@ def gemtex(box, light, mid, dark):
 grad((0, 0, 48, 64), RED[1], RED[3])
 for i in range(-64, 64, 8):
     d.line([(i, 64), (i + 64, 0)], fill=(170, 25, 40), width=2)
-# glow behind bed
-for r, c in [(16, (180, 40, 50)), (12, (220, 80, 60)), (8, (255, 150, 80))]:
-    d.ellipse([24 - r, 32 - r * 0.8, 24 + r, 32 + r * 0.8], fill=c)
-for (x, y), c in SWORD.items():
-    d.point([(4 + x, 30 + y - 2)], fill=c)
-    d.point([(43 - x, 30 + y - 2)], fill=c)
-bed_icon(14, 27)
+# glow behind logo
+for r, c in [(18, (170, 35, 50)), (14, (210, 70, 60)), (9, (250, 140, 70))]:
+    d.ellipse([24 - r, 34 - r * 0.75, 24 + r, 34 + r * 0.75], fill=c)
+
+
+def outlined(s_, cx, y, col, sc):
+    for ox, oy in [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, 1), (-1, 1), (1, -1)]:
+        text(s_, cx + ox, y + oy, BLACK, BLACK, sc)
+    text(s_, cx, y, col, GOLD[3], sc)
+
+
+outlined("ARVAN", 24, 25, GOLD[0], 2)
+d.line([(6, 37), (41, 37)], fill=GOLD[1])
+d.rectangle([7, 39, 40, 46], fill=BLACK)
+text("GAMING", 24, 40, WHITE, RED[2])
+d.line([(6, 48), (41, 48)], fill=GOLD[1])
+star_pts = [(24, 20)]
 d.rectangle([3, 3, 44, 18], fill=BLACK)
 d.rectangle([3, 18, 44, 18], fill=GOLD[2])
-text("BEDWARS", 24, 5, GOLD[0], GOLD[3])
+text("BATTLE", 24, 5, GOLD[0], GOLD[3])
 text("PASS", 24, 11, WHITE, RED[2])
 d.rectangle([3, 50, 44, 60], fill=BLACK)
 d.rectangle([3, 50, 44, 50], fill=GOLD[2])
 text("SEASON 1", 24, 53, (110, 255, 150), (10, 70, 30))
-for x, y in [(6, 22), (42, 23), (9, 44), (39, 43), (24, 21)]:
+for x, y in [(6, 21), (42, 22), (5, 44), (42, 44)]:
     d.point([(x, y)], fill=WHITE)
     d.point([(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)], fill=GOLD[0])
 frame((0, 0, 48, 64))
@@ -331,7 +343,7 @@ for sub in ["models/entity", "animations", "textures/entity", "entity", "render_
     os.makedirs(os.path.join(RP, sub))
 NS = uuid.UUID("6a1f0c3e-5b8d-4c2a-9e7f-b3d1a2c4e5f6")  # stable uuids across rebuilds
 manifest = {"format_version": 2, "header": {
-    "name": "§l§cBed§9Wars §6Battle Pass", "description": "§eBedWars Battle Pass NPC model §7- Season 1",
+    "name": "§l§bArvan§fGaming §6Battle Pass", "description": "§eArvanGaming Battle Pass NPC §7- Season 1",
     "uuid": str(uuid.uuid5(NS, "header")), "version": [1, 0, 0], "min_engine_version": [1, 20, 0]},
     "modules": [{"type": "resources", "uuid": str(uuid.uuid5(NS, "module")), "version": [1, 0, 0]}]}
 json.dump(manifest, open(os.path.join(RP, "manifest.json"), "w"), indent=2)

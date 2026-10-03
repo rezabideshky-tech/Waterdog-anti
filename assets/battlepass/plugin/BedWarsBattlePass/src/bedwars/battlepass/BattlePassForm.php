@@ -10,7 +10,7 @@ final class BattlePassForm implements Form{
 	public function jsonSerialize() : array{
 		return [
 			"type" => "form",
-			"title" => "§l§cBed§9Wars §6Battle Pass §7- Season 1",
+			"title" => "§l§bArvan§fGaming §6Battle Pass §7- Season 1",
 			"content" => "§eUnlock exclusive cosmetics by playing BedWars!\n§7Win games and break beds to earn XP.",
 			"buttons" => [
 				["text" => "§l§aFree Rewards\n§r§7Tier 1 - 30"],

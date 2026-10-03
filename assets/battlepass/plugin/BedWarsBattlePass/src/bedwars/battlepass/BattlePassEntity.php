@@ -22,7 +22,7 @@ final class BattlePassEntity extends Entity{
 
 	protected function initEntity(\pocketmine\nbt\tag\CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
-		$this->setNameTag("§l§cBED§9WARS §6BATTLE PASS\n§r§eTap to open!");
+		$this->setNameTag("§l§bARVAN§fGAMING §6BATTLE PASS\n§r§eTap to open!");
 		$this->setNameTagAlwaysVisible();
 		$this->setNoClientPredictions();
 	}
