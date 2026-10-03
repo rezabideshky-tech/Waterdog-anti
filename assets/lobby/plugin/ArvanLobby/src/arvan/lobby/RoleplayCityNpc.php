@@ -8,5 +8,5 @@ final class RoleplayCityNpc extends LobbyNpc{
 
 	public static function getNetworkTypeId() : string{ return self::NETWORK_ID; }
 
-	protected function key() : string{ return ""; }
+	protected function key() : string{ return "roleplay"; }
 }
