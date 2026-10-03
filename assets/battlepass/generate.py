@@ -91,6 +91,41 @@ def sword(x0, y0, x1, y1, blade, hilt):
     d.line([(gx - 3, gy + 3 * (1 if x1 > x0 else -1) * -1), (gx + 3, gy - 3 * (1 if x1 > x0 else -1) * -1)], fill=GOLD[2], width=2)
 
 
+
+SW_OUT, SW_HI, SW_MID, SW_DK = (10, 40, 50), (220, 255, 255), (90, 230, 230), (30, 140, 160)
+SW_H, SW_HD = (120, 75, 35), (70, 40, 20)
+
+
+def sword_pixels():
+    """Classic 16x16 diamond sword sprite -> {(x,y): color}, blade pointing to top-right."""
+    px = {}
+    for i in range(10):  # blade
+        x, y = 5 + i, 10 - i
+        for (dx, dy), c in {(0, 0): SW_MID, (1, 0): SW_HI, (0, 1): SW_DK, (-1, 0): SW_OUT,
+                            (0, -1): SW_OUT, (1, 1): SW_OUT, (-1, 1): SW_OUT}.items():
+            k = (x + dx, y + dy)
+            if c != SW_OUT or k not in px:
+                px[k] = c
+    px[(15, 0)] = SW_OUT
+    for k, c in {(2, 9): SW_OUT, (3, 10): SW_HD, (4, 11): SW_HD, (5, 12): SW_HD, (6, 13): SW_OUT,
+                 (3, 9): SW_OUT, (6, 12): SW_OUT, (4, 10): SW_HD, (5, 11): SW_HD}.items():
+        px[k] = c  # crossguard
+    for k, c in {(3, 12): SW_H, (2, 13): SW_H, (4, 13): SW_OUT, (3, 14): SW_OUT, (1, 13): SW_OUT,
+                 (2, 12): SW_OUT, (1, 14): SW_HD, (0, 15): SW_OUT, (0, 14): SW_OUT, (1, 15): SW_OUT}.items():
+        px[k] = c  # handle + pommel
+    return px
+
+
+SWORD = sword_pixels()
+
+
+def draw_sprite(ox, oy, pix, mirror=False, scale=1):
+    for (x, y), c in pix.items():
+        if 0 <= x < 16 and 0 <= y < 16:
+            xx = (15 - x) if mirror else x
+            d.rectangle([ox + xx * scale, oy + y * scale, ox + xx * scale + scale - 1, oy + y * scale + scale - 1], fill=c)
+
+
 def gemtex(box, light, mid, dark):
     x0, y0, x1, y1 = box
     grad(box, light, dark)
@@ -107,8 +142,9 @@ for i in range(-64, 64, 8):
 # glow behind bed
 for r, c in [(16, (180, 40, 50)), (12, (220, 80, 60)), (8, (255, 150, 80))]:
     d.ellipse([24 - r, 32 - r * 0.8, 24 + r, 32 + r * 0.8], fill=c)
-sword(7, 47, 21, 21, (210, 255, 255), (120, 70, 30))   # diamond sword
-sword(41, 47, 27, 21, (210, 255, 255), (120, 70, 30))
+for (x, y), c in SWORD.items():
+    d.point([(4 + x, 30 + y - 2)], fill=c)
+    d.point([(43 - x, 30 + y - 2)], fill=c)
 bed_icon(14, 27)
 d.rectangle([3, 3, 44, 18], fill=BLACK)
 d.rectangle([3, 18, 44, 18], fill=GOLD[2])
@@ -162,6 +198,16 @@ grad((48, 80, 64, 96), (130, 80, 40), (80, 50, 25))
 # bed top: pillow left 10px, red blanket
 d.rectangle([64, 80, 95, 95], fill=RED[1]); noise((64, 80, 96, 96), [RED[0], RED[2]], 3)
 d.rectangle([64, 80, 75, 95], fill=WHITE); d.line([(76, 80), (76, 95)], fill=RED[0])
+# sword sprites (16,96) normal (32,96) mirrored
+draw_sprite(16, 96, SWORD); draw_sprite(32, 96, SWORD, True)
+# TNT side (48,96), TNT top (64,96)
+d.rectangle([48, 96, 63, 111], fill=(210, 40, 30)); d.rectangle([48, 101, 63, 106], fill=(235, 235, 225))
+for x in range(48, 64, 4): d.line([(x, 96), (x, 100)], fill=(150, 20, 15)); d.line([(x, 107), (x, 111)], fill=(150, 20, 15))
+text("TNT", 56, 101, BLACK, (235, 235, 225))
+d.rectangle([64, 96, 79, 111], fill=(200, 45, 35)); d.rectangle([68, 100, 75, 107], fill=(230, 220, 200)); d.rectangle([70, 102, 73, 105], fill=BLACK)
+# red team flag (80,96)
+grad((80, 96, 96, 112), RED[0], RED[2]);
+d.rectangle([84, 100, 91, 103], fill=WHITE); d.rectangle([84, 103, 91, 106], fill=(255, 220, 220)); d.rectangle([80, 96, 95, 111], outline=RED[3])
 # shine for orbit (row 96): glow tile
 grad((0, 96, 16, 112), (255, 255, 200), (255, 190, 60))
 
@@ -174,7 +220,8 @@ R = {"front": (0, 0, 48, 64), "back": (48, 0, 48, 64), "edge": (96, 0, 32, 64),
      "grass": (48, 64, 16, 16), "grass_side": (64, 64, 16, 16), "red": (80, 64, 16, 16),
      "blue": (96, 64, 16, 16), "white": (112, 64, 16, 16), "wood": (0, 80, 16, 16),
      "goldb": (16, 80, 16, 16), "blade": (32, 80, 16, 16), "hilt": (48, 80, 16, 16),
-     "bedtop": (64, 80, 32, 16)}
+     "bedtop": (64, 80, 32, 16), "sw": (16, 96, 16, 16), "swm": (32, 96, 16, 16),
+     "tnt": (48, 96, 16, 16), "tnt_top": (64, 96, 16, 16), "flag": (80, 96, 16, 16), "none": (112, 96, 16, 16)}
 
 
 def F(n, s=None, e=None, w=None, u=None, dn=None):
@@ -197,10 +244,11 @@ C = [
     # pass
     ("card", "pass", (-6, 12, -0.75), (6, 28, 0.75), F("front", s="back", e="edge", u="edge")),
     ("emerald", "pass", (-1.5, 28.5, -1.5), (1.5, 31.5, 1.5), F("emerald"), (0, 45, 0), (0, 30, 0)),
-    ("sword_l_blade", "pass", (-0.75, 14, -1.25), (0.75, 30, -0.75), F("blade"), (0, 0, 35), (-4, 16, 0)),
-    ("sword_r_blade", "pass", (-0.75, 14, -1.25), (0.75, 30, -0.75), F("blade"), (0, 0, -35), (4, 16, 0)),
-    ("sword_l_hilt", "pass", (-2.5, 13, -1.4), (2.5, 14, -0.6), F("goldb"), (0, 0, 35), (-4, 16, 0)),
-    ("sword_r_hilt", "pass", (-2.5, 13, -1.4), (2.5, 14, -0.6), F("goldb"), (0, 0, -35), (4, 16, 0)),
+    ("sword_l", "pass", (-13, 13, 1.0), (1, 27, 1.4), F("none", ) | dict(north="sw", south="swm"),),
+    ("sword_r", "pass", (-1, 13, 1.0), (13, 27, 1.4), F("none") | dict(north="swm", south="sw"),),
+    ("tnt", "island", (-7.5, 4, -3), (-3.5, 8, 1), F("tnt", u="tnt_top")),
+    ("pole", "island", (6, 4, 0), (6.6, 15, 0.6), F("wood")),
+    ("flag", "island", (2, 11, 0.1), (6, 14, 0.5), F("flag")),
     # orbit gems
     ("orb_diamond", "orbit", (8, 19, -1), (10, 21, 1), F("diamond"), (45, 0, 45), (9, 20, 0)),
     ("orb_emerald", "orbit", (-10, 19, -1), (-8, 21, 1), F("emerald"), (45, 0, 45), (-9, 20, 0)),
@@ -208,7 +256,7 @@ C = [
     ("orb_iron", "orbit", (-1, 19, -10), (1, 21, -8), F("white"), (45, 0, 45), (0, 20, -9)),
 ]
 # sword positions offset: shift blades sideways
-OFF = {"sword_l_blade": -4, "sword_l_hilt": -4, "sword_r_blade": 4, "sword_r_hilt": 4}
+OFF = {}
 C = [(n, b, (f[0] + OFF.get(n, 0), f[1], f[2]), (t[0] + OFF.get(n, 0), t[1], t[2]), fc, *rest)
      for (n, b, f, t, fc, *rest) in C]
 BONES = [("island", [0, 0, 0], None), ("pass", [0, 20, 0], None), ("orbit", [0, 20, 0], None)]

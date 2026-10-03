@@ -1,0 +1,14 @@
+name: BedWarsBattlePass
+main: bedwars\battlepass\Main
+version: 1.0.0
+api: 5.0.0
+depend: [Customies]
+description: BedWars Battle Pass NPC (needs BedWarsBattlePass resource pack)
+commands:
+  battlepass:
+    description: Spawn/remove the Battle Pass NPC
+    usage: "/battlepass <spawn|remove>"
+    permission: battlepass.admin
+permissions:
+  battlepass.admin:
+    default: op
