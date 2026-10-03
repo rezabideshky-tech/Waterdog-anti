@@ -5,7 +5,7 @@ import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-NS = uuid.UUID("b7c41e2a-93f0-4d55-8a61-2f3e9c0d7a18")
+NS = uuid.UUID("c65793a9-05da-4cea-a2d7-a000a5bc4282")
 WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
 RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
@@ -481,14 +481,6 @@ def bedwars_duos():
         ("tip", "island", (-2, -12, -1.5), (2, -9, 2.5), F("stone")),
         *BED("red", -11.5, -4), *BED("blue", 4, 11.5),
         # bed defense (wool + endstone + planks, classic BedWars)
-        ("def_r_foot", "island", (-12.5, 4, -3), (-3, 6, -1), F("wool_red")),
-        ("def_r_side", "island", (-14, 4, -3), (-12, 7, 12), F("endstone")),
-        ("def_r_in", "island", (-3.5, 4, -1), (-2, 6.5, 12), F("planks")),
-        ("def_b_foot", "island", (3, 4, -3), (12.5, 6, -1), F("wool_blue")),
-        ("def_b_side", "island", (12, 4, -3), (14, 7, 12), F("endstone")),
-        ("def_b_in", "island", (2, 4, -1), (3.5, 6.5, 12), F("planks")),
-        ("obs_r", "island", (-14, 7, 10), (-12, 9, 12), F("obsidian")),
-        ("obs_b", "island", (12, 7, 10), (14, 9, 12), F("obsidian")),
         # TNT + wool stack front-left
         ("tnt", "island", (-13, 4, -11.5), (-10, 7, -8.5), F("tnt_side", u="tnt_top")),
         ("wool_stack1", "island", (-9.5, 4, -11.5), (-7.5, 6, -9.5), F("wool_red")),
@@ -644,7 +636,7 @@ shutil.rmtree(RP, ignore_errors=True)
 for sub in ["models/entity", "animations", "textures/entity", "entity", "render_controllers", "texts"]:
     os.makedirs(os.path.join(RP, sub))
 json.dump({"format_version": 2, "header": {
-    "name": "§l§bArvan§fGaming §eLobby", "description": "§cBedWars Duos §7& §aRolePlay City §7portal models",
+    "name": "§l§bArvan§fGaming §eLobby", "description": "§cBedWars Duos §7& §aRolePlay City §7portals + §6Battle Pass",
     "uuid": str(uuid.uuid5(NS, "header")), "version": [1, 0, 0], "min_engine_version": [1, 20, 0]},
     "modules": [{"type": "resources", "uuid": str(uuid.uuid5(NS, "module")), "version": [1, 0, 0]}]},
     open(os.path.join(RP, "manifest.json"), "w"), indent=2)
@@ -658,6 +650,12 @@ for m in models:
     json.dump(m["anim"], open(os.path.join(RP, f"animations/{n}.animation.json"), "w"), indent=2)
     json.dump(m["ent"], open(os.path.join(RP, f"entity/{n}.entity.json"), "w"), indent=2)
     shutil.copy(m["tex"], os.path.join(RP, f"textures/entity/{n}.png"))
+# merge Battle Pass pack
+BP = os.path.join(OUT, "..", "battlepass", "BedWarsBattlePass_RP")
+for sub in ["models/entity", "animations", "textures/entity", "entity", "render_controllers"]:
+    for fn in os.listdir(os.path.join(BP, sub)):
+        shutil.copy(os.path.join(BP, sub, fn), os.path.join(RP, sub, fn))
+lang += [l for l in open(os.path.join(BP, "texts/en_US.lang")).read().splitlines() if l.strip()]
 lang += ["entity.arvan:bedwars_duos.name=§l§cBed§9Wars §fDuos", "entity.arvan:roleplay_city.name=§l§aRolePlay City"]
 open(os.path.join(RP, "texts/en_US.lang"), "w").write("\n".join(lang) + "\n")
 json.dump(["en_US"], open(os.path.join(RP, "texts/languages.json"), "w"))
