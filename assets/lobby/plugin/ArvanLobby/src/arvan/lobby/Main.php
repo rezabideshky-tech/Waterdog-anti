@@ -20,6 +20,7 @@ final class Main extends PluginBase{
 		$this->saveDefaultConfig();
 		CustomiesEntityFactory::getInstance()->registerEntity(BedwarsDuosNpc::class, BedwarsDuosNpc::NETWORK_ID);
 		CustomiesEntityFactory::getInstance()->registerEntity(RoleplayCityNpc::class, RoleplayCityNpc::NETWORK_ID);
+		CustomiesEntityFactory::getInstance()->registerEntity(CargoTruckNpc::class, CargoTruckNpc::NETWORK_ID);
 	}
 
 	/** @return array<string, mixed> */
@@ -47,6 +48,7 @@ final class Main extends PluginBase{
 			$npc = match($args[1] ?? ""){
 				"duos" => new BedwarsDuosNpc($sender->getLocation()),
 				"roleplay" => new RoleplayCityNpc($sender->getLocation()),
+				"truck" => new CargoTruckNpc($sender->getLocation()),
 				default => null,
 			};
 			if($npc === null) return false;

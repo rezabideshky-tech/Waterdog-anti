@@ -1,0 +1,67 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cargo_truck.idle": {
+      "loop": true,
+      "bones": {
+        "body": {
+          "position": [
+            0,
+            "math.abs(math.sin(query.anim_time * 720)) * 0.25",
+            0
+          ],
+          "rotation": [
+            "math.sin(query.anim_time * 360) * 0.6",
+            0,
+            0
+          ]
+        },
+        "axle_f": {
+          "rotation": [
+            "query.anim_time * -360",
+            0,
+            0
+          ]
+        },
+        "axle_r1": {
+          "rotation": [
+            "query.anim_time * -360",
+            0,
+            0
+          ]
+        },
+        "axle_r2": {
+          "rotation": [
+            "query.anim_time * -360",
+            0,
+            0
+          ]
+        },
+        "smoke1": {
+          "position": [
+            0,
+            "math.mod(query.anim_time * 6, 6)",
+            "math.mod(query.anim_time * 6, 6) * 0.6"
+          ],
+          "scale": [
+            "1 + math.mod(query.anim_time * 6, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6, 6) * 0.35"
+          ]
+        },
+        "smoke2": {
+          "position": [
+            0,
+            "math.mod(query.anim_time * 6 + 3, 6)",
+            "math.mod(query.anim_time * 6 + 3, 6) * 0.6"
+          ],
+          "scale": [
+            "1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35"
+          ]
+        }
+      }
+    }
+  }
+}

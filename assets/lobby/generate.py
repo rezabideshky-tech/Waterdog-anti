@@ -5,7 +5,7 @@ import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-NS = uuid.UUID("769f9960-5025-4c72-be41-101e54197141")
+NS = uuid.UUID("64bcdf08-7b8b-4064-bed8-b56457cc5fd1")
 WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
 RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
@@ -628,7 +628,159 @@ def roleplay_city():
     return build("arvan_roleplay_city", "arvan:roleplay_city", A, bones, C, anim, 4, 3.2, [3.5, 4, 2])
 
 
-models = [bedwars_duos(), roleplay_city()]
+# ================================================================== CARGO TRUCK
+def cargo_truck():
+    A = Atlas(256, 256)
+    CAB = [(255, 120, 90), (225, 45, 40), (150, 20, 25), (70, 8, 12)]
+    CHROME = [(255, 255, 255), (215, 220, 230), (150, 158, 172), (80, 86, 100)]
+    GLASS = [(200, 235, 255), (90, 160, 220), (30, 70, 130)]
+
+    def body(box, pal=CAB):
+        A.grad(box, pal[1], pal[2]); A.noise(box, [pal[0], pal[2]], 11, 31)
+
+    def chrome_bar(x0, y0, x1, y1):
+        A.grad((x0, y0, x1, y1), CHROME[0], CHROME[2])
+        A.d.line([(x0, y1 - 1), (x1 - 1, y1 - 1)], fill=CHROME[3])
+
+    # --- cab front 56x56 (14x14 units)
+    b = A.alloc("cab_front", 56, 56); x0, y0, x1, y1 = b
+    body(b)
+    A.grad((x0 + 3, y0 + 3, x1 - 3, y0 + 24), GLASS[0], GLASS[2])           # windshield
+    A.d.polygon([(x0 + 8, y0 + 23), (x0 + 20, y0 + 3), (x0 + 26, y0 + 3), (x0 + 14, y0 + 23)], fill=(220, 245, 255))
+    A.d.polygon([(x0 + 18, y0 + 23), (x0 + 30, y0 + 3), (x0 + 32, y0 + 3), (x0 + 20, y0 + 23)], fill=(180, 225, 250))
+    A.d.line([(x0 + 27, y0 + 3), (x0 + 27, y0 + 23)], fill=CAB[3])
+    A.d.rectangle([x0 + 2, y0 + 2, x1 - 3, y0 + 24], outline=(25, 25, 30))
+    A.d.rectangle([x0 + 8, y0 + 4, x1 - 9, y0 + 6], fill=(30, 30, 35))       # sun visor
+    A.text("ARVAN", (x0 + x1) // 2, y0 + 4, (255, 210, 80))
+    for yy in range(y0 + 29, y0 + 46, 3):                                    # grille
+        chrome_bar(x0 + 14, yy, x1 - 14, yy + 2)
+    A.d.rectangle([x0 + 13, y0 + 28, x1 - 14, y0 + 46], outline=CHROME[3])
+    for lx in (x0 + 3, x1 - 12):                                             # headlights
+        A.d.rectangle([lx, y0 + 30, lx + 8, y0 + 37], fill=CHROME[3])
+        A.d.rectangle([lx + 1, y0 + 31, lx + 7, y0 + 36], fill=(255, 250, 200))
+        A.d.rectangle([lx + 2, y0 + 32, lx + 4, y0 + 33], fill=WHITE)
+        A.d.rectangle([lx, y0 + 39, lx + 8, y0 + 41], fill=(255, 170, 30))    # indicator
+    A.d.rectangle([x0 + 20, y0 + 48, x1 - 21, y0 + 53], fill=WHITE)           # plate
+    A.text("AG 1", (x0 + x1) // 2, y0 + 49, BLACK)
+    # --- cab side 48x56 (12 long x 14 tall)
+    b = A.alloc("cab_side", 48, 56); x0, y0, x1, y1 = b
+    body(b)
+    A.grad((x0 + 4, y0 + 4, x0 + 30, y0 + 24), GLASS[0], GLASS[2])           # door window
+    A.d.line([(x0 + 8, y0 + 23), (x0 + 18, y0 + 5)], fill=(225, 245, 255), width=2)
+    A.d.rectangle([x0 + 3, y0 + 3, x0 + 31, y0 + 25], outline=(25, 25, 30))
+    A.d.rectangle([x0 + 2, y0 + 3, x0 + 33, y0 + 48], outline=CAB[3])        # door seam
+    A.d.rectangle([x0 + 26, y0 + 29, x0 + 31, y0 + 30], fill=CHROME[1])       # handle
+    A.d.ellipse([x0 + 8, y0 + 30, x0 + 24, y0 + 42], fill=GOLD[1], outline=GOLD[3])  # AG badge
+    A.text("AG", x0 + 16, y0 + 34, CAB[3])
+    A.grad((x0, y0 + 49, x1, y1), (60, 60, 68), (30, 30, 35))                # step / sill
+    chrome_bar(x0 + 3, y0 + 51, x0 + 31, y0 + 53)
+    A.d.line([(x0, y0 + 26), (x1 - 1, y0 + 26)], fill=GOLD[1])               # pin stripe
+    b = A.alloc("cab_back", 56, 56); body(b)
+    A.grad((b[0] + 18, b[1] + 6, b[2] - 18, b[1] + 16), GLASS[1], GLASS[2])
+    b = A.alloc("cab_top", 56, 48); body(b)
+    for yy in range(b[1] + 6, b[3] - 4, 8):
+        A.d.line([(b[0] + 3, yy), (b[2] - 4, yy)], fill=CAB[2])
+    # --- container 108x68 side (27 x 17 units)
+    b = A.alloc("box_side", 108, 68); x0, y0, x1, y1 = b
+    A.grad(b, (250, 250, 252), (205, 208, 215))
+    for xx in range(x0, x1, 6):
+        A.d.line([(xx, y0), (xx, y1 - 1)], fill=(190, 192, 200))
+    A.d.rectangle([x0, y0, x1 - 1, y0 + 2], fill=CHROME[2]); A.d.rectangle([x0, y1 - 3, x1 - 1, y1 - 1], fill=CHROME[3])
+    A.d.polygon([(x0, y0 + 46), (x1, y0 + 30), (x1, y0 + 40), (x0, y0 + 56)], fill=CAB[1])    # swoosh
+    A.d.polygon([(x0, y0 + 56), (x1, y0 + 40), (x1, y0 + 43), (x0, y0 + 59)], fill=GOLD[1])
+    A.outlined("ARVAN", (x0 + x1) // 2 - 6, y0 + 7, CAB[1], 4, out=CAB[3])
+    A.text("GAMING CARGO", (x0 + x1) // 2 - 6, y0 + 31, (40, 40, 50), None, 1)
+    A.d.ellipse([x1 - 22, y0 + 6, x1 - 4, y0 + 24], fill=GOLD[1], outline=GOLD[3])
+    A.text("AG", x1 - 13, y0 + 12, CAB[3])
+    b = A.alloc("box_back", 60, 68); x0, y0, x1, y1 = b
+    A.grad(b, (240, 240, 245), (195, 198, 205))
+    m = (x0 + x1) // 2
+    A.d.line([(m, y0 + 2), (m, y1 - 3)], fill=(110, 110, 120))
+    for bx in (m - 10, m - 4, m + 3, m + 9):                                  # lock bars
+        chrome_bar(bx, y0 + 3, bx + 2, y1 - 4)
+        A.d.rectangle([bx - 1, y0 + 30, bx + 3, y0 + 34], fill=CHROME[3])
+    A.d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=CHROME[3])
+    for lx in (x0 + 2, x1 - 8):
+        A.d.rectangle([lx, y1 - 10, lx + 5, y1 - 5], fill=(230, 30, 30))      # tail lights
+        A.d.rectangle([lx + 1, y1 - 9, lx + 2, y1 - 8], fill=(255, 160, 160))
+    for i in range(0, 10, 2):                                                # hazard stripes
+        A.d.rectangle([x0 + 2 + i * 5, y1 - 3, x0 + 6 + i * 5, y1 - 2], fill=(255, 200, 0))
+    b = A.alloc("box_front", 60, 68); A.grad(b, (235, 235, 240), (200, 203, 210)); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=CHROME[3])
+    b = A.alloc("box_top", 30, 54); A.grad(b, (225, 228, 235), (200, 203, 210))
+    for yy in range(b[1], b[3], 4): A.d.line([(b[0], yy), (b[2] - 1, yy)], fill=(180, 183, 190))
+    # --- wheel (alpha circle) + parts
+    b = A.alloc("wheel", 24, 24); x0, y0, x1, y1 = b
+    A.d.ellipse([x0, y0, x1 - 1, y1 - 1], fill=(28, 28, 32))
+    A.d.ellipse([x0 + 2, y0 + 2, x1 - 3, y1 - 3], outline=(55, 55, 62))
+    A.d.ellipse([x0 + 6, y0 + 6, x1 - 7, y1 - 7], fill=CHROME[1], outline=CHROME[3])
+    A.d.ellipse([x0 + 9, y0 + 9, x1 - 10, y1 - 10], fill=CHROME[3])
+    for a in range(0, 360, 60):
+        A.d.point([(x0 + 12 + 4 * math.cos(math.radians(a)), y0 + 12 + 4 * math.sin(math.radians(a)))], fill=GOLD[1])
+    b = A.alloc("tread", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(30, 30, 34))
+    for yy in range(b[1], b[3], 2): A.d.line([(b[0], yy), (b[2] - 1, yy)], fill=(50, 50, 56))
+    b = A.alloc("chrome", 8, 8); A.grad(b, CHROME[0], CHROME[2])
+    b = A.alloc("metal", 8, 8); A.grad(b, (70, 72, 82), (35, 36, 42))
+    b = A.alloc("amber", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(255, 170, 20)); A.d.point([(b[0] + 2, b[1] + 2)], fill=WHITE)
+    b = A.alloc("red", 8, 8); body(b)
+    b = A.alloc("glass", 8, 8); A.grad(b, GLASS[0], GLASS[2])
+    b = A.alloc("flap", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(25, 25, 28)); A.d.line([(b[0], b[1] + 2), (b[2] - 1, b[1] + 2)], fill=CHROME[2])
+    b = A.alloc("smoke", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(170, 170, 178)); A.d.point([(b[0] + 2, b[1] + 2), (b[0] + 3, b[1] + 2)], fill=(210, 210, 215))
+    b = A.alloc("none", 8, 8)
+
+    W = lambda: F("tread") | dict(east="wheel", west="wheel")
+    bones = [("root", [0, 0, 0], None), ("body", [0, 5, 0], "root"),
+             ("axle_f", [0, 3.5, -14], "root"), ("axle_r1", [0, 3.5, 8], "root"), ("axle_r2", [0, 3.5, 15], "root"),
+             ("smoke1", [-7.5, 22, -8], "body"), ("smoke2", [7.5, 22, -8], "body")]
+    C = [
+        # chassis
+        ("chassis", "body", (-5.5, 3, -20), (5.5, 5, 21), F("metal")),
+        ("bumper", "body", (-7.5, 2.5, -21.5), (7.5, 5.5, -20), F("chrome")),
+        # cab (front = north / -Z)
+        ("cab", "body", (-7, 5, -20), (7, 19, -8), F("cab_front", s="cab_back", e="cab_side", u="cab_top", dn="metal")),
+        ("hood_trim", "body", (-7.2, 12.5, -20.3), (7.2, 13, -19.8), F("chrome")),
+        ("spoiler", "body", (-6.5, 19, -15), (6.5, 22, -8.5), F("red")),
+        ("visor", "body", (-7, 18.5, -21), (7, 19.2, -19.5), F("metal")),
+        ("light1", "body", (-5, 19.2, -19.8), (-3.5, 20, -18.8), F("amber")),
+        ("light2", "body", (-2, 19.2, -19.8), (-0.5, 20, -18.8), F("amber")),
+        ("light3", "body", (0.5, 19.2, -19.8), (2, 20, -18.8), F("amber")),
+        ("light4", "body", (3.5, 19.2, -19.8), (5, 20, -18.8), F("amber")),
+        ("mirror_l", "body", (-9.5, 12, -18.5), (-8.5, 16, -17.5), F("metal") | dict(north="glass")),
+        ("mirror_l_arm", "body", (-8.5, 14, -18.3), (-7, 14.5, -17.7), F("chrome")),
+        ("mirror_r", "body", (8.5, 12, -18.5), (9.5, 16, -17.5), F("metal") | dict(north="glass")),
+        ("mirror_r_arm", "body", (7, 14, -18.3), (8.5, 14.5, -17.7), F("chrome")),
+        ("stack_l", "body", (-8.2, 8, -8.6), (-7, 22, -7.4), F("chrome")),
+        ("stack_r", "body", (7, 8, -8.6), (8.2, 22, -7.4), F("chrome")),
+        ("tank_l", "body", (-7.8, 4.5, -7), (-5.5, 7.5, -1), F("chrome")),
+        ("tank_r", "body", (5.5, 4.5, -7), (7.8, 7.5, -1), F("chrome")),
+        ("fender_f", "body", (-7.6, 7, -17), (7.6, 7.6, -11), F("red")),
+        # cargo container
+        ("box", "body", (-7.5, 5.5, -7), (7.5, 22.5, 21), F("box_front", s="box_back", e="box_side", u="box_top", dn="metal")),
+        ("flap_l", "body", (-7, 1.5, 18.5), (-4, 5, 19), F("flap")),
+        ("flap_r", "body", (4, 1.5, 18.5), (7, 5, 19), F("flap")),
+        # smoke puffs
+        ("puff1", "smoke1", (-8.1, 22.5, -8.6), (-6.9, 23.7, -7.4), F("smoke")),
+        ("puff2", "smoke2", (6.9, 22.5, -8.6), (8.1, 23.7, -7.4), F("smoke")),
+    ]
+    for ax, z in (("axle_f", -14), ("axle_r1", 8), ("axle_r2", 15)):
+        for side, (xa, xb) in (("l", (-8, -5)), ("r", (5, 8))):
+            C.append((f"w_{ax}_{side}", ax, (xa, 0.5, z - 3), (xb, 6.5, z + 3), W()))
+            C.append((f"w_{ax}_{side}45", ax, (xa + 0.05, 0.5, z - 3), (xb - 0.05, 6.5, z + 3),
+                      F("none") | dict(north="tread", south="tread", up="tread", down="tread"), (45, 0, 0), (0, 3.5, z)))
+    anim = {
+        "body": {"position": [0, "math.abs(math.sin(query.anim_time * 720)) * 0.25", 0],
+                 "rotation": ["math.sin(query.anim_time * 360) * 0.6", 0, 0]},
+        "axle_f": {"rotation": ["query.anim_time * -360", 0, 0]},
+        "axle_r1": {"rotation": ["query.anim_time * -360", 0, 0]},
+        "axle_r2": {"rotation": ["query.anim_time * -360", 0, 0]},
+        "smoke1": {"position": [0, "math.mod(query.anim_time * 6, 6)", "math.mod(query.anim_time * 6, 6) * 0.6"],
+                   "scale": ["1 + math.mod(query.anim_time * 6, 6) * 0.35"] * 3},
+        "smoke2": {"position": [0, "math.mod(query.anim_time * 6 + 3, 6)", "math.mod(query.anim_time * 6 + 3, 6) * 0.6"],
+                   "scale": ["1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35"] * 3},
+    }
+    return build("arvan_cargo_truck", "arvan:cargo_truck", A, bones, C, anim, 2, 2.2, [4, 2.5, 2])
+
+
+models = [bedwars_duos(), roleplay_city(), cargo_truck()]
 
 # ------------------------------------------------------------------ resource pack
 RP = os.path.join(OUT, "ArvanLobby_RP")
@@ -636,7 +788,7 @@ shutil.rmtree(RP, ignore_errors=True)
 for sub in ["models/entity", "animations", "textures/entity", "entity", "render_controllers", "texts"]:
     os.makedirs(os.path.join(RP, sub))
 json.dump({"format_version": 2, "header": {
-    "name": "§l§bArvan§fGaming §eLobby", "description": "§cBedWars Duos §7& §aRolePlay City §7portals + §6Battle Pass",
+    "name": "§l§bArvan§fGaming §eLobby", "description": "§cBedWars Duos §7& §aRolePlay City §7portals + §6Battle Pass §7+ §fCargo Truck",
     "uuid": str(uuid.uuid5(NS, "header")), "version": [1, 0, 0], "min_engine_version": [1, 20, 0]},
     "modules": [{"type": "resources", "uuid": str(uuid.uuid5(NS, "module")), "version": [1, 0, 0]}]},
     open(os.path.join(RP, "manifest.json"), "w"), indent=2)
@@ -656,7 +808,7 @@ for sub in ["models/entity", "animations", "textures/entity", "entity", "render_
     for fn in os.listdir(os.path.join(BP, sub)):
         shutil.copy(os.path.join(BP, sub, fn), os.path.join(RP, sub, fn))
 lang += [l for l in open(os.path.join(BP, "texts/en_US.lang")).read().splitlines() if l.strip()]
-lang += ["entity.arvan:bedwars_duos.name=§l§cBed§9Wars §fDuos", "entity.arvan:roleplay_city.name=§l§aRolePlay City"]
+lang += ["entity.arvan:bedwars_duos.name=§l§cBed§9Wars §fDuos", "entity.arvan:roleplay_city.name=§l§aRolePlay City", "entity.arvan:cargo_truck.name=§l§cArvan §fCargo Truck"]
 open(os.path.join(RP, "texts/en_US.lang"), "w").write("\n".join(lang) + "\n")
 json.dump(["en_US"], open(os.path.join(RP, "texts/languages.json"), "w"))
 
@@ -664,7 +816,7 @@ json.dump(["en_US"], open(os.path.join(RP, "texts/languages.json"), "w"))
 icon = Image.new("RGBA", (256, 256), (18, 12, 28, 255))
 dd = ImageDraw.Draw(icon)
 dd.ellipse([10, 10, 246, 246], fill=(35, 25, 55))
-for i, m in enumerate(models):
+for i, m in enumerate(models[:2]):
     x, y, w, h = m["R"]["sign"]
     sg = m["img"].crop((x, y, x + w, y + h)).resize((w * 3, h * 3), Image.NEAREST)
     icon.paste(sg, (32, 30 + i * 104), sg)

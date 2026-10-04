@@ -15,3 +15,9 @@ npcs:
     address: "play.arvangaming.ir"
     port: 19133
     command: "tell {player} RolePlay coming soon!"
+  truck:
+    nametag: "§l§cARVAN §fCARGO\n§r§7Tap to join RolePlay!"
+    action: transfer
+    address: "play.arvangaming.ir"
+    port: 19133
+    command: "tell {player} Cargo jobs coming soon!"
