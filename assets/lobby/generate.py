@@ -802,6 +802,24 @@ for m in models:
     json.dump(m["anim"], open(os.path.join(RP, f"animations/{n}.animation.json"), "w"), indent=2)
     json.dump(m["ent"], open(os.path.join(RP, f"entity/{n}.entity.json"), "w"), indent=2)
     shutil.copy(m["tex"], os.path.join(RP, f"textures/entity/{n}.png"))
+# drivable RolePlay truck: same model, wheels driven by real movement
+json.dump({"format_version": "1.8.0", "animations": {"animation.arvan_rp_truck.drive": {"loop": True, "bones": {
+    "axle_f": {"rotation": ["query.modified_distance_moved * -45", 0, 0]},
+    "axle_r1": {"rotation": ["query.modified_distance_moved * -45", 0, 0]},
+    "axle_r2": {"rotation": ["query.modified_distance_moved * -45", 0, 0]},
+    "body": {"position": [0, "math.abs(math.sin(query.anim_time * 720)) * (0.1 + query.modified_move_speed * 0.4)", 0]},
+    "smoke1": {"position": [0, "math.mod(query.anim_time * 6, 6)", "math.mod(query.anim_time * 6, 6) * 0.6"],
+               "scale": ["1 + math.mod(query.anim_time * 6, 6) * 0.35"] * 3},
+    "smoke2": {"position": [0, "math.mod(query.anim_time * 6 + 3, 6)", "math.mod(query.anim_time * 6 + 3, 6) * 0.6"],
+               "scale": ["1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35"] * 3}}}}},
+    open(os.path.join(RP, "animations/arvan_rp_truck.animation.json"), "w"), indent=2)
+json.dump({"format_version": "1.10.0", "minecraft:client_entity": {"description": {
+    "identifier": "arvan:rp_truck", "materials": {"default": "entity_alphatest"},
+    "textures": {"default": "textures/entity/arvan_cargo_truck"}, "geometry": {"default": "geometry.arvan_cargo_truck"},
+    "animations": {"drive": "animation.arvan_rp_truck.drive"}, "scripts": {"animate": ["drive"], "scale": "2.2"},
+    "render_controllers": ["controller.render.arvan_lobby"]}}},
+    open(os.path.join(RP, "entity/arvan_rp_truck.entity.json"), "w"), indent=2)
+lang += ["entity.arvan:rp_truck.name=§l§cArvan §fTruck"]
 # merge Battle Pass pack
 BP = os.path.join(OUT, "..", "battlepass", "BedWarsBattlePass_RP")
 for sub in ["models/entity", "animations", "textures/entity", "entity", "render_controllers"]:
