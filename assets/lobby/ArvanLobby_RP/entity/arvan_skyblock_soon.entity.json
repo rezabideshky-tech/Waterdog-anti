@@ -1,0 +1,29 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:skyblock_soon",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_skyblock_soon"
+      },
+      "geometry": {
+        "default": "geometry.arvan_skyblock_soon"
+      },
+      "animations": {
+        "idle": "animation.arvan_skyblock_soon.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "3.2"
+      },
+      "render_controllers": [
+        "controller.render.arvan_lobby"
+      ]
+    }
+  }
+}

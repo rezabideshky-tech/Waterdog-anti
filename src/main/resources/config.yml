@@ -1,0 +1,28 @@
+# WaterdogLobbyFallback config
+#
+# When a player's CURRENT backend server dies / becomes unreachable,
+# this plugin transfers them to a lobby instead of just kicking them
+# off the whole proxy.
+
+# Ordered list of server names to try, in order, as the destination.
+# The first one that is currently online and NOT the server that
+# just went down will be used. Add multiple lobbies for redundancy.
+lobby-servers:
+  - "lobby"
+  - "lobby-1"
+
+# Message shown to the player right when the transfer happens.
+transfer-message: "§eThe server you were on went offline - reconnecting you to the lobby..."
+
+# Message shown if NONE of the lobby-servers are reachable either
+# (player gets fully disconnected from the proxy in this case).
+no-lobby-message: "§cServer went offline and no lobby is currently available. Please reconnect shortly."
+
+# Don't trigger a fallback transfer if the player was already ON one
+# of the lobby servers listed above (avoids reconnect loops if a
+# lobby itself is the one that died).
+ignore-if-already-on-lobby: true
+
+# Small delay (in ticks, 20 = 1 second) before attempting the transfer,
+# giving the proxy a moment to fully register the disconnect.
+transfer-delay-ticks: 10

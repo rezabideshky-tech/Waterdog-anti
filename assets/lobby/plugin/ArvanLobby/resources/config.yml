@@ -1,5 +1,6 @@
 # What happens when a player taps an NPC.
 # action: "transfer" -> sends player to address:port (use your Waterdog proxy / game server)
+# action: "soon"     -> game mode not open yet: shows "Coming Soon", counts interested players ({count})
 # action: "command"  -> runs command from console, {player} is replaced with player name
 #                       e.g. Waterdog/multi-server plugins: "transfer {player} bedwars"
 npcs:
@@ -21,3 +22,13 @@ npcs:
     address: "play.arvangaming.ir"
     port: 19133
     command: "tell {player} Cargo jobs coming soon!"
+  skyblock:
+    nametag: "§l§aSKY§2BLOCK §7- §eCOMING SOON\n§r§b{count} §7players waiting!"
+    action: soon
+    title: "§l§aSKYBLOCK"
+    subtitle: "§eComing Soon to ArvanGaming!"
+    message: "§a✔ §7You're on the §aSkyBlock §7waiting list! §8({count} players)\n§7Follow our Discord/Telegram for the launch date §e🔔"
+    message_again: "§eYou're already on the SkyBlock list. §7Stay tuned!"
+    # when SkyBlock opens: change action to "transfer" and set address/port
+    address: "play.arvangaming.ir"
+    port: 19134

@@ -1,0 +1,85 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_skyblock_soon.idle": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "position": [
+            0,
+            "math.sin(query.anim_time * 90) * 0.8",
+            0
+          ]
+        },
+        "clouds": {
+          "rotation": [
+            0,
+            "query.anim_time * 20",
+            0
+          ]
+        },
+        "ghost": {
+          "scale": [
+            "0.92 + math.sin(query.anim_time * 180) * 0.06",
+            "0.92 + math.sin(query.anim_time * 180) * 0.06",
+            "0.92 + math.sin(query.anim_time * 180) * 0.06"
+          ]
+        },
+        "lock": {
+          "rotation": [
+            0,
+            0,
+            "math.sin(query.anim_time * 1440) * 6 * math.pow(math.sin(query.anim_time * 90), 8)"
+          ]
+        },
+        "qmark": {
+          "rotation": [
+            0,
+            "query.anim_time * 120",
+            0
+          ],
+          "position": [
+            0,
+            "math.sin(query.anim_time * 180) * 0.8",
+            0
+          ]
+        },
+        "sand_top": {
+          "scale": [
+            1,
+            "1 - math.mod(query.anim_time, 4) / 4",
+            1
+          ]
+        },
+        "sand_bot": {
+          "scale": [
+            1,
+            "0.2 + math.mod(query.anim_time, 4) / 4",
+            1
+          ]
+        },
+        "rarm_s": {
+          "rotation": [
+            "-70 + math.abs(math.sin(query.anim_time * 270)) * 60",
+            0,
+            0
+          ]
+        },
+        "body_s": {
+          "rotation": [
+            "math.abs(math.sin(query.anim_time * 270)) * 6",
+            0,
+            0
+          ]
+        },
+        "head_s": {
+          "rotation": [
+            "10 + math.abs(math.sin(query.anim_time * 270)) * 6",
+            0,
+            0
+          ]
+        }
+      }
+    }
+  }
+}

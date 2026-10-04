@@ -5,7 +5,7 @@ import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-NS = uuid.UUID("2835464d-a3eb-4330-94ba-9d903de7a366")
+NS = uuid.UUID("c48be7c2-ed29-4e7a-886b-8305315baed3")
 WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
 RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
@@ -780,7 +780,194 @@ def cargo_truck():
     return build("arvan_cargo_truck", "arvan:cargo_truck", A, bones, C, anim, 2, 2.2, [4, 2.5, 2])
 
 
-models = [bedwars_duos(), roleplay_city(), cargo_truck()]
+# ================================================================== SKYBLOCK - COMING SOON
+def skyblock_soon():
+    A = Atlas(256, 256)
+    YEL, BLK = (255, 205, 30), (25, 22, 25)
+    # terrain
+    b = A.alloc("grass", 16, 16); A.grad(b, (125, 200, 85), (95, 170, 65)); A.noise(b, [(80, 150, 55), (155, 220, 110)], 2)
+    b = A.alloc("grass_side", 16, 16); A.grad(b, (140, 100, 66), (100, 72, 48)); A.noise(b, [(80, 56, 36), (165, 125, 85)], 3)
+    for x in range(b[0], b[2]):
+        A.d.line([(x, b[1]), (x, b[1] + 2 + (x * 7) % 3)], fill=(110, 185, 75))
+    b = A.alloc("dirt", 16, 16); A.grad(b, (125, 90, 58), (88, 60, 40)); A.noise(b, [(72, 50, 32), (150, 112, 78)], 3, 2)
+    b = A.alloc("stone", 16, 16); A.grad(b, (138, 138, 145), (98, 98, 108)); A.noise(b, [(82, 82, 92), (162, 162, 168)], 3, 3)
+    b = A.alloc("log", 16, 16); A.grad(b, (110, 82, 50), (80, 58, 34))
+    for x in range(b[0] + 2, b[2], 4): A.d.line([(x, b[1]), (x, b[3] - 1)], fill=(65, 46, 26))
+    b = A.alloc("log_top", 16, 16); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(80, 58, 34))
+    A.d.ellipse([b[0] + 2, b[1] + 2, b[2] - 3, b[3] - 3], fill=(170, 135, 85), outline=(120, 90, 55))
+    b = A.alloc("leaves", 16, 16); A.grad(b, (90, 175, 70), (45, 120, 45)); A.noise(b, [(35, 100, 35), (130, 205, 95)], 2, 5)
+    # ghost / blueprint block: transparent with dashed cyan outline
+    b = A.alloc("ghost", 16, 16)
+    A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(120, 200, 255, 70))
+    for i in range(0, 16, 4):
+        for (x, y) in [(b[0] + i, b[1]), (b[0] + i, b[3] - 1), (b[0], b[1] + i), (b[2] - 1, b[1] + i)]:
+            A.d.rectangle([x, y, x + 1, y], fill=(150, 230, 255, 255))
+            A.d.rectangle([x, y, x, y + 1], fill=(150, 230, 255, 255))
+    # chest + chains + padlock
+    b = A.alloc("chest_front", 16, 16); A.grad(b, (175, 120, 55), (125, 82, 35))
+    A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=(70, 45, 20)); A.d.line([(b[0], b[1] + 5), (b[2] - 1, b[1] + 5)], fill=(70, 45, 20))
+    b = A.alloc("chest_side", 16, 16); A.grad(b, (165, 112, 50), (120, 78, 32)); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=(70, 45, 20))
+    A.d.line([(b[0], b[1] + 5), (b[2] - 1, b[1] + 5)], fill=(70, 45, 20))
+    b = A.alloc("chest_top", 16, 16); A.grad(b, (185, 130, 62), (150, 100, 45)); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=(70, 45, 20))
+    b = A.alloc("chain", 8, 16)
+    for y in range(b[1], b[3], 4):
+        A.d.rectangle([b[0] + 1, y, b[0] + 6, y + 2], outline=(110, 110, 120)); A.d.point([(b[0] + 2, y)], fill=(220, 220, 230))
+    b = A.alloc("lock", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
+    A.d.ellipse([b[0] + 6, b[1] + 4, b[0] + 9, b[1] + 7], fill=BLK); A.d.rectangle([b[0] + 7, b[1] + 7, b[0] + 8, b[1] + 11], fill=BLK)
+    b = A.alloc("shackle", 8, 8); A.grad(b, (235, 235, 240), (150, 150, 160))
+    # caution tape + posts, cone, toolbox
+    b = A.alloc("tape", 32, 8)
+    for x in range(b[0] - 8, b[2], 8):
+        A.d.polygon([(x, b[3]), (x + 4, b[1]), (x + 8, b[1]), (x + 4, b[3])], fill=BLK)
+    A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=None)
+    for x in range(b[0], b[2]):
+        for y in range(b[1], b[3]):
+            if A.img.getpixel((x, y))[3] == 0: A.d.point([(x, y)], fill=YEL)
+    b = A.alloc("post", 8, 16)
+    for y in range(b[1], b[3], 4): A.d.rectangle([b[0], y, b[2] - 1, y + 1], fill=YEL); A.d.rectangle([b[0], y + 2, b[2] - 1, y + 3], fill=BLK)
+    b = A.alloc("cone", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(255, 120, 20)); A.d.line([(b[0], b[1] + 4), (b[2] - 1, b[1] + 4)], fill=WHITE)
+    b = A.alloc("toolbox", 16, 8); A.grad(b, (220, 40, 40), (150, 20, 25)); A.d.line([(b[0], b[1] + 3), (b[2] - 1, b[1] + 3)], fill=(90, 10, 15))
+    A.d.rectangle([b[0] + 6, b[1] + 3, b[0] + 9, b[1] + 4], fill=(200, 200, 210))
+    # cloud
+    b = A.alloc("cloud", 16, 16); A.grad(b, (255, 255, 255), (220, 228, 240)); A.noise(b, [(240, 244, 250)], 3, 8)
+    # hourglass
+    b = A.alloc("sand", 8, 8); A.grad(b, (250, 225, 140), (220, 185, 90))
+    b = A.alloc("glass", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(200, 235, 255, 90), outline=(230, 250, 255, 200))
+    b = A.alloc("gold", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
+    b = A.alloc("planks", 16, 16); A.grad(b, (178, 132, 78), (140, 100, 56))
+    for y in range(b[1] + 3, b[3], 4): A.d.line([(b[0], y), (b[2] - 1, y)], fill=(100, 70, 38))
+    b = A.alloc("none", 8, 8)
+    # builder Steve: skin, orange safety vest, hard hat, hammer
+    SKIN, SKIN_D, HAIR = (199, 143, 108), (163, 110, 82), (58, 38, 20)
+    VEST, VEST_D, REFL = (255, 130, 20), (215, 95, 10), (235, 240, 200)
+    JEANS, JEANS_D, BOOT = (55, 75, 150), (40, 55, 115), (70, 45, 25)
+    S = {"H": HAIR, "S": SKIN, "D": SKIN_D, "W": WHITE, "E": (73, 62, 160), "M": (110, 58, 48), "B": (104, 68, 46)}
+
+    def grid(box, rows, cmap, cell=2):
+        for gy, row in enumerate(rows):
+            for gx, ch in enumerate(row):
+                x, y = box[0] + gx * cell, box[1] + gy * cell
+                A.d.rectangle([x, y, x + cell - 1, y + cell - 1], fill=cmap[ch])
+    b = A.alloc("face", 16, 16); grid(b, ["HHHHHHHH", "HHHHHHHH", "HSSSSSSH", "SSSSSSSS", "SWESSEWS", "SSSDDSSS", "SSBMMBSS", "SSBBBBSS"], S)
+    b = A.alloc("hside", 16, 16); grid(b, ["HHHHHHHH", "HHHHHHHH", "HHHHHHSS", "HHHHHSSS", "HHHHSSSS", "HHHSSSSS", "HHSSSSSS", "HSSSSSSS"], S)
+    b = A.alloc("hback", 16, 16); grid(b, ["HHHHHHHH"] * 8, S)
+    b = A.alloc("skin", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN_D)
+    b = A.alloc("vest", 16, 24); A.grad(b, VEST, VEST_D)
+    A.d.rectangle([b[0] + 6, b[1], b[0] + 9, b[1] + 17], fill=(240, 240, 240))  # shirt visible in middle
+    for yy in (b[1] + 8, b[1] + 13): A.d.rectangle([b[0], yy, b[2] - 1, yy + 1], fill=REFL)
+    A.d.rectangle([b[0], b[1] + 18, b[2] - 1, b[3] - 1], fill=JEANS); A.d.rectangle([b[0], b[1] + 17, b[2] - 1, b[1] + 17], fill=(80, 50, 25))
+    b = A.alloc("vest_side", 8, 24); A.grad(b, VEST, VEST_D)
+    for yy in (b[1] + 8, b[1] + 13): A.d.rectangle([b[0], yy, b[2] - 1, yy + 1], fill=REFL)
+    A.d.rectangle([b[0], b[1] + 18, b[2] - 1, b[3] - 1], fill=JEANS)
+    b = A.alloc("arm", 8, 24); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN)
+    A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 7], fill=(240, 240, 240)); A.d.rectangle([b[0], b[3] - 6, b[2] - 1, b[3] - 1], fill=(200, 160, 60))  # glove
+    b = A.alloc("leg", 8, 24); A.grad(b, JEANS, JEANS_D); A.d.rectangle([b[0], b[3] - 5, b[2] - 1, b[3] - 1], fill=BOOT)
+    b = A.alloc("hat", 16, 16); A.grad(b, (255, 225, 60), (230, 180, 20)); A.d.line([(b[0] + 7, b[1]), (b[0] + 7, b[3] - 1)], fill=(255, 245, 160))
+    A.d.line([(b[0], b[3] - 1), (b[2] - 1, b[3] - 1)], fill=(170, 120, 10))
+    b = A.alloc("handle", 8, 8); A.grad(b, (150, 100, 55), (100, 65, 35))
+    b = A.alloc("hammer", 8, 8); A.grad(b, (170, 175, 185), (95, 100, 112))
+    # sign 96x40
+    b = A.alloc("sign", 96, 40); x0, y0, x1, y1 = b
+    A.grad((x0, y0, x1, y0 + 20), (40, 150, 80), (20, 95, 50))
+    A.outlined("SKYBLOCK", (x0 + x1) // 2, y0 + 5, GOLD[0], 2, out=(10, 50, 25))
+    A.grad((x0, y0 + 20, x1, y1), (215, 40, 45), (140, 15, 25))
+    A.outlined("COMING SOON", (x0 + x1) // 2, y0 + 25, WHITE, 2, out=(70, 5, 12))
+    for x in range(x0 - 8, x1, 8):  # caution frame top & bottom
+        for (yy0, yy1) in ((y0, y0 + 2), (y1 - 3, y1 - 1)):
+            A.d.polygon([(x, yy1), (x + 3, yy0), (x + 7, yy0), (x + 4, yy1)], fill=BLK)
+    for x in range(x0, x1):
+        for y in list(range(y0, y0 + 3)) + list(range(y1 - 3, y1)):
+            if A.img.getpixel((x, y))[:3] != BLK: A.d.point([(x, y)], fill=YEL)
+    A.d.line([(x0, y0 + 20), (x1 - 1, y0 + 20)], fill=GOLD[1])
+    b = A.alloc("sign_back", 96, 40); A.grad(b, (60, 40, 25), (35, 22, 12)); A.frame(b)
+    A.text("ARVAN GAMING", (b[0] + b[2]) // 2, b[1] + 17, GOLD[1], GOLD[3], 1)
+    b = A.alloc("trim", 16, 16)
+    for y in range(b[1], b[3], 4): A.d.rectangle([b[0], y, b[2] - 1, y + 1], fill=YEL); A.d.rectangle([b[0], y + 2, b[2] - 1, y + 3], fill=BLK)
+
+    # ---------------- geometry
+    bones = [("root", [0, 0, 0], None), ("island", [0, 0, 0], "root"), ("clouds", [0, -4, 0], "root"),
+             ("ghost", [-6, 4, -6], "root"), ("lock", [-7, 7, 4], "root"), ("qmark", [0, 33, 0], "root"),
+             ("sand_top", [11, 14, 6], "root"), ("sand_bot", [11, 11, 6], "root"),
+             ("builder", [5, 4, -4], "root", [0, -40, 0]), ("body_s", [5, 10, -4], "builder"),
+             ("rarm_s", [8, 15.5, -4], "body_s"), ("head_s", [5, 16, -4], "body_s")]
+    GH = F("ghost")
+    C = [
+        # L-shaped floating island
+        ("top_a", "island", (-13, 0, -11), (13, 4, 3), F("grass_side", u="grass", dn="dirt")),
+        ("top_b", "island", (-13, 0, 3), (1, 4, 12), F("grass_side", u="grass", dn="dirt")),
+        ("under1", "island", (-11, -3, -9), (11, 0, 2), F("dirt")),
+        ("under1b", "island", (-11, -3, 2), (-1, 0, 10), F("dirt")),
+        ("under2", "island", (-8, -6, -6), (7, -3, 6), F("stone")),
+        ("under3", "island", (-5, -9, -3), (3, -6, 3), F("stone")),
+        ("tip", "island", (-2, -12, -1.5), (1, -9, 1.5), F("stone")),
+        # half-built tree
+        ("trunk", "island", (8, 4, -9), (10, 14, -7), F("log", u="log_top", dn="log_top")),
+        ("leaf1", "island", (6, 12, -11), (12, 15, -5), F("leaves")),
+        ("leaf_ghost", "ghost", (6, 15, -11), (12, 18, -5), GH),
+        # locked chest with chains
+        ("chest", "island", (-11, 4, 5), (-3, 10, 10), F("chest_front", s="chest_side", e="chest_side", u="chest_top", dn="chest_side")),
+        ("chain_v", "island", (-7.5, 3.9, 4.6), (-6.5, 10.2, 10.4), F("chain", u="chain")),
+        ("chain_h", "island", (-11.4, 6.5, 4.6), (-2.6, 7.5, 10.4), F("chain", u="chain")),
+        ("padlock", "lock", (-8.5, 5.5, 3.4), (-5.5, 8.5, 4.6), F("lock")),
+        ("shackle_l", "lock", (-8, 8.5, 3.8), (-7.4, 10, 4.2), F("shackle")),
+        ("shackle_r", "lock", (-6.6, 8.5, 3.8), (-6, 10, 4.2), F("shackle")),
+        ("shackle_t", "lock", (-8, 9.6, 3.8), (-6, 10.2, 4.2), F("shackle")),
+        # blueprint (ghost) blocks being built
+        ("g1", "ghost", (-12, 4, -10), (-8, 8, -6), GH), ("g2", "ghost", (-8, 4, -10), (-4, 8, -6), GH),
+        ("g3", "ghost", (-12, 8, -10), (-8, 12, -6), GH), ("g4", "ghost", (-12, 4, -6), (-8, 8, -2), GH),
+        ("built1", "island", (-4, 4, -10), (0, 8, -6), F("planks")),
+        # caution tape + posts around front
+        ("post1", "island", (-13, 4, -11.5), (-12, 10, -10.5), F("post")),
+        ("post2", "island", (12, 4, -11.5), (13, 10, -10.5), F("post")),
+        ("tape_front", "island", (-12, 8.2, -11.2), (12, 9.2, -10.8), F("tape")),
+        ("tape_front2", "island", (-12, 6.2, -11.2), (12, 7.2, -10.8), F("tape")),
+        ("cone", "island", (10, 4, -2), (12, 5, 0), F("cone")), ("cone2", "island", (10.4, 5, -1.6), (11.6, 7, -0.4), F("cone")),
+        ("toolbox", "island", (-2, 4, 6), (2, 6, 8), F("toolbox")),
+        # clouds hugging the underside
+        ("c1", "clouds", (-16, -5, -6), (-8, -2, 2), F("cloud")), ("c2", "clouds", (8, -7, -4), (16, -4, 4), F("cloud")),
+        ("c3", "clouds", (-4, -8, 6), (6, -5, 13), F("cloud")), ("c4", "clouds", (-6, -6, -14), (4, -3, -8), F("cloud")),
+        # hourglass
+        ("hg_top", "island", (9.5, 15, 4.5), (12.5, 15.6, 7.5), F("gold")), ("hg_bot", "island", (9.5, 4, 4.5), (12.5, 4.6, 7.5), F("gold")),
+        ("hg_glass", "island", (10, 4.6, 5), (12, 15, 7), F("glass")),
+        ("hg_sand_t", "sand_top", (10.4, 11, 5.4), (11.6, 14.5, 6.6), F("sand")),
+        ("hg_sand_b", "sand_bot", (10.4, 4.6, 5.4), (11.6, 7, 6.6), F("sand")),
+        # sign
+        ("sp_l", "island", (-11, 4, 11), (-10, 20, 12), F("post")), ("sp_r", "island", (10, 4, 11), (11, 20, 12), F("post")),
+        ("board", "island", (-13, 19, 10.5), (13, 30, 11.5), F("sign", s="sign_back", e="trim", u="trim")),
+        # golden question mark
+        ("q1", "qmark", (-2, 36, -0.5), (2, 37, 0.5), F("gold")), ("q2", "qmark", (1, 34, -0.5), (2, 36, 0.5), F("gold")),
+        ("q3", "qmark", (-2, 35, -0.5), (-1, 36, 0.5), F("gold")), ("q4", "qmark", (-0.5, 33, -0.5), (1, 34, 0.5), F("gold")),
+        ("q5", "qmark", (-0.5, 32, -0.5), (0.5, 33, 0.5), F("gold")), ("q6", "qmark", (-0.5, 30.5, -0.5), (0.5, 31.5, 0.5), F("gold")),
+    ]
+    cx, cz, y = 5, -4, 4
+    C += [
+        ("s_head", "head_s", (cx - 2, y + 12, cz - 2), (cx + 2, y + 16, cz + 2), F("face", s="hback", e="hside", u="hback", dn="skin")),
+        ("s_hat", "head_s", (cx - 2.3, y + 15, cz - 2.3), (cx + 2.3, y + 16.8, cz + 2.3), F("hat")),
+        ("s_brim", "head_s", (cx - 2.3, y + 15, cz - 3.4), (cx + 2.3, y + 15.4, cz - 2.3), F("hat")),
+        ("s_body", "body_s", (cx - 2, y + 6, cz - 1), (cx + 2, y + 12, cz + 1), F("vest", e="vest_side", u="vest_side", dn="vest_side")),
+        ("s_rarm", "rarm_s", (cx + 2, y + 6, cz - 1), (cx + 4, y + 12, cz + 1), F("arm", u="skin", dn="skin")),
+        ("s_larm", "body_s", (cx - 4, y + 6, cz - 1), (cx - 2, y + 12, cz + 1), F("arm", u="skin", dn="skin")),
+        ("s_rleg", "builder", (cx, y, cz - 1), (cx + 2, y + 6, cz + 1), F("leg", u="skin", dn="skin")),
+        ("s_lleg", "builder", (cx - 2, y, cz - 1), (cx, y + 6, cz + 1), F("leg", u="skin", dn="skin")),
+        ("hammer_h", "rarm_s", (cx + 2.6, y + 6.4, cz - 5), (cx + 3.4, y + 7.2, cz + 0.5), F("handle")),
+        ("hammer_head", "rarm_s", (cx + 2.2, y + 5.6, cz - 6.2), (cx + 3.8, y + 8, cz - 4.6), F("hammer")),
+    ]
+    anim = {
+        "root": {"position": [0, "math.sin(query.anim_time * 90) * 0.8", 0]},
+        "clouds": {"rotation": [0, "query.anim_time * 20", 0]},
+        "ghost": {"scale": ["0.92 + math.sin(query.anim_time * 180) * 0.06"] * 3},
+        "lock": {"rotation": [0, 0, "math.sin(query.anim_time * 1440) * 6 * math.pow(math.sin(query.anim_time * 90), 8)"]},
+        "qmark": {"rotation": [0, "query.anim_time * 120", 0], "position": [0, "math.sin(query.anim_time * 180) * 0.8", 0]},
+        "sand_top": {"scale": [1, "1 - math.mod(query.anim_time, 4) / 4", 1]},
+        "sand_bot": {"scale": [1, "0.2 + math.mod(query.anim_time, 4) / 4", 1]},
+        "rarm_s": {"rotation": ["-70 + math.abs(math.sin(query.anim_time * 270)) * 60", 0, 0]},
+        "body_s": {"rotation": ["math.abs(math.sin(query.anim_time * 270)) * 6", 0, 0]},
+        "head_s": {"rotation": ["10 + math.abs(math.sin(query.anim_time * 270)) * 6", 0, 0]},
+    }
+    return build("arvan_skyblock_soon", "arvan:skyblock_soon", A, bones, C, anim, 4, 3.2, [4, 5, 2])
+
+
+models = [bedwars_duos(), roleplay_city(), cargo_truck(), skyblock_soon()]
 
 # ------------------------------------------------------------------ resource pack
 RP = os.path.join(OUT, "ArvanLobby_RP")
@@ -826,7 +1013,7 @@ for sub in ["models/entity", "animations", "textures/entity", "entity", "render_
     for fn in os.listdir(os.path.join(BP, sub)):
         shutil.copy(os.path.join(BP, sub, fn), os.path.join(RP, sub, fn))
 lang += [l for l in open(os.path.join(BP, "texts/en_US.lang")).read().splitlines() if l.strip()]
-lang += ["entity.arvan:bedwars_duos.name=§l§cBed§9Wars §fDuos", "entity.arvan:roleplay_city.name=§l§aRolePlay City", "entity.arvan:cargo_truck.name=§l§cArvan §fCargo Truck"]
+lang += ["entity.arvan:bedwars_duos.name=§l§cBed§9Wars §fDuos", "entity.arvan:roleplay_city.name=§l§aRolePlay City", "entity.arvan:cargo_truck.name=§l§cArvan §fCargo Truck", "entity.arvan:skyblock_soon.name=§l§aSkyBlock §7- §eComing Soon"]
 open(os.path.join(RP, "texts/en_US.lang"), "w").write("\n".join(lang) + "\n")
 json.dump(["en_US"], open(os.path.join(RP, "texts/languages.json"), "w"))
 

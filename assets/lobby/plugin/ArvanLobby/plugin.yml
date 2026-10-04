@@ -7,7 +7,7 @@ description: ArvanGaming lobby portal NPCs (BedWars Duos, RolePlay City)
 commands:
   lobbynpc:
     description: Spawn/remove lobby portal NPCs
-    usage: "/lobbynpc <spawn <duos|roleplay|truck>|remove>"
+    usage: "/lobbynpc <spawn <duos|roleplay|truck|skyblock>|remove>"
     permission: arvanlobby.admin
 permissions:
   arvanlobby.admin:

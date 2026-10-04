@@ -13,6 +13,13 @@ use pocketmine\player\Player;
 abstract class LobbyNpc extends Entity{
 	abstract protected function key() : string;
 
+	public function getKey() : string{ return $this->key(); }
+
+	public function refreshNameTag() : void{
+		$tag = (string) (Main::get()->npcConfig($this->key())["nametag"] ?? "");
+		$this->setNameTag(str_replace("{count}", (string) Main::get()->waitingCount($this->key()), $tag));
+	}
+
 	protected function getInitialSizeInfo() : EntitySizeInfo{ return new EntitySizeInfo(7.0, 7.0); }
 
 	protected function getInitialDragMultiplier() : float{ return 0.0; }
@@ -21,7 +28,7 @@ abstract class LobbyNpc extends Entity{
 
 	protected function initEntity(CompoundTag $nbt) : void{
 		parent::initEntity($nbt);
-		$this->setNameTag((string) (Main::get()->npcConfig($this->key())["nametag"] ?? ""));
+		$this->refreshNameTag();
 		$this->setNameTagAlwaysVisible();
 		$this->setNoClientPredictions();
 	}
