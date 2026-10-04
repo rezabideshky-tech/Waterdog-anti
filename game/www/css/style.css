@@ -1,0 +1,248 @@
+/* style.css — ظاهر بازی قارچ‌خور (راست‌به‌چپ، موبایل‌محور، تمام‌صفحه) */
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../assets/fonts/Vazirmatn-400.woff2') format('woff2');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../assets/fonts/Vazirmatn-700.woff2') format('woff2');
+  font-weight: 700; font-display: swap;
+}
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../assets/fonts/Vazirmatn-900.woff2') format('woff2');
+  font-weight: 900; font-display: swap;
+}
+
+:root {
+  --gold: #ffd166;
+  --gold-2: #f0a83c;
+  --purple: #2a2145;
+  --purple-2: #17122b;
+  --teal: #2bb3c0;
+  --red: #e04a3a;
+  --green: #35a35a;
+  --ink: #f6f1e6;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0; padding: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #0b0918;
+  color: var(--ink);
+  font-family: 'Vazirmatn', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  user-select: none;
+  touch-action: none;
+}
+
+#app { position: fixed; inset: 0; overflow: hidden; }
+
+#game {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  background: #12102a;
+}
+
+/* ------------------------------- دکمه‌های لمسی ------------------------------ */
+#touch-controls {
+  position: absolute; inset: auto 0 0 0;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 10px calc(14px + var(--safe-l)) calc(14px + var(--safe-b)) calc(14px + var(--safe-r));
+  pointer-events: none;
+  z-index: 5;
+}
+#touch-controls.lefty { flex-direction: row-reverse; }
+.pad-side { display: flex; align-items: flex-end; gap: 10px; pointer-events: auto; }
+
+.tbtn {
+  width: 74px; height: 74px;
+  border-radius: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(20, 16, 40, 0.42);
+  color: #fff;
+  font-size: 28px;
+  font-family: inherit;
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow);
+  transition: transform .07s ease, background .12s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+.tbtn.round { border-radius: 50%; width: 86px; height: 86px; font-size: 32px; }
+.tbtn.small { width: 62px; height: 62px; font-size: 24px; }
+.tbtn.active, .tbtn:active { transform: scale(0.92); background: rgba(255, 209, 102, 0.5); }
+
+.corner-btn {
+  position: absolute; top: calc(10px + var(--safe-t)); left: calc(10px + var(--safe-l));
+  width: 44px; height: 44px; border-radius: 14px;
+  background: rgba(20, 16, 40, 0.5); color: #fff; border: 2px solid rgba(255,255,255,.3);
+  font-size: 18px; z-index: 6; font-family: inherit;
+}
+
+/* --------------------------------- صفحه‌ها -------------------------------- */
+.screen {
+  position: absolute; inset: 0;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: calc(14px + var(--safe-t)) 14px calc(14px + var(--safe-b));
+  z-index: 10;
+  background: radial-gradient(circle at 50% 30%, rgba(40, 30, 80, 0.72), rgba(8, 6, 20, 0.92));
+  backdrop-filter: blur(3px);
+  overflow-y: auto;
+  animation: fadeIn .22s ease;
+}
+.screen.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.panel {
+  width: min(560px, 100%);
+  max-height: 100%;
+  background: linear-gradient(180deg, rgba(42, 33, 69, 0.96), rgba(23, 18, 43, 0.98));
+  border: 2px solid rgba(255, 209, 102, 0.35);
+  border-radius: 22px;
+  padding: 18px 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  overflow-y: auto;
+}
+.panel.wide { width: min(720px, 100%); }
+
+.logo-wrap { text-align: center; }
+.logo { width: 108px; height: 108px; border-radius: 26px; box-shadow: var(--shadow); border: 3px solid var(--gold); }
+
+.game-title {
+  margin: 10px 0 0;
+  font-size: clamp(30px, 9vw, 48px);
+  font-weight: 900;
+  background: linear-gradient(180deg, #fff3c4, var(--gold-2));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+  letter-spacing: 1px;
+}
+.game-sub { margin: 4px 0 14px; color: #d9d2f0; font-size: 15px; }
+
+h2 { margin: 4px 0 10px; font-size: 22px; color: var(--gold); }
+
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 12px 0; }
+
+.btn {
+  font-family: inherit; font-size: 17px; font-weight: 700;
+  padding: 13px 16px;
+  border-radius: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(180deg, rgba(84, 70, 132, 0.95), rgba(52, 42, 88, 0.95));
+  color: var(--ink);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+  transition: transform .07s ease, filter .12s ease;
+  cursor: pointer;
+}
+.btn:active { transform: translateY(2px); filter: brightness(1.1); }
+.btn.primary { background: linear-gradient(180deg, #ffd977, #e39a1f); color: #2a1c00; border-color: #ffe9a8; }
+.btn.big { font-size: 20px; padding: 16px; }
+.btn.danger { background: linear-gradient(180deg, #d9534f, #8c2b28); }
+.btn:disabled { opacity: .5; }
+
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 6px; border-bottom: 1px dashed rgba(255,255,255,0.14);
+  font-size: 16px;
+}
+.row input[type=checkbox] { width: 26px; height: 26px; accent-color: var(--gold); }
+.row select {
+  font-family: inherit; font-size: 15px; padding: 6px 10px; border-radius: 10px;
+  background: #2a2145; color: var(--ink); border: 1px solid rgba(255,255,255,.25);
+}
+
+.stats-row {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin: 10px 0 6px; font-size: 14px; color: #ffe9a8;
+}
+.story { text-align: right; line-height: 2; font-size: 15px; }
+.help-list { text-align: right; line-height: 1.9; font-size: 14px; padding-inline-start: 18px; }
+.muted { color: #b9b1d6; }
+.small { font-size: 13px; }
+
+/* ---------------------------------- نقشه --------------------------------- */
+.map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 10px 0; }
+.map-card {
+  position: relative;
+  border-radius: 16px; padding: 12px 10px;
+  border: 2px solid rgba(255,255,255,0.18);
+  background: linear-gradient(180deg, rgba(70, 58, 112, 0.95), rgba(38, 30, 66, 0.95));
+  text-align: right; cursor: pointer; font-family: inherit; color: var(--ink);
+}
+.map-card.locked { filter: grayscale(0.85) brightness(0.65); cursor: not-allowed; }
+.map-card .num { font-size: 12px; color: var(--gold); }
+.map-card .nm { font-size: 16px; font-weight: 700; margin-top: 2px; }
+.map-card .diff { font-size: 12px; color: #cfc6e8; }
+.map-card .stars { font-size: 14px; letter-spacing: 2px; margin-top: 4px; }
+.map-card .best { font-size: 12px; color: #ffe9a8; }
+
+/* ---------------------------------- کارت‌ها ------------------------------- */
+.card-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 10px 0; }
+.card {
+  display: flex; gap: 10px; align-items: center;
+  padding: 10px; border-radius: 16px; text-align: right;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255,255,255,0.12);
+}
+.card.owned { border-color: rgba(53, 163, 90, 0.7); }
+.card.selected { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(255,209,102,.35) inset; }
+.card .ic { font-size: 30px; width: 40px; text-align: center; }
+.card .info { flex: 1; }
+.card .nm { font-weight: 700; }
+.card .ds { font-size: 12px; color: #c8c0e4; line-height: 1.6; }
+.card .price { font-size: 13px; color: var(--gold); }
+.card button { font-family: inherit; font-size: 14px; }
+
+.stars-row { font-size: 34px; letter-spacing: 6px; margin: 6px 0 10px; color: var(--gold); }
+.score-table { width: 100%; font-size: 15px; }
+.score-table div { display: flex; justify-content: space-between; padding: 7px 4px; border-bottom: 1px dashed rgba(255,255,255,.12); }
+
+/* --------------------------------- توست --------------------------------- */
+.toast {
+  position: absolute; left: 50%; bottom: calc(96px + var(--safe-b));
+  transform: translateX(-50%);
+  background: rgba(20, 16, 40, 0.92);
+  border: 2px solid var(--gold);
+  color: var(--ink);
+  padding: 10px 16px; border-radius: 14px;
+  font-size: 15px; z-index: 20; max-width: 80vw; text-align: center;
+  animation: popIn .2s ease;
+}
+@keyframes popIn { from { transform: translate(-50%, 10px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+
+#rotate-hint {
+  position: absolute; inset: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(8, 6, 20, 0.92); color: var(--gold); font-size: 18px; text-align: center; padding: 20px;
+}
+
+.hidden { display: none !important; }
+.fx-hidden { display: none; }
+.fade-out { animation: fadeOut .3s ease forwards; }
+@keyframes fadeOut { to { opacity: 0; } }
+
+/* افقی و صفحه‌های بزرگ */
+@media (orientation: landscape) and (max-height: 460px) {
+  .logo { width: 74px; height: 74px; }
+  .game-title { font-size: 30px; }
+  .panel { padding: 12px; }
+  .tbtn { width: 62px; height: 62px; font-size: 24px; }
+  .tbtn.round { width: 72px; height: 72px; }
+  .tbtn.small { width: 54px; height: 54px; }
+  .row { padding: 7px 4px; font-size: 15px; }
+}

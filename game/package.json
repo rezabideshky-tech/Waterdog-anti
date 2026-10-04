@@ -1,0 +1,21 @@
+{
+  "name": "gharchekhor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "قارچ‌خور — بازی پلتفرمر ایرانی (وب + اندروید)",
+  "type": "module",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "test": "node tools/validate.mjs && node tools/boss-test.mjs && node tools/smoke.mjs",
+    "spritesheet": "cd tools && node spritesheet.mjs",
+    "android:add": "cap add android && node tools/patch-android.mjs",
+    "android:sync": "cap sync android && node tools/patch-android.mjs",
+    "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug",
+    "android:open": "cap open android"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0"
+  }
+}

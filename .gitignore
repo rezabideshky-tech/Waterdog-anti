@@ -1,0 +1,21 @@
+# ── بازی قارچ‌خور ────────────────────────────────────────────────
+game/node_modules/
+game/tools/node_modules/
+game/android/
+game/.arena/
+game/www/**/*.map
+.arena/
+resources/
+
+# ── خروجی ساخت ──────────────────────────────────────────────────
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# ── سیستم و ویرایشگر ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
