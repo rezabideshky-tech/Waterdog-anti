@@ -4,27 +4,92 @@
     "animation.bedwars_battle_pass.idle": {
       "loop": true,
       "bones": {
-        "pass": {
+        "door_l": {
           "rotation": [
             0,
-            "math.sin(query.anim_time * 60) * 25",
+            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * 100",
             0
-          ],
+          ]
+        },
+        "door_r": {
+          "rotation": [
+            0,
+            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * -100",
+            0
+          ]
+        },
+        "lid": {
+          "rotation": [
+            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * -75",
+            0,
+            0
+          ]
+        },
+        "card": {
           "position": [
             0,
-            "math.sin(query.anim_time * 120) * 1.2",
+            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * 5 + math.sin(query.anim_time * 180) * 0.3 * math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1)",
+            0
+          ],
+          "rotation": [
+            0,
+            "query.anim_time * 120 * math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1)",
+            0
+          ]
+        },
+        "flag_l": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 300) * 15",
+            0
+          ]
+        },
+        "flag_r": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 300 + 90) * 15",
+            0
+          ]
+        },
+        "flag_k": {
+          "rotation": [
+            0,
+            "math.sin(query.anim_time * 300 + 45) * 15",
             0
           ]
         },
         "orbit": {
           "rotation": [
             0,
-            "query.anim_time * -120",
+            "query.anim_time * -60",
             0
-          ],
-          "position": [
+          ]
+        },
+        "torch_l": {
+          "scale": [
+            "0.85 + math.abs(math.sin(query.anim_time * 900)) * 0.3",
+            "0.85 + math.abs(math.sin(query.anim_time * 900)) * 0.3",
+            "0.85 + math.abs(math.sin(query.anim_time * 900)) * 0.3"
+          ]
+        },
+        "torch_r": {
+          "scale": [
+            "0.85 + math.abs(math.sin(query.anim_time * 900 + 60)) * 0.3",
+            "0.85 + math.abs(math.sin(query.anim_time * 900 + 60)) * 0.3",
+            "0.85 + math.abs(math.sin(query.anim_time * 900 + 60)) * 0.3"
+          ]
+        },
+        "garm_r": {
+          "rotation": [
+            "math.sin(query.anim_time * 90) * 3",
             0,
-            "math.cos(query.anim_time * 120) * 1",
+            0
+          ]
+        },
+        "garm_b": {
+          "rotation": [
+            "math.sin(query.anim_time * 90 + 90) * 3",
+            0,
             0
           ]
         }

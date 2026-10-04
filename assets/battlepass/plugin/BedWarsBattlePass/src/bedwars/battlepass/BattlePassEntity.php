@@ -14,7 +14,7 @@ final class BattlePassEntity extends Entity{
 
 	public static function getNetworkTypeId() : string{ return self::NETWORK_ID; }
 
-	protected function getInitialSizeInfo() : EntitySizeInfo{ return new EntitySizeInfo(4.5, 2.4); }
+	protected function getInitialSizeInfo() : EntitySizeInfo{ return new EntitySizeInfo(6.0, 5.0); }
 
 	protected function getInitialDragMultiplier() : float{ return 0.0; }
 

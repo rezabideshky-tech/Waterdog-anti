@@ -5,7 +5,7 @@ import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-NS = uuid.UUID("c48be7c2-ed29-4e7a-886b-8305315baed3")
+NS = uuid.UUID("c9990984-1cbb-49e6-8037-322bc695bae9")
 WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
 RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
@@ -967,7 +967,239 @@ def skyblock_soon():
     return build("arvan_skyblock_soon", "arvan:skyblock_soon", A, bones, C, anim, 4, 3.2, [4, 5, 2])
 
 
-models = [bedwars_duos(), roleplay_city(), cargo_truck(), skyblock_soon()]
+# ================================================================== BATTLE PASS CASTLE (replaces bedwars:battle_pass look)
+def battlepass_castle():
+    A = Atlas(256, 384)
+    STONE = [(200, 200, 205), (165, 165, 172), (125, 125, 135), (85, 85, 95)]
+
+    def bricks(box, pal, bw=8, bh=4):
+        x0, y0, x1, y1 = box
+        A.grad(box, pal[1], pal[2]); A.noise(box, [pal[0], pal[2]], 7, 41)
+        for r, y in enumerate(range(y0, y1, bh)):
+            A.d.line([(x0, y), (x1 - 1, y)], fill=pal[3])
+            off = (bw // 2) * (r % 2)
+            for x in range(x0 + off, x1, bw):
+                A.d.line([(x, y), (x, min(y + bh - 1, y1 - 1))], fill=pal[3])
+
+    def wool(box, pal):
+        A.grad(box, pal[0], pal[2]); A.noise(box, [pal[1], pal[2], pal[0]], 2, 43)
+
+    def slit(x, y, h=8):
+        A.d.rectangle([x, y, x + 1, y + h], fill=(20, 15, 25)); A.d.rectangle([x - 1, y + h // 2 - 1, x + 2, y + h // 2], fill=(20, 15, 25))
+
+    # terrain
+    b = A.alloc("grass", 16, 16); A.grad(b, (120, 200, 75), (90, 165, 55)); A.noise(b, [(70, 140, 40), (150, 220, 95)], 2)
+    b = A.alloc("grass_side", 16, 16); A.grad(b, (140, 98, 62), (100, 70, 45)); A.noise(b, [(80, 55, 35), (165, 122, 82)], 3)
+    for x in range(b[0], b[2]): A.d.line([(x, b[1]), (x, b[1] + 2 + (x * 7) % 3)], fill=(105, 185, 65))
+    b = A.alloc("dirt", 16, 16); A.grad(b, (125, 88, 55), (85, 58, 38)); A.noise(b, [(70, 48, 30), (150, 110, 75)], 3, 2)
+    b = A.alloc("stone", 16, 16); bricks(b, STONE)
+    b = A.alloc("path", 16, 16); A.grad(b, (160, 130, 90), (130, 100, 65)); A.noise(b, [(110, 85, 55), (180, 150, 110)], 3, 5)
+    # towers (7 wide x 23 tall -> 28x92)
+    for nm, pal in (("red", RED), ("blue", BLUE)):
+        b = A.alloc(f"tower_{nm}", 28, 92); x0, y0, x1, y1 = b
+        wool(b, pal)
+        for yy in (y0 + 10, y0 + 50, y1 - 8):
+            A.d.rectangle([x0, yy, x1 - 1, yy + 2], fill=GOLD[1]); A.d.line([(x0, yy + 3), (x1 - 1, yy + 3)], fill=GOLD[3])
+        slit(x0 + 13, y0 + 22, 10); slit(x0 + 13, y0 + 60, 10)
+        A.d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=pal[3])
+        b = A.alloc(f"tower_{nm}_top", 16, 16); wool(b, pal)
+        b = A.alloc(f"merlon_{nm}", 8, 8); wool(b, pal); A.d.line([(b[0], b[1]), (b[2] - 1, b[1])], fill=GOLD[1])
+        b = A.alloc(f"flag_{nm}", 16, 16); A.grad(b, pal[0], pal[2])
+        A.d.polygon([(b[0] + 8, b[1] + 2), (b[0] + 10, b[1] + 6), (b[0] + 14, b[1] + 7), (b[0] + 11, b[1] + 10), (b[0] + 12, b[1] + 14),
+                     (b[0] + 8, b[1] + 11), (b[0] + 4, b[1] + 14), (b[0] + 5, b[1] + 10), (b[0] + 2, b[1] + 7), (b[0] + 6, b[1] + 6)], fill=GOLD[1], outline=GOLD[3])
+        b = A.alloc(f"roof_{nm}", 16, 16); A.grad(b, pal[1], pal[3])
+        for y in range(b[1], b[3], 3): A.d.line([(b[0], y), (b[2] - 1, y)], fill=pal[3])
+    # walls
+    b = A.alloc("wall", 16, 60); bricks(b, STONE); A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 2], fill=GOLD[1])
+    b = A.alloc("wall_long", 64, 48); bricks(b, STONE); A.d.rectangle([b[0], b[1], b[2] - 1, b[1] + 2], fill=GOLD[1])
+    for x in range(b[0] + 8, b[2], 16): slit(x, b[1] + 16, 8)
+    b = A.alloc("lintel", 24, 24); bricks(b, STONE)
+    A.d.rectangle([b[0], b[3] - 4, b[2] - 1, b[3] - 1], fill=GOLD[2])
+    A.d.polygon([(b[0] + 9, b[3] - 4), (b[0] + 12, b[3] - 9), (b[0] + 15, b[3] - 4)], fill=GOLD[1], outline=GOLD[3])  # keystone
+    b = A.alloc("merlon", 8, 8); bricks(b, STONE, 4, 4)
+    # keep (12 wide x 27 tall -> 48x108), side 32x108
+    b = A.alloc("keep", 48, 108); x0, y0, x1, y1 = b; bricks(b, STONE)
+    for yy in (y0 + 4, y1 - 6): A.d.rectangle([x0, yy, x1 - 1, yy + 2], fill=GOLD[1])
+    b = A.alloc("keep_side", 32, 108); bricks(b, STONE); slit(b[0] + 15, b[1] + 20, 12); slit(b[0] + 15, b[1] + 60, 12)
+    b = A.alloc("keep_top", 16, 16); bricks(b, STONE, 8, 8)
+    # gate doors (3 wide x 9 tall -> 12x36)
+    b = A.alloc("door", 12, 36); x0, y0, x1, y1 = b
+    A.grad(b, (150, 100, 55), (105, 68, 35))
+    for x in range(x0 + 3, x1, 3): A.d.line([(x, y0), (x, y1 - 1)], fill=(85, 55, 28))
+    for yy in (y0 + 5, y0 + 17, y1 - 7):
+        A.d.rectangle([x0, yy, x1 - 1, yy + 1], fill=(60, 60, 70)); A.d.point([(x0 + 2, yy), (x1 - 3, yy)], fill=(200, 200, 210))
+    A.d.ellipse([x0 + 7, y0 + 18, x0 + 10, y0 + 21], outline=GOLD[1])
+    b = A.alloc("wood", 8, 8); A.grad(b, (150, 100, 55), (105, 68, 35))
+    # banner (12 wide x 13 tall -> 48x52)
+    b = A.alloc("banner", 48, 52); x0, y0, x1, y1 = b
+    A.grad(b, (120, 20, 40), (60, 5, 20))
+    A.d.polygon([(x0, y1 - 8), (x0 + 24, y1 - 1), (x1, y1 - 8), (x1, y1), (x0, y1)], fill=(0, 0, 0, 0))
+    A.d.line([(x0, y1 - 8), (x0 + 24, y1 - 1)], fill=GOLD[1]); A.d.line([(x1 - 1, y1 - 8), (x0 + 24, y1 - 1)], fill=GOLD[1])
+    A.d.rectangle([x0, y0, x1 - 1, y0 + 2], fill=GOLD[1]); A.d.line([(x0 + 1, y0 + 3), (x0 + 1, y1 - 9)], fill=GOLD[2]); A.d.line([(x1 - 2, y0 + 3), (x1 - 2, y1 - 9)], fill=GOLD[2])
+    A.outlined("BATTLE", (x0 + x1) // 2, y0 + 6, GOLD[0], 1)
+    A.outlined("PASS", (x0 + x1) // 2, y0 + 14, GOLD[0], 2)
+    for r, c in [(7, GOLD[3]), (6, GOLD[1])]:
+        A.d.ellipse([x0 + 24 - r, y0 + 33 - r, x0 + 24 + r, y0 + 33 + r], fill=c)
+    A.d.polygon([(x0 + 24, y0 + 28), (x0 + 25, y0 + 32), (x0 + 29, y0 + 33), (x0 + 25, y0 + 34), (x0 + 24, y0 + 38), (x0 + 23, y0 + 34),
+                 (x0 + 19, y0 + 33), (x0 + 23, y0 + 32)], fill=WHITE)
+    A.text("SEASON 1", (x0 + x1) // 2, y1 - 15, (120, 255, 160), (10, 60, 30))
+    # treasure chest + card + coins
+    b = A.alloc("tchest", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
+    A.d.rectangle([b[0] + 2, b[1] + 2, b[2] - 3, b[3] - 3], fill=(150, 25, 40)); A.d.rectangle([b[0] + 6, b[1] + 1, b[0] + 9, b[1] + 5], fill=GOLD[0])
+    b = A.alloc("tchest_top", 16, 16); A.grad(b, (190, 35, 50), (130, 18, 30)); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[2])
+    A.d.line([(b[0] + 7, b[1]), (b[0] + 7, b[3] - 1)], fill=GOLD[1]); A.d.line([(b[0] + 8, b[1]), (b[0] + 8, b[3] - 1)], fill=GOLD[1])
+    b = A.alloc("glow", 16, 16); A.grad(b, (255, 250, 200), (255, 200, 60))
+    b = A.alloc("card", 16, 24); x0, y0, x1, y1 = b
+    A.grad(b, (150, 40, 220), (60, 10, 110)); A.d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=GOLD[1]); A.d.rectangle([x0 + 1, y0 + 1, x1 - 2, y1 - 2], outline=GOLD[3])
+    A.d.polygon([(x0 + 8, y0 + 6), (x0 + 9, y0 + 10), (x0 + 13, y0 + 11), (x0 + 9, y0 + 12), (x0 + 8, y0 + 16), (x0 + 7, y0 + 12), (x0 + 3, y0 + 11), (x0 + 7, y0 + 10)], fill=GOLD[0])
+    A.text("BP", (x0 + x1) // 2, y1 - 7, WHITE)
+    b = A.alloc("coin", 8, 8); A.d.ellipse([b[0], b[1], b[2] - 1, b[3] - 1], fill=GOLD[1], outline=GOLD[3]); A.d.point([(b[0] + 2, b[1] + 2)], fill=WHITE)
+    b = A.alloc("diamond", 16, 16); A.grad(b, (220, 255, 255), (30, 130, 160))
+    A.d.polygon([(b[0] + 8, b[1] + 2), (b[0] + 13, b[1] + 8), (b[0] + 8, b[1] + 13), (b[0] + 3, b[1] + 8)], fill=(90, 225, 235), outline=WHITE)
+    b = A.alloc("emerald", 16, 16); A.grad(b, (170, 255, 190), (10, 100, 45))
+    A.d.polygon([(b[0] + 8, b[1] + 2), (b[0] + 13, b[1] + 8), (b[0] + 8, b[1] + 13), (b[0] + 3, b[1] + 8)], fill=(40, 210, 100), outline=WHITE)
+    b = A.alloc("gold", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
+    b = A.alloc("flame", 8, 8); A.grad(b, (255, 245, 150), (255, 110, 20))
+    b = A.alloc("metal", 8, 8); A.grad(b, (90, 92, 102), (45, 46, 54))
+    b = A.alloc("none", 8, 8)
+    # guards (face + armor per team)
+    SKIN, SKIN_D, HAIR = (199, 143, 108), (163, 110, 82), (58, 38, 20)
+    S = {"H": HAIR, "S": SKIN, "D": SKIN_D, "W": WHITE, "E": (73, 62, 160), "M": (110, 58, 48), "B": (104, 68, 46)}
+
+    def grid(box, rows, cmap, cell=2):
+        for gy, row in enumerate(rows):
+            for gx, ch in enumerate(row):
+                if ch != ".":
+                    x, y = box[0] + gx * cell, box[1] + gy * cell
+                    A.d.rectangle([x, y, x + cell - 1, y + cell - 1], fill=cmap[ch])
+    b = A.alloc("g_face", 16, 16); grid(b, ["HHHHHHHH", "HHHHHHHH", "HSSSSSSH", "SSSSSSSS", "SWESSEWS", "SSSDDSSS", "SSBMMBSS", "SSBBBBSS"], S)
+    b = A.alloc("g_hair", 16, 16); grid(b, ["HHHHHHHH"] * 8, S)
+    b = A.alloc("g_skin", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=SKIN_D)
+    for t, P in (("r", RED), ("b", BLUE)):
+        b = A.alloc(f"g_helm_{t}", 20, 20); x0, y0, x1, y1 = b
+        A.grad((x0, y0, x1, y0 + 7), P[0], P[1]); A.d.rectangle([x0, y0 + 6, x1 - 1, y0 + 7], fill=GOLD[1])
+        A.grad((x0, y0 + 7, x0 + 4, y1 - 3), P[1], P[2]); A.grad((x1 - 4, y0 + 7, x1, y1 - 3), P[1], P[2])
+        A.grad((x0 + 8, y0 + 7, x0 + 12, y0 + 13), P[1], P[2])
+        b = A.alloc(f"g_helm_s_{t}", 20, 20); A.grad(b, P[0], P[2]); A.d.rectangle([b[0], b[1] + 6, b[2] - 1, b[1] + 7], fill=GOLD[1])
+        b = A.alloc(f"g_chest_{t}", 16, 24); x0, y0, x1, y1 = b
+        A.grad(b, P[0], P[2]); A.noise(b, [P[1], P[2]], 7, 45)
+        A.d.line([(x0 + 7, y0 + 1), (x0 + 7, y0 + 15)], fill=P[0]); A.d.line([(x0 + 8, y0 + 1), (x0 + 8, y0 + 15)], fill=P[3])
+        A.d.rectangle([x0 + 5, y0 + 5, x0 + 10, y0 + 9], fill=GOLD[1]); A.d.rectangle([x0 + 6, y0 + 6, x0 + 9, y0 + 8], fill=WHITE)
+        A.d.rectangle([x0, y0 + 16, x1 - 1, y0 + 17], fill=(80, 52, 28)); A.d.rectangle([x0 + 6, y0 + 16, x0 + 9, y0 + 17], fill=GOLD[1])
+        A.d.rectangle([x0, y0 + 18, x1 - 1, y1 - 1], fill=P[2])
+        b = A.alloc(f"g_side_{t}", 8, 24); A.grad(b, P[1], P[2]); A.d.rectangle([b[0], b[1] + 16, b[2] - 1, b[1] + 17], fill=(80, 52, 28))
+        b = A.alloc(f"g_arm_{t}", 8, 24); A.grad((b[0], b[1], b[2], b[1] + 10), P[0], P[2]); A.d.line([(b[0], b[1] + 9), (b[2] - 1, b[1] + 9)], fill=GOLD[1])
+        A.d.rectangle([b[0], b[1] + 10, b[2] - 1, b[3] - 1], fill=SKIN); A.d.rectangle([b[0], b[3] - 8, b[2] - 1, b[3] - 1], fill=P[2])
+        b = A.alloc(f"g_leg_{t}", 8, 24); A.grad(b, P[1], P[2]); A.d.rectangle([b[0], b[3] - 6, b[2] - 1, b[3] - 1], fill=P[3])
+        A.d.line([(b[0], b[3] - 6), (b[2] - 1, b[3] - 6)], fill=GOLD[1])
+        b = A.alloc(f"g_top_{t}", 8, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=P[1])
+    b = A.alloc("spear_tip", 8, 8); A.grad(b, (220, 255, 255), (60, 180, 200))
+    b = A.alloc("trim", 16, 16); A.grad(b, GOLD[0], GOLD[2])
+
+    # ---------------- geometry (front = -Z)
+    bones = [("root", [0, 0, 0], None), ("castle", [0, 0, 0], "root"),
+             ("door_l", [-3, 3, -9], "root"), ("door_r", [3, 3, -9], "root"),
+             ("lid", [0, 7, 0.5], "root"), ("card", [0, 6, -2], "root"),
+             ("flag_l", [-10.5, 30, -8.5], "root"), ("flag_r", [10.5, 30, -8.5], "root"), ("flag_k", [0, 36, 6], "root"),
+             ("orbit", [0, 30, 6], "root"), ("torch_l", [-4.5, 10, -11.5], "root"), ("torch_r", [4.5, 10, -11.5], "root")]
+    C = [
+        # island
+        ("ground", "castle", (-16, 0, -15), (16, 3, 13), F("grass_side", u="grass", dn="dirt")),
+        ("under1", "castle", (-13, -3, -12), (13, 0, 10), F("dirt")),
+        ("under2", "castle", (-9, -6, -8), (9, -3, 6), F("stone")),
+        ("under3", "castle", (-4, -9, -4), (4, -6, 3), F("stone")),
+        ("path", "castle", (-3, 3, -15), (3, 3.1, -9), F("path")),
+        # towers
+        ("tower_l", "castle", (-14, 3, -12), (-7, 26, -5), F("tower_red", u="tower_red_top", dn="tower_red_top")),
+        ("tower_r", "castle", (7, 3, -12), (14, 26, -5), F("tower_blue", u="tower_blue_top", dn="tower_blue_top")),
+        ("roof_l", "castle", (-13, 27, -11), (-8, 29, -6), F("roof_red")), ("roof_l2", "castle", (-12, 29, -10), (-9, 30, -7), F("roof_red")),
+        ("roof_r", "castle", (8, 27, -11), (13, 29, -6), F("roof_blue")), ("roof_r2", "castle", (9, 29, -10), (12, 30, -7), F("roof_blue")),
+        ("pole_l", "castle", (-10.75, 30, -8.75), (-10.25, 37, -8.25), F("wood")),
+        ("pole_r", "castle", (10.25, 30, -8.75), (10.75, 37, -8.25), F("wood")),
+        # front wall with gate opening
+        ("wall_l", "castle", (-7, 3, -10), (-3, 18, -7), F("wall", u="stone", dn="stone")),
+        ("wall_r", "castle", (3, 3, -10), (7, 18, -7), F("wall", u="stone", dn="stone")),
+        ("lintel", "castle", (-3, 12, -10), (3, 18, -7), F("lintel", u="stone", dn="stone")),
+        # side + back walls
+        ("wall_sl", "castle", (-14, 3, -5), (-11, 16, 10), F("wall_long", u="stone")),
+        ("wall_sr", "castle", (11, 3, -5), (14, 16, 10), F("wall_long", u="stone")),
+        ("wall_b", "castle", (-14, 3, 10), (14, 16, 12), F("wall_long", u="stone")),
+        # keep
+        ("keep", "castle", (-6, 3, 2), (6, 30, 10), F("keep", s="keep_side", e="keep_side", u="keep_top", dn="keep_top")),
+        ("banner", "castle", (-6, 15, 1.4), (6, 28, 1.9), F("none") | dict(north="banner", south="banner")),
+        ("banner_rod", "castle", (-6.5, 28, 1.2), (6.5, 28.6, 1.9), F("trim")),
+        ("pole_k", "castle", (-0.25, 30, 5.75), (0.25, 39, 6.25), F("wood")),
+        # courtyard treasure
+        ("tchest", "castle", (-2.5, 3, -3.5), (2.5, 7, 0.5), F("tchest", u="tchest_top", dn="tchest")),
+        ("lid", "lid", (-2.6, 7, -3.6), (2.6, 8.5, 0.6), F("tchest_top")),
+        ("glow", "card", (-1.5, 7.2, -2.6), (1.5, 7.4, -0.4), F("glow")),
+        ("card", "card", (-1.6, 7.5, -1.6), (1.6, 12.3, -1.4), F("none") | dict(north="card", south="card")),
+        # torches by the gate
+        ("tstick_l", "castle", (-4.75, 8, -11), (-4.25, 10.5, -10.5), F("wood")),
+        ("tstick_r", "castle", (4.25, 8, -11), (4.75, 10.5, -10.5), F("wood")),
+        ("flame_l", "torch_l", (-5, 10.5, -11.25), (-4, 11.7, -10.25), F("flame")),
+        ("flame_r", "torch_r", (4, 10.5, -11.25), (5, 11.7, -10.25), F("flame")),
+        # doors (hinged at the gate sides)
+        ("door_l", "door_l", (-3, 3, -9.2), (0, 12, -8.6), F("door", e="wood", u="wood", dn="wood")),
+        ("door_r", "door_r", (0, 3, -9.2), (3, 12, -8.6), F("door", e="wood", u="wood", dn="wood")),
+        # flags
+        ("flag_l", "flag_l", (-10.25, 33.5, -8.6), (-6.25, 36.5, -8.4), F("none") | dict(north="flag_red", south="flag_red")),
+        ("flag_r", "flag_r", (6.25, 33.5, -8.6), (10.25, 36.5, -8.4), F("none") | dict(north="flag_blue", south="flag_blue")),
+        ("flag_k", "flag_k", (0.25, 35.5, 5.9), (5.25, 38.5, 6.1), F("none") | dict(north="flag_red", south="flag_blue")),
+        # orbit resources around the keep
+        ("o1", "orbit", (9, 29, 5), (11, 31, 7), F("diamond"), (45, 0, 45), (10, 30, 6)),
+        ("o2", "orbit", (-11, 29, 5), (-9, 31, 7), F("emerald"), (45, 0, 45), (-10, 30, 6)),
+        ("o3", "orbit", (-1, 29, 15), (1, 31, 17), F("gold"), (45, 0, 45), (0, 30, 16)),
+    ]
+    # merlons on towers, wall and keep
+    for x0_, z0_, pal in ((-14, -12, "red"), (7, -12, "blue")):
+        for dx, dz in ((0, 0), (5, 0), (0, 5), (5, 5), (2.5, 0), (2.5, 5), (0, 2.5), (5, 2.5)):
+            C.append((f"m_{pal}_{dx}_{dz}", "castle", (x0_ + dx, 26, z0_ + dz), (x0_ + dx + 2, 27.5, z0_ + dz + 2), F(f"merlon_{pal}")))
+    for i, x in enumerate((-7, -4, -1, 2, 5)):
+        C.append((f"m_wall_{i}", "castle", (x, 18, -10), (x + 2, 19.5, -8), F("merlon")))
+    for i, (x, z) in enumerate(((-6, 2), (4, 2), (-6, 8), (4, 8), (-1, 2), (-1, 8))):
+        C.append((f"m_keep_{i}", "castle", (x, 30, z), (x + 2, 31.5, z + 2), F("merlon")))
+
+    def guard(t, cx, cz):
+        y = 3
+        bn = f"guard_{t}"
+        bones.append((bn, [cx, y, cz], "root", [0, 0, 0]))
+        bones.append((f"garm_{t}", [cx + 3, y + 11.5, cz], bn))
+        HE = F("g_face", s="g_hair", e="g_hair", u="g_hair", dn="g_skin")
+        return [
+            (f"g_head_{t}", bn, (cx - 2, y + 12, cz - 2), (cx + 2, y + 16, cz + 2), HE),
+            (f"g_helm_{t}", bn, (cx - 2.3, y + 12.6, cz - 2.3), (cx + 2.3, y + 16.3, cz + 2.3),
+             F(f"g_helm_{t}", s=f"g_helm_s_{t}", e=f"g_helm_s_{t}", u=f"g_helm_s_{t}", dn="none")),
+            (f"g_plume_{t}", bn, (cx - 0.3, y + 16.3, cz - 1.8), (cx + 0.3, y + 17.6, cz + 2.4), F("trim")),
+            (f"g_body_{t}", bn, (cx - 2, y + 6, cz - 1), (cx + 2, y + 12, cz + 1), F(f"g_chest_{t}", e=f"g_side_{t}", u=f"g_top_{t}")),
+            (f"g_larm_{t}", bn, (cx - 4, y + 6, cz - 1), (cx - 2, y + 12, cz + 1), F(f"g_arm_{t}", u=f"g_top_{t}", dn="g_skin")),
+            (f"g_rarm_{t}", f"garm_{t}", (cx + 2, y + 6, cz - 1), (cx + 4, y + 12, cz + 1), F(f"g_arm_{t}", u=f"g_top_{t}", dn="g_skin")),
+            (f"g_spear_{t}", f"garm_{t}", (cx + 2.75, y + 3, cz - 2.25), (cx + 3.25, y + 20, cz - 1.75), F("wood")),
+            (f"g_tip_{t}", f"garm_{t}", (cx + 2.5, y + 20, cz - 2.5), (cx + 3.5, y + 22, cz - 1.5), F("spear_tip"), (0, 45, 0), (cx + 3, y + 21, cz - 2)),
+            (f"g_rleg_{t}", bn, (cx, y, cz - 1), (cx + 2, y + 6, cz + 1), F(f"g_leg_{t}", u=f"g_top_{t}", dn=f"g_top_{t}")),
+            (f"g_lleg_{t}", bn, (cx - 2, y, cz - 1), (cx, y + 6, cz + 1), F(f"g_leg_{t}", u=f"g_top_{t}", dn=f"g_top_{t}")),
+        ]
+    C += guard("r", -5.5, -13) + guard("b", 6.5, -13)
+    gate = "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1)"   # 6 s cycle: open, hold, close
+    anim = {
+        "door_l": {"rotation": [0, f"{gate} * 100", 0]},
+        "door_r": {"rotation": [0, f"{gate} * -100", 0]},
+        "lid": {"rotation": [f"{gate} * -75", 0, 0]},
+        "card": {"position": [0, f"{gate} * 5 + math.sin(query.anim_time * 180) * 0.3 * {gate}", 0],
+                 "rotation": [0, f"query.anim_time * 120 * {gate}", 0]},
+        "flag_l": {"rotation": [0, "math.sin(query.anim_time * 300) * 15", 0]},
+        "flag_r": {"rotation": [0, "math.sin(query.anim_time * 300 + 90) * 15", 0]},
+        "flag_k": {"rotation": [0, "math.sin(query.anim_time * 300 + 45) * 15", 0]},
+        "orbit": {"rotation": [0, "query.anim_time * -60", 0]},
+        "torch_l": {"scale": ["0.85 + math.abs(math.sin(query.anim_time * 900)) * 0.3"] * 3},
+        "torch_r": {"scale": ["0.85 + math.abs(math.sin(query.anim_time * 900 + 60)) * 0.3"] * 3},
+        "garm_r": {"rotation": ["math.sin(query.anim_time * 90) * 3", 0, 0]},
+        "garm_b": {"rotation": ["math.sin(query.anim_time * 90 + 90) * 3", 0, 0]},
+    }
+    return build("bedwars_battle_pass", "bedwars:battle_pass", A, bones, C, anim, 6, 2.6, [4, 5, 2])
+
+
+models = [bedwars_duos(), roleplay_city(), cargo_truck(), skyblock_soon(), battlepass_castle()]
 
 # ------------------------------------------------------------------ resource pack
 RP = os.path.join(OUT, "ArvanLobby_RP")
@@ -1011,7 +1243,8 @@ lang += ["entity.arvan:rp_truck.name=§l§cArvan §fTruck"]
 BP = os.path.join(OUT, "..", "battlepass", "BedWarsBattlePass_RP")
 for sub in ["models/entity", "animations", "textures/entity", "entity", "render_controllers"]:
     for fn in os.listdir(os.path.join(BP, sub)):
-        shutil.copy(os.path.join(BP, sub, fn), os.path.join(RP, sub, fn))
+        if not os.path.exists(os.path.join(RP, sub, fn)):  # castle model overrides the old battle pass card
+            shutil.copy(os.path.join(BP, sub, fn), os.path.join(RP, sub, fn))
 lang += [l for l in open(os.path.join(BP, "texts/en_US.lang")).read().splitlines() if l.strip()]
 lang += ["entity.arvan:bedwars_duos.name=§l§cBed§9Wars §fDuos", "entity.arvan:roleplay_city.name=§l§aRolePlay City", "entity.arvan:cargo_truck.name=§l§cArvan §fCargo Truck", "entity.arvan:skyblock_soon.name=§l§aSkyBlock §7- §eComing Soon"]
 open(os.path.join(RP, "texts/en_US.lang"), "w").write("\n".join(lang) + "\n")
