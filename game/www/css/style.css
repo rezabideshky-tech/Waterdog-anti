@@ -212,6 +212,17 @@ h2 { margin: 4px 0 10px; font-size: 22px; color: var(--gold); }
 .score-table { width: 100%; font-size: 15px; }
 .score-table div { display: flex; justify-content: space-between; padding: 7px 4px; border-bottom: 1px dashed rgba(255,255,255,.12); }
 
+/* ------------------------------ نکته‌های توقف ---------------------------- */
+.tips { display: grid; gap: 8px; margin: 10px 0 4px; text-align: right; }
+.tips .tip {
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 209, 102, .28);
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-size: 14px; line-height: 1.9; color: #f3eee0;
+}
+.tips .tip b { color: var(--gold); }
+
 /* --------------------------------- توست --------------------------------- */
 .toast {
   position: absolute; left: 50%; bottom: calc(96px + var(--safe-b));

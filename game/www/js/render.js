@@ -18,6 +18,8 @@ export class Renderer {
     this.viewW = 400;
     this.viewH = VIEW_H;
     this.quality = 1;
+    this.lowQuality = false;      // تنظیم «کیفیت» بازی: کمتر کردن جلوه‌های گران
+    this.shadows = true;          // سایهٔ زیر شخصیت‌ها و دشمنان
     this.atlas = {};
     this.decorCache = {};
     this.time = 0;
@@ -410,7 +412,9 @@ export class Renderer {
     }
 
     /* ابرها */
-    for (const c of this.clouds) {
+    const cloudStep = this.lowQuality ? 2 : 1;
+    for (let ci = 0; ci < this.clouds.length; ci += cloudStep) {
+      const c = this.clouds[ci];
       const x = ((c.x - camX * 0.12 + this.time * c.v) % (vw + 260) + vw + 260) % (vw + 260) - 130;
       const y = c.y - camY * 0.08;
       g.fillStyle = th.night ? 'rgba(180,200,230,0.28)' : 'rgba(255,255,255,0.75)';
@@ -547,9 +551,9 @@ export class Renderer {
     if (world.flag) this.drawFlag(g, world.flag, cam, world);
     // دشمنان
     for (const e of world.entities) {
-      if (e.kind === 'enemy') this.drawEnemy(g, e, cam);
+      if (e.kind === 'enemy') { this.drawGroundShadow(g, e, cam, 1); this.drawEnemy(g, e, cam); }
       else if (e.kind === 'shell') e.draw(g, cam);
-      else if (e.kind === 'boss') this.drawBoss(g, e, cam);
+      else if (e.kind === 'boss') { this.drawGroundShadow(g, e, cam, e.type === 'dragon' ? 1.3 : 1.1); this.drawBoss(g, e, cam); }
       else if (e instanceof Object && e.tile !== undefined) this.drawDebris(g, e, cam);
     }
     // گلوله‌های آتش
@@ -566,7 +570,22 @@ export class Renderer {
     if (p && !(p.dead && p.deathTimer > 0.9)) this.drawPlayer(g, p, cam, world);
   }
 
+  /* سایهٔ بیضی زیر اجسام (قابل خاموش‌کردن در تنظیمات) */
+  drawGroundShadow(g, e, cam, scale = 1) {
+    if (!this.shadows || this.lowQuality) return;
+    const x = Math.round(e.cx - cam.x);
+    const y = Math.round(e.y + e.h - cam.y);
+    g.save();
+    g.globalAlpha = 0.22;
+    g.fillStyle = '#000';
+    g.beginPath();
+    g.ellipse(x, y - 1, (e.w * 0.5) * scale, Math.max(1.5, e.w * 0.16) * scale, 0, 0, 6.3);
+    g.fill();
+    g.restore();
+  }
+
   drawPlayer(g, p, cam, world) {
+    this.drawGroundShadow(g, p, cam, 0.9);
     const key = p.spriteKey;
     const entry = Sprite.hero[p.big ? 'big' : 'small'][key.split('.')[1]];
     if (!entry) return;
@@ -880,7 +899,54 @@ export class Renderer {
       g.fillText(boss.type === 'div' ? 'دیو کویر' : 'اژدهای دماوند', W / 2, by + 22 * s);
       g.textAlign = 'left';
     }
+
+    // کارت معرفی مرحله و کارت نبرد رئیس
+    this.drawBanners(world, s, W, H);
+
     g.textAlign = 'left';
+  }
+
+  /* کارت‌های بزرگ وسط صفحه: «مرحله ۳ — گلستان ارم» و «نبرد رئیس!» */
+  drawBanners(world, s, W, H) {
+    const g = this.g;
+    const card = (t, total, title, sub, color) => {
+      const p = 1 - t / total;                       // ۰ تا ۱
+      const appear = Math.min(1, p / 0.12);
+      const leave = t < 0.45 ? Math.max(0, t / 0.45) : 1;
+      const a = Math.min(appear, leave);
+      if (a <= 0.01) return;
+      const w = Math.min(W * 0.66, 430 * s), h = 64 * s;
+      const cx = W / 2, cy = H * 0.40;
+      g.save();
+      g.globalAlpha = a * 0.88;
+      g.fillStyle = 'rgba(14,10,26,0.92)';
+      if (g.roundRect) { g.beginPath(); g.roundRect(cx - w / 2, cy - h / 2, w, h, 12 * s); g.fill(); }
+      else g.fillRect(cx - w / 2, cy - h / 2, w, h);
+      g.globalAlpha = a;
+      g.strokeStyle = color;
+      g.lineWidth = 2 * s;
+      if (g.roundRect) { g.beginPath(); g.roundRect(cx - w / 2, cy - h / 2, w, h, 12 * s); g.stroke(); }
+      else g.strokeRect(cx - w / 2, cy - h / 2, w, h);
+      g.textAlign = 'center';
+      g.fillStyle = '#ffffff';
+      g.font = `bold ${Math.round(19 * s)}px Vazirmatn, sans-serif`;
+      g.fillText(title, cx, cy + 4 * s);
+      if (sub) {
+        g.fillStyle = color;
+        g.font = `bold ${Math.round(12 * s)}px Vazirmatn, sans-serif`;
+        g.fillText(sub, cx, cy + 23 * s);
+      }
+      g.restore();
+      g.textAlign = 'left';
+    };
+    if (world.introT > 0 && !world.completed) {
+      const lv = world.level;
+      const hazards = (lv.hazard || []).map((h) => ({ water: 'آب', spike: 'نیزه', void: 'پرتگاه' }[h] || '')).filter(Boolean);
+      const sub = hazards.length ? `خطرها: ${hazards.join('، ')}` : (lv.boss ? 'پایان مرحله: نبرد رئیس' : '');
+      card(world.introT, 2.8, `مرحله ${fa(lv.n)} — ${lv.name}`, sub, '#ffd166');
+    } else if (world.bossIntroT > 0 && world.boss && !world.boss.defeated) {
+      card(world.bossIntroT, 2.8, 'نبرد رئیس!', world.boss.type === 'div' ? 'دیو کویر' : 'اژدهای دماوند', '#ff6a4d');
+    }
   }
 
   /* سپر طلایی روی پرچم تا زمانی که رئیس شکست نخورده */
@@ -927,6 +993,7 @@ export class Renderer {
   }
 
   drawVignette() {
+    if (this.lowQuality) return;
     const g = this.g;
     const W = this.canvas.width, H = this.canvas.height;
     const grad = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);

@@ -47,6 +47,8 @@ export class World {
     this.paused = false;
     this.camera = { x: 0, y: 0, targetX: 0, targetY: 0 };
     this.transition = 0;
+    this.introT = 2.8;          // کارت معرفی مرحله در آغاز
+    this.bossIntroT = 0;        // کارت «نبرد رئیس!»
     this.starKills = 0;
     this.onEvent = opts.onEvent || (() => {});
     this.spawnAll();
@@ -93,6 +95,12 @@ export class World {
 
   /* ------------------------------ به‌روزرسانی ----------------------------- */
   update(dt, input) {
+    if (this.introT > 0) this.introT = Math.max(0, this.introT - dt);
+    if (this.bossIntroT > 0) this.bossIntroT = Math.max(0, this.bossIntroT - dt);
+    if (this.boss && this.boss.active && !this.bossBannerShown && this.state === 'playing') {
+      this.bossBannerShown = true;
+      this.bossIntroT = 2.8;
+    }
     this.input = input;
     if (this.paused) return;
     this.fx.update(dt);

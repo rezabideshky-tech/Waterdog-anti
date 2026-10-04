@@ -5,7 +5,7 @@
 
 export const GAME_TITLE = 'قارچ‌خور';
 export const GAME_SUBTITLE = 'ماجراهای کوکو در ایران';
-export const VERSION = '1.0.0';
+export const VERSION = '1.0.1';
 
 /* ------------------------------- فیزیک بازی ------------------------------ */
 export const TILE = 16;                 // اندازهٔ هر خانه (پیکسل منطقی)

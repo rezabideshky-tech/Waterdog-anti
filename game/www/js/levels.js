@@ -65,6 +65,9 @@ export function buildLevel(index, opts = {}) {
         for (let i = 0; i < gapW; i++) set(x + i, groundTop, T.SPIKE);
       } else if (hazard === 'water') {
         for (let y = groundTop + 1; y < h; y++) for (let i = 0; i < gapW; i++) set(x + i, y, T.WATER);
+      } else if (!hazard && diff <= 2) {
+        // مرحله‌های آغازین: گودال کم‌ژرف؛ سقوط دردناک نیست و بازیکن تازه‌کار دلسرد نمی‌شود
+        for (let y = groundTop + 2; y < h; y++) for (let i = 0; i < gapW; i++) set(x + i, y, T.GROUND_DARK);
       }
       lastGap = x + gapW;
       x += gapW - 1;
@@ -296,7 +299,7 @@ export function buildLevel(index, opts = {}) {
     w, h, tiles, entities, decor, spawn: { x: 3 * TILE, y: (groundTop - 2) * TILE },
     goal: { x: flagX * TILE, y: (flagTop - 9) * TILE },
     pixelW: w * TILE, pixelH: h * TILE,
-    time: 300, boss: def.boss,
+    time: 300, boss: def.boss, hazard: def.hazard, bossType: def.boss,
   };
 }
 

@@ -55,7 +55,8 @@ shot('01-menu');
 // --- شروع بازی از دکمهٔ «بازی جدید» ---
 clickAction('play');
 await sleep(300);
-log('state after play =', App.state, '| level =', App.levelIndex);
+log('state after play =', App.state, '| level =', App.levelIndex, '| کادر معرفی =', (App.world ? App.world.introT.toFixed(1) : '-'));
+shot('09-intro-card');
 const x0 = App.world ? App.world.player.x : 0;
 
 // --- بازی با دکمه‌های لمسی: راست + دویدن + پرش‌های مکرر ---
@@ -72,6 +73,25 @@ shot('02-playing');
 const x1 = App.world ? App.world.player.x : 0;
 log(`حرکت بازیکن: ${Math.round(x0)} → ${Math.round(x1)} px (${x1 > x0 + 40 ? 'درست' : 'تکان نخورد!'})`);
 if (!(x1 > x0 + 40)) problems.push('بازیکن با دکمهٔ لمسی حرکت نکرد');
+
+// --- بازرسی همهٔ صفحه‌های منو: متن‌های ناقص، NaN و undefined ---
+log('کادر معرفی مرحله هنگام شروع =', App.world ? App.world.introT.toFixed(1) : '-');
+const screenActions = ['shop', 'chars', 'ach', 'map', 'settings', 'help'];
+const dirty = [];
+for (const a of screenActions) {
+  if (!clickAction(a)) continue;
+  await sleep(70);
+  for (const scr of document.querySelectorAll('.screen.active')) {
+    const html = scr.innerHTML || '';
+    for (const bad of ['undefined', 'NaN', '[object', '>null<']) {
+      if (html.includes(bad)) dirty.push(`${a}: «${bad}» در ${scr.id}`);
+    }
+  }
+  clickAction('back');
+  await sleep(40);
+}
+log('بازرسی صفحه‌ها:', dirty.length ? dirty.join(' | ') : 'همه پاک');
+problems.push(...dirty);
 
 // --- گرافیک، صدا و چرخهٔ بازی: چند صحنهٔ دیگر ---
 press('btn-right', false);
@@ -97,7 +117,17 @@ press('btn-right', true);
 for (let i = 0; i < 90; i++) { if (i % 12 === 0) press('btn-jump', true); if (i % 12 === 6) press('btn-jump', false); await sleep(16); }
 press('btn-right', false); press('btn-jump', false);
 // --- مکث و منو ---
-if (App.state === 'playing') { $('btn-pause').dispatchEvent('click', {}); await sleep(120); }
+log('قبل از توقف: state =', App.state, '| tips el =', !!$('pause-tips'));
+if (App.state === 'playing') {
+  $('btn-pause').dispatchEvent('click', {});
+  await sleep(120);
+  log('بعد از توقف: state =', App.state, '| tips html =', (($('pause-tips') || {}).innerHTML || '').slice(0, 40));
+  const tips = $('pause-tips');
+  const tipCount = (tips && tips.innerHTML) ? tips.innerHTML.split('class="tip"').length - 1 : 0;
+  log('نکته‌های صفحهٔ توقف =', tipCount);
+  if (tipCount < 1) problems.push('نکته‌های صفحهٔ توقف ساخته نشد');
+  shot('08-pause');
+}
 press('btn-resume', false) || $('btn-resume').dispatchEvent('click', {});
 await sleep(120);
 $('btn-quit').dispatchEvent('click', {});

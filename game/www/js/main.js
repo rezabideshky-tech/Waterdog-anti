@@ -180,7 +180,23 @@ function applyLayout() {
 }
 function applyQuality() {
   const q = App.save.settings.quality;
-  App.lowQuality = q === 'low';
+  const low = q === 'low' || (q === 'auto' && App.autoLow);
+  App.lowQuality = low;
+  if (App.renderer) {
+    App.renderer.lowQuality = low;
+    App.renderer.shadows = !!App.save.settings.shadows;
+  }
+}
+
+/* تشخیص خودکار دستگاه ضعیف: اگر میانگین نرخ فریم پایین بود، یک‌بار کیفیت کم می‌شود */
+function checkAutoQuality() {
+  if (App.save.settings.quality !== 'auto' || App.autoLow || App.fpsSamples.length < 60) return;
+  const avg = App.fpsSamples.reduce((a, b) => a + b, 0) / App.fpsSamples.length;
+  if (avg > 0.0235) {   // کمتر از ≈۴۲ فریم بر ثانیه
+    App.autoLow = true;
+    applyQuality();
+    App.ui.toast('⚙️ کیفیت گرافیک برای روانی بازی کم شد', 2200);
+  }
 }
 
 function resize() {
@@ -269,7 +285,12 @@ function togglePause(force) {
   const paused = force === undefined ? App.state === 'playing' : force;
   App.state = paused ? 'paused' : 'playing';
   App.world.paused = paused;
-  if (paused) { App.ui.show('screen-pause'); $('btn-pause').classList.add('hidden'); Sound.pauseBlip(); }
+  if (paused) {
+    App.ui.renderPauseTips(App.levelIndex, App.endless);
+    App.ui.show('screen-pause');
+    $('btn-pause').classList.add('hidden');
+    Sound.pauseBlip();
+  }
   else { App.ui.hideScreens(); $('btn-pause').classList.remove('hidden'); App.lastTime = performance.now(); }
 }
 
@@ -409,6 +430,7 @@ function loop(now) {
 
   App.fpsSamples.push(dtReal);
   if (App.fpsSamples.length > 60) App.fpsSamples.shift();
+  if ((App.frameCount = (App.frameCount || 0) + 1) % 30 === 0) checkAutoQuality();
 }
 
 /* ---------------------------------- آغاز --------------------------------- */

@@ -158,6 +158,29 @@ export class UI {
     if (q) q.value = s.quality || 'auto';
   }
 
+  /* راهنما و نکتهٔ مرحله روی صفحهٔ توقف */
+  renderPauseTips(levelIndex, endless) {
+    const el = this.el('pause-tips');
+    if (!el) return;
+    if (endless) {
+      el.innerHTML = [
+        '<div class="tip"><b>دوی بی‌پایان:</b> هرچه جلوتر بروی، دشمن‌ها بیشتر و سریع‌تر می‌شوند و پرتگاه‌ها بیشتر می‌شوند.</div>',
+        '<div class="tip"><b>کنترل:</b> دکمهٔ 🔥 هم شوت گل آتش است و هم برای دویدن؛ با نگه‌داشتن ▲ بلندتر می‌پری.</div>',
+        '<div class="tip"><b>هدف:</b> بیشترین امتیاز و بیشترین سکه — سکه‌ها به بانک می‌روند و در فروشگاه خرج می‌شوند.</div>',
+      ].join('');
+      return;
+    }
+    const lv = LEVELS[levelIndex];
+    const tips = [];
+    if (lv) tips.push(`<div class="tip"><b>مرحله ${fa(lv.n)} — ${lv.name}:</b> سختی «${DIFFICULTY_LABEL[lv.diff] || ''}»${lv.boss ? ' — در پایان این مرحله یک رئیس منتظر توست!' : ''}</div>`);
+    tips.push('<div class="tip"><b>کنترل:</b> دکمهٔ 🔥 هم شوت گل آتش است و هم برای دویدن؛ با نگه‌داشتن ▲ بلندتر می‌پری.</div>');
+    tips.push('<div class="tip"><b>نکته:</b> روی سر دشمن‌ها بپر تا نابود شوند؛ در نبرد رئیس هنگام درخشش طلایی روی سرش بپر (فقط از جلو با گل آتش هم می‌شود).</div>');
+    if (lv && lv.hazard.includes('water')) tips.push('<div class="tip"><b>خطر این مرحله:</b> آب — پرش‌های بلند بزن و از ایستگاه ذخیره غافل نشو.</div>');
+    if (lv && lv.hazard.includes('spike')) tips.push('<div class="tip"><b>خطر این مرحله:</b> نیزه‌ها — روی نوک نیزه‌ها فرود نیا؛ از لبه بپر.</div>');
+    if (lv && lv.hazard.includes('void')) tips.push('<div class="tip"><b>خطر این مرحله:</b> پرتگاه — لبه‌ها را با احتیاط رد کن؛ اگر پَر سیمرغ داری با پرش دوم نجات پیدا می‌کنی.</div>');
+    el.innerHTML = tips.join('');
+  }
+
   renderComplete(info) {
     this.el('complete-title').textContent = info.boss ? '👑 دشمن بزرگ شکست خورد!' : '🎉 مرحله تمام شد!';
     this.el('complete-stars').textContent = '★'.repeat(info.stars) + '☆'.repeat(3 - info.stars);
