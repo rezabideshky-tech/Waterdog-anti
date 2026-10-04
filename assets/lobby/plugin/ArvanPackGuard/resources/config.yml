@@ -1,0 +1,9 @@
+# A connection that logs in (and downloads the packs) but never spawns within this many seconds = 1 strike
+spawn-timeout: 60
+# Strikes (per XUID or IP) before an automatic ban
+max-strikes: 3
+# Also ban the IP address
+ban-ip: true
+# Extra strike if client data looks like a bot (empty device model / unknown OS)
+bot-heuristics: true
+kick-message: "§cConnection refused. §7(ArvanGaming PackGuard)"

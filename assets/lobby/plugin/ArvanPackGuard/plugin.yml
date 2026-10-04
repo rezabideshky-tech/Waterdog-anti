@@ -1,0 +1,15 @@
+name: ArvanPackGuard
+main: arvan\packguard\Main
+version: 1.0.0
+api: 5.0.0
+description: Detects and bans resource pack stealers (bedrockpack / gophertunnel bots)
+commands:
+  packguard:
+    description: PackGuard admin
+    usage: "/packguard <list|unban <xuid|name>|status>"
+    permission: packguard.admin
+permissions:
+  packguard.admin:
+    default: op
+  packguard.notify:
+    default: op
