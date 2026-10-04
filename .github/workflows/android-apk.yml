@@ -3,6 +3,7 @@ name: Build Android APK
 on:
   push:
     branches: [ main, master ]
+    tags: [ 'game-v*' ]
     paths:
       - 'game/**'
       - '.github/workflows/android-apk.yml'
@@ -12,11 +13,6 @@ on:
       - 'game/**'
       - '.github/workflows/android-apk.yml'
   workflow_dispatch:
-    inputs:
-      release:
-        description: 'ساخت APK نسخهٔ انتشار (release) در کنار debug'
-        type: boolean
-        default: false
 
 jobs:
   apk:
@@ -78,19 +74,15 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: ساخت APK نسخهٔ انتشار
-        if: ${{ inputs.release == true }}
-        run: |
-          cd android
-          ./gradlew assembleRelease --no-daemon --stacktrace
+      - name: آماده‌سازی فایل APK برای انتشار
+        if: startsWith(github.ref, 'refs/tags/')
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk "gharchekhor-${{ github.ref_name }}.apk"
 
       - name: بارگذاری APK
         uses: actions/upload-artifact@v4
         with:
           name: gharchekhor-apk
-          path: |
-            game/android/app/build/outputs/apk/debug/*.apk
-            game/android/app/build/outputs/apk/release/*.apk
+          path: game/android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 90
 
@@ -99,7 +91,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: قارچ‌خور ${{ github.ref_name }}
-          files: |
-            game/android/app/build/outputs/apk/debug/*.apk
-            game/android/app/build/outputs/apk/release/*.apk
+          files: game/gharchekhor-*.apk
           generate_release_notes: true
