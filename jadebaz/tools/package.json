@@ -1,0 +1,8 @@
+{
+  "name": "jadebaz-devtools",
+  "private": true,
+  "type": "module",
+  "description": "ساخت تکسچرها و آیکون‌های اختصاصی بازی جاده‌باز (Godot)",
+  "scripts": { "assets": "node gen_assets.mjs" },
+  "dependencies": { "@napi-rs/canvas": "^0.1.80" }
+}

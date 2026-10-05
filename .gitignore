@@ -19,3 +19,10 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+
+# ── جاده‌باز (Godot) ─────────────────────────────────────────────
+jadebaz/tools/node_modules/
+jadebaz/.godot/
+jadebaz/build/
+jadebaz/*.zip
+jadebaz-godot*.zip
