@@ -13,6 +13,22 @@ mkdirSync(outDir, { recursive: true });
 
 const html = readFileSync(join(here, '../www/index.html'), 'utf8');
 const { win } = installDom({ html });
+
+// صدا: WebAudio ساختگی سخت‌گیر تا هیچ پارامتر نامعتبری از قلم نیفتد
+const { installFakeWebAudio, calls: audioCalls } = await import('./fake-audio.mjs');
+installFakeWebAudio();
+
+// پوستهٔ بومی ساختگی (اندروید): دکمهٔ بازگشت و رویداد پس‌زمینه
+const nativeHandlers = {};
+let exitCount = 0;
+win.Capacitor = {
+  Plugins: {
+    App: {
+      addListener(name, cb) { nativeHandlers[name] = cb; return { remove() {} }; },
+      exitApp() { exitCount++; },
+    },
+  },
+};
 win.innerWidth = 880;
 win.innerHeight = 480;
 globalThis.innerWidth = 880;
@@ -76,7 +92,7 @@ if (!(x1 > x0 + 40)) problems.push('بازیکن با دکمهٔ لمسی حرک
 
 // --- بازرسی همهٔ صفحه‌های منو: متن‌های ناقص، NaN و undefined ---
 log('کادر معرفی مرحله هنگام شروع =', App.world ? App.world.introT.toFixed(1) : '-');
-const screenActions = ['shop', 'chars', 'ach', 'map', 'settings', 'help'];
+const screenActions = ['shop', 'chars', 'ach', 'records', 'map', 'settings', 'help'];
 const dirty = [];
 for (const a of screenActions) {
   if (!clickAction(a)) continue;
@@ -92,6 +108,29 @@ for (const a of screenActions) {
 }
 log('بازرسی صفحه‌ها:', dirty.length ? dirty.join(' | ') : 'همه پاک');
 problems.push(...dirty);
+
+// --- کارنامه: آمار، جدول مرحله‌ها و دکمهٔ اشتراک‌گذاری ---
+clickAction('records');
+await sleep(90);
+const recBody = $('records-body');
+const recRows = recBody ? (recBody.innerHTML.match(/class="rec-row/g) || []).length : 0;
+const recStats = recBody ? (recBody.innerHTML.includes('رکورد بی‌پایان') && recBody.innerHTML.includes('دستاورد از')) : false;
+log('ردیف‌های کارنامه =', recRows, '| آمار کل =', recStats);
+if (recRows !== 8) problems.push(`کارنامه باید ۸ ردیف مرحله داشته باشد (${recRows})`);
+if (!recStats) problems.push('آمار کل در کارنامه ساخته نشد');
+const shareBtn = $('btn-share');
+if (!shareBtn) problems.push('دکمهٔ اشتراک‌گذاری کارنامه نیست');
+else {
+  const before = problems.length;
+  shareBtn.dispatchEvent('click', {});
+  await sleep(80);
+  log('اشتراک‌گذاری بدون خطا اجرا شد =', problems.length === before);
+}
+const shareText = App.ui.recordsShareText();
+log('متن اشتراک‌گذاری:', shareText.split('\n')[1]);
+if (!shareText.includes('ستاره')) problems.push('متن اشتراک‌گذاری ناقص است');
+clickAction('back');
+await sleep(60);
 
 // --- گرافیک، صدا و چرخهٔ بازی: چند صحنهٔ دیگر ---
 press('btn-right', false);
@@ -150,6 +189,33 @@ press('btn-right', true); press('btn-run', true);
 for (let i = 0; i < 60; i++) { if (i % 10 === 0) press('btn-jump', true); if (i % 10 === 5) press('btn-jump', false); await sleep(16); }
 shot('07-level8');
 press('btn-right', false);
+
+// --- پوستهٔ اندروید: دکمهٔ بازگشت و پس‌زمینه‌رفتن ---
+log('شنونده‌های بومی =', Object.keys(nativeHandlers).join(', ') || 'هیچ');
+if (!nativeHandlers.backButton) problems.push('شنوندهٔ دکمهٔ بازگشت اندروید ثبت نشد');
+if (App.state === 'playing') {
+  nativeHandlers.backButton?.();
+  await sleep(80);
+  if (App.state !== 'paused') problems.push('دکمهٔ بازگشت بازی را متوقف نکرد');
+  nativeHandlers.backButton?.();          // دوباره = ادامه
+  await sleep(60);
+  if (App.state !== 'playing') problems.push('دکمهٔ بازگشت دوم بازی را ادامه نداد');
+  nativeHandlers.appStateChange?.({ isActive: false });   // رفتن به پس‌زمینه
+  await sleep(80);
+  if (App.state !== 'paused') problems.push('رفتن به پس‌زمینه بازی را متوقف نکرد');
+  nativeHandlers.appStateChange?.({ isActive: true });
+  await sleep(60);
+  log('پس از پس‌زمینه: state =', App.state, '| موسیقی =', !!App.save.settings.music);
+  // بازگشت از منو باید اپ را ببندد
+  $('btn-quit')?.dispatchEvent('click', {});
+  await sleep(150);
+  nativeHandlers.backButton?.();
+  await sleep(60);
+  log('دکمهٔ بازگشت در منو → خروج از اپ =', exitCount);
+  if (exitCount !== 1) problems.push('در منو، دکمهٔ بازگشت اپ را نبست');
+}
+log('رویدادهای صوتی شبیه‌سازی‌شده در بازی واقعی =', audioCalls.osc, 'نوسان‌ساز +', audioCalls.buffer, 'نمونهٔ صوتی');
+if (audioCalls.osc < 5) problems.push('مسیر صدای بازی در اجرای واقعی خیلی کم فعال شد');
 
 console.error = origError;
 const bad = problems.filter((p) => !/AudioContext|decodeAudio|not implemented/i.test(p));

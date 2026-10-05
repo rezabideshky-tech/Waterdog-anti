@@ -4,7 +4,7 @@
 
 ![صحنه‌های بازی](docs/gallery.png)
 
-> 📱 **دانلود APK:** در صفحهٔ [Releases](../../releases) فایل `gharchekhor-game-v1.0.1.apk` را دانلود کن
+> 📱 **دانلود APK:** در صفحهٔ [Releases](../../releases) فایل `gharchekhor-game-v1.0.2.apk` را دانلود کن
 > (یا از Actions → artifact). روی اندروید نصب کن و بازی کن — کاملاً آفلاین. کوکو از کوچه‌های کاهگلی تهران تا قلهٔ دماوند می‌دود،
 قارچ و سکه جمع می‌کند، با دیو کویر و اژدهای دماوند می‌جنگد و پرچم ایران را بالا می‌برد.
 
@@ -42,14 +42,21 @@ node tools/serve.mjs 8080     # سپس http://localhost:8080
 
 ```bash
 cd game
-node tools/validate.mjs         # آیا همهٔ ۸ مرحله با ربات قابل عبورند؟
+npm test                        # همهٔ آزمون‌های زیر، یکی‌یکی
+
+node tools/audio-test.mjs       # موتور صدا: همهٔ افکت‌ها، دستگاه‌ها، کلید موسیقی، پرش زمانی
+node tools/validate.mjs         # آیا همهٔ ۸ مرحله با ربات قابل عبورند (با رئیس‌ها)؟
 NOFEATHER=1 node tools/validate.mjs
 node tools/boss-test.mjs        # آیا هر دو رئیس شکست‌پذیرند؟
-node tools/smoke.mjs            # آزمون دود: بوت، منو، دکمه‌های لمسی، صحنه‌ها
+node tools/smoke.mjs            # آزمون دود: بوت، منو، کارنامه، دکمه‌های لمسی، دکمهٔ بازگشت اندروید
 node tools/sim.mjs 3 12 shot    # شبیه‌سازی و اسکرین‌شات در .arena/tmp
-cd tools && node spritesheet.mjs  # جدول همهٔ اسپرایت‌ها
 node tools/gallery.mjs          # ساخت docs/gallery.png
+python3 tools/apk_check.py path/to/app-debug.apk   # بازرسی محتوای APK
+cd tools && node spritesheet.mjs  # جدول همهٔ اسپرایت‌ها
 ```
+
+آزمون‌های صدا و دود از یک **WebAudio ساختگی سخت‌گیر** استفاده می‌کنند: هر پارامتر NaN/منفی
+همان‌جا خطا می‌دهد، پس مسیر صوتی بازی (افکت‌ها و موسیقی دستگاه‌های ایرانی) واقعاً اجرا و بررسی می‌شود.
 
 آزمون‌ها بازی را در یک DOM ساختگی با `@napi-rs/canvas` اجرا می‌کنند؛ نه مرورگر لازم است و نه فایل فونت اضافه.
 
@@ -84,6 +91,12 @@ game/
 ├── capacitor.config.json
 └── package.json
 ```
+
+## رفتار روی اندروید
+
+* **دکمهٔ بازگشت گوشی** بازی را متوقف می‌کند (در منو، اپ را می‌بندد) — با `@capacitor/app`.
+* با رفتن اپ به **پس‌زمینه** بازی خودکار متوقف و موسیقی قطع می‌شود و با بازگشت ادامه پیدا می‌کند.
+* چرخش افقی، تمام‌صفحه، آیکون‌های لانچر و اسپلش با `node tools/patch-android.mjs` روی پلتفرم اندروید اعمال می‌شود.
 
 ## نکته‌های پیاده‌سازی
 

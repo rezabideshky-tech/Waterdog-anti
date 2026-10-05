@@ -2,7 +2,16 @@
  * رندر با @napi-rs/canvas (Skia) انجام می‌شود؛ برای تست خودکار و اسکرین‌شات.
  */
 import { writeFileSync } from 'node:fs';
-import { Canvas, createCanvas, GlobalFonts } from '@napi-rs/canvas';
+
+// وابستگی رندر؛ اگر نصب نشده باشد، پیام فارسی روشن بده (نه stack trace)
+let Canvas, createCanvas, GlobalFonts;
+try {
+  ({ Canvas, createCanvas, GlobalFonts } = await import('@napi-rs/canvas'));
+} catch (e) {
+  console.error('\n❌ برای اجرای آزمون‌ها و ابزارهای توسعه، اول وابستگی‌ها را نصب کن:\n');
+  console.error('     cd game/tools && npm install\n');
+  process.exit(2);
+}
 
 globalThis.OffscreenCanvas = Canvas;
 

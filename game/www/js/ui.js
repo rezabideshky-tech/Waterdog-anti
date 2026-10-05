@@ -128,6 +128,61 @@ export class UI {
     }
   }
 
+  /* کارنامهٔ بازیکن: آمار کل، رکورد هر مرحله و دکمهٔ اشتراک‌گذاری */
+  renderRecords() {
+    const el = this.el('records-body');
+    if (!el) return;
+    const s = this.save;
+    const stars = Object.values(s.stars || {}).reduce((a, b) => a + (b || 0), 0);
+    const maxStars = LEVELS.length * 3;
+    const doneAch = (s.achievements || []).length;
+    const own = s.owned || [];
+    const perks = [];
+    if (own.includes('permFeather')) perks.push('پَر سیمرغ');
+    if (own.includes('bankShield')) perks.push('سپر سکه');
+    if (s.livesBonus) perks.push(`${fa(s.livesBonus)} جان اضافه`);
+    const rows = LEVELS.map((lv, i) => {
+      const unlocked = s.unlockedLevel >= lv.n;
+      const st = (s.stars || {})[i] || 0;
+      const best = (s.best || {})[i] || 0;
+      return `<div class="rec-row${unlocked ? '' : ' locked'}">
+        <span class="rec-name">${unlocked ? '' : '🔒 '}مرحله ${fa(lv.n)} — ${lv.name}${lv.boss ? ' 👹' : ''}</span>
+        <span class="rec-stars">${'★'.repeat(st)}${'☆'.repeat(3 - st)}</span>
+        <span class="rec-best">${best ? fa(best) : '—'}</span>
+      </div>`;
+    }).join('');
+    el.innerHTML = `
+      <div class="rec-cards">
+        <div class="rec-card"><span class="v">${fa(stars)}</span><span class="k">ستاره از ${fa(maxStars)}</span></div>
+        <div class="rec-card"><span class="v">${fa(s.endlessBest || 0)}</span><span class="k">رکورد بی‌پایان</span></div>
+        <div class="rec-card"><span class="v">${fa(doneAch)}</span><span class="k">دستاورد از ${fa(ACHIEVEMENTS.length)}</span></div>
+      </div>
+      <div class="rec-stats">
+        <span>🪙 سکه‌ها: <b>${fa(s.totalCoins || 0)}</b></span>
+        <span>🍄 قارچ‌ها: <b>${fa(s.totalMushrooms || 0)}</b></span>
+        <span>💥 دشمنان: <b>${fa(s.totalKills || 0)}</b></span>
+        <span>🛒 آیتم‌ها: <b>${fa(own.length)}</b>${perks.length ? ' — ' + perks.join('، ') : ''}</span>
+      </div>
+      <div class="rec-table">
+        <div class="rec-head"><span>مرحله</span><span>ستاره‌ها</span><span>رکورد</span></div>
+        ${rows}
+      </div>`;
+  }
+
+  /** متن کارنامه برای اشتراک‌گذاری */
+  recordsShareText() {
+    const s = this.save;
+    const stars = Object.values(s.stars || {}).reduce((a, b) => a + (b || 0), 0);
+    return [
+      '🍄 قارچ‌خور — ماجراهای کوکو در ایران',
+      `⭐ ستاره‌ها: ${fa(stars)} از ${fa(LEVELS.length * 3)}`,
+      `🏆 دستاوردها: ${fa((s.achievements || []).length)} از ${fa(ACHIEVEMENTS.length)}`,
+      `♾️ رکورد دوی بی‌پایان: ${fa(s.endlessBest || 0)}`,
+      `🪙 سکه‌ها: ${fa(s.totalCoins || 0)} · 🍄 قارچ‌ها: ${fa(s.totalMushrooms || 0)}`,
+      'من هم بازی می‌کنم! 🎮',
+    ].join('\n');
+  }
+
   renderAchievements() {
     const list = this.el('ach-list');
     if (!list) return;

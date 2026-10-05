@@ -58,11 +58,14 @@ jobs:
       - name: نصب وابستگی‌های Capacitor
         run: npm install --no-audit --no-fund
 
-      - name: آزمون‌های بازی (بوت، پیمایش مرحله‌ها، رئیس‌ها)
+      - name: آزمون‌های بازی (صدا، پیمایش مرحله‌ها، رئیس‌ها، بوت و پوستهٔ اندروید)
         run: |
           cd tools && npm install --no-audit --no-fund && cd ..
+          node tools/audio-test.mjs
           node tools/validate.mjs
+          NOFEATHER=1 node tools/validate.mjs
           node tools/boss-test.mjs
+          node tools/smoke.mjs
 
       - name: افزودن پلتفرم اندروید
         run: |

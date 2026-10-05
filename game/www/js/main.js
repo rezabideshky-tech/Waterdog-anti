@@ -97,6 +97,7 @@ function bindEvents() {
         case 'shop': App.ui.renderShop(); App.ui.show('screen-shop'); break;
         case 'chars': App.ui.renderChars(); App.ui.show('screen-chars'); break;
         case 'ach': App.ui.renderAchievements(); App.ui.show('screen-ach'); break;
+        case 'records': App.ui.renderRecords(); App.ui.show('screen-records'); break;
         case 'settings': App.ui.fillSettings(); App.ui.show('screen-settings'); break;
         case 'help': App.ui.show('screen-help'); break;
         case 'start-level': startLevel(Math.min(App.save.unlockedLevel - 1, LEVELS.length - 1)); break;
@@ -126,6 +127,7 @@ function bindEvents() {
   $('btn-menu').addEventListener('click', () => goMenu());
   $('btn-retry').addEventListener('click', () => { App.endless ? startEndless() : startLevel(App.levelIndex); });
   $('btn-go-menu').addEventListener('click', () => goMenu());
+  $('btn-share').addEventListener('click', () => shareRecords());
   $('btn-reset').addEventListener('click', () => {
     if (!confirm('همهٔ پیشرفت پاک شود؟')) return;
     App.save = loadSave();
@@ -167,11 +169,51 @@ function bindEvents() {
   window.addEventListener('orientationchange', () => setTimeout(resize, 250));
   document.addEventListener('visibilitychange', () => { if (document.hidden && App.state === 'playing') togglePause(true); });
 
+  bindNativeShell();
   App.input.bindTouchButtons();
   $('touch-controls').classList.add('hidden');
   if (navigator.serviceWorker) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
+}
+
+/* ------------------------- اشتراک‌گذاری کارنامه ------------------------- */
+async function shareRecords() {
+  const text = App.ui.recordsShareText();
+  try {
+    if (navigator.share) { await navigator.share({ title: GAME_TITLE, text }); return; }
+  } catch (e) { /* کاربر لغو کرد */ }
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      App.ui.toast('📋 کارنامه کپی شد — برای دوستانت بفرست');
+      return;
+    }
+  } catch (e) { /* دسترسی به کلیپ‌بورد نبود */ }
+  App.ui.toast('اشتراک‌گذاری در این دستگاه پشتیبانی نمی‌شود');
+}
+
+/* ------------------------- پوستهٔ بومی (اندروید) -------------------------
+ * دکمهٔ بازگشت سخت‌افزاری گوشی باید بازی را متوقف کند (نه اینکه اپ را ببندد)
+ * و وقتی اپ به پس‌زمینه می‌رود، بازی خودکار متوقف شود. */
+function bindNativeShell() {
+  try {
+    const capApp = window.Capacitor?.Plugins?.App;
+    if (!capApp || typeof capApp.addListener !== 'function') return;
+    App.native = true;
+    capApp.addListener('backButton', () => {
+      if (App.state === 'playing') { togglePause(true); return; }
+      if (App.state === 'paused') { togglePause(false); return; }
+      if (App.state === 'gameover' || App.state === 'complete') { goMenu(); return; }
+      const screen = App.ui.current;
+      if (screen && screen !== 'screen-title' && screen !== 'screen-loading') { goMenu(); return; }
+      capApp.exitApp?.();
+    });
+    capApp.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive && App.state === 'playing') togglePause(true);
+      if (isActive && App.state === 'playing') Sound.resume();
+    });
+  } catch (e) { /* در وب بی‌نیاز است */ }
 }
 
 function applyLayout() {
@@ -289,9 +331,15 @@ function togglePause(force) {
     App.ui.renderPauseTips(App.levelIndex, App.endless);
     App.ui.show('screen-pause');
     $('btn-pause').classList.add('hidden');
+    Sound.pauseMusic();
     Sound.pauseBlip();
   }
-  else { App.ui.hideScreens(); $('btn-pause').classList.remove('hidden'); App.lastTime = performance.now(); }
+  else {
+    App.ui.hideScreens();
+    $('btn-pause').classList.remove('hidden');
+    Sound.resumeMusic();
+    App.lastTime = performance.now();
+  }
 }
 
 function goMenu() {

@@ -26,6 +26,7 @@ export class AudioEngine {
     this.enabledSfx = true;
     this.enabledMusic = true;
     this.musicOn = false;
+    this.wantMusic = false;      // کاربر موسیقی را می‌خواهد (حتی وقتی موقتاً خاموش است)
     this.theme = 'shur';
     this.tempo = 116;
     this._step = 0;
@@ -69,7 +70,13 @@ export class AudioEngine {
   }
 
   setSfx(on) { this.enabledSfx = on; }
-  setMusic(on) { this.enabledMusic = on; if (!on) this.stopMusic(); else if (this.musicOn) this.startMusic(this.theme); }
+
+  /** روشن/خاموش‌کردن موسیقی از تنظیمات؛ اگر پیش‌تر پخش شروع شده بود، دوباره شروع می‌شود */
+  setMusic(on) {
+    this.enabledMusic = on;
+    if (!on) this.stopMusic();
+    else if (this.wantMusic) this.startMusic(this.theme);
+  }
 
   /* ------------------------------- افکت‌ها ------------------------------- */
   tone(freq, dur = 0.12, type = 'square', vol = 0.6, when = 0, slideTo = null) {
@@ -134,6 +141,7 @@ export class AudioEngine {
   startMusic(theme = 'shur') {
     this.theme = theme in SCALES ? theme : 'shur';
     this.musicOn = true;
+    this.wantMusic = true;
     if (!this.enabledMusic || !this.init()) return;
     if (this._timer) clearInterval(this._timer);
     this._nextTime = this.ctx.currentTime + 0.1;
@@ -146,6 +154,12 @@ export class AudioEngine {
     if (this._timer) { clearInterval(this._timer); this._timer = null; }
   }
 
+  /** قطع موقت موسیقی (مثلاً هنگام توقف بازی) بدون تغییر تنظیم کاربر */
+  pauseMusic() { this.stopMusic(); }
+
+  /** ادامهٔ موسیقی پس از توقف، فقط اگر کاربر موسیقی را خاموش نکرده باشد */
+  resumeMusic() { if (this.enabledMusic && this.wantMusic) this.startMusic(this.theme); }
+
   setTheme(theme, tempo) {
     this.theme = theme in SCALES ? theme : 'shur';
     if (tempo) this.tempo = tempo;
@@ -154,6 +168,8 @@ export class AudioEngine {
   _schedule() {
     if (!this.ctx || !this.enabledMusic) return;
     const spb = 60 / this.tempo / 2; // هر قدم = یک هشتم
+    // پس از بازگشت از پس‌زمینه، زمان‌بندی عقب‌مانده را نپریم (وگرنه یک‌جا صدا پخش می‌شود)
+    if (this._nextTime < this.ctx.currentTime) this._nextTime = this.ctx.currentTime + 0.05;
     while (this._nextTime < this.ctx.currentTime + 0.35) {
       this._playStep(this._step, this._nextTime);
       this._nextTime += spb;
