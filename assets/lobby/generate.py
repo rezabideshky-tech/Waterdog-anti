@@ -5,7 +5,7 @@ import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-NS = uuid.UUID("e2f006de-e372-4785-be50-222fb767b5bc")
+NS = uuid.UUID("ea6d0411-7aef-4607-9b3e-b1d9c8f345f0")
 WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
 RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
@@ -1060,8 +1060,6 @@ def battlepass_passport():
     b = A.alloc("sign", 48, 16); x0, y0, x1, y1 = b
     A.grad(b, NAVY[1], NAVY[3]); A.frame(b); A.outlined("BATTLE PASS", (x0 + x1) // 2, y0 + 5, GOLD[0], 1)
     b = A.alloc("none", 8, 8)
-    for k in ["page_l", "page_r", "completed"] + [f"st_{n}" for n in icons]:  # face the viewer
-        x, y, w, h = A.R[k]; A.img.paste(A.img.crop((x, y, x + w, y + h)).transpose(Image.FLIP_LEFT_RIGHT), (x, y))
 
     BY = 17  # book height
     bones = [("root", [0, 0, 0], None), ("base", [0, 0, 0], "root"),
@@ -1107,7 +1105,7 @@ def battlepass_passport():
     anim = {}
     for i, nm in enumerate(stamp_names):
         r, c = divmod(i, 2)
-        x0 = -10 + (40 - (5 + c * 17) - 12) / 4; z0 = -7 + (11 + r * 14) / 4
+        x0 = -10 + (5 + c * 17) / 4; z0 = -7 + (11 + r * 14) / 4
         bn = f"stamp{i}"
         bones.append((bn, [x0 + 1.5, BY + 1.25, z0 + 1.5], "tilt"))
         C.append((bn, bn, (x0, BY + 1.22, z0), (x0 + 3, BY + 1.3, z0 + 3), F("none") | dict(up=f"st_{nm}")))
