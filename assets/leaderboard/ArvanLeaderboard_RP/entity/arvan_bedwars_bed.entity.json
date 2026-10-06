@@ -1,0 +1,33 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:bedwars_bed",
+      "materials": {
+        "default": "entity_alphablend"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_bedwars_bed"
+      },
+      "geometry": {
+        "default": "geometry.arvan_bedwars_bed"
+      },
+      "animations": {
+        "idle": "animation.arvan_bedwars_bed.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "1.0"
+      },
+      "render_controllers": [
+        "controller.render.arvan_leaderboard"
+      ],
+      "spawn_egg": {
+        "base_color": "#DC282D",
+        "overlay_color": "#F0F0F5"
+      }
+    }
+  }
+}

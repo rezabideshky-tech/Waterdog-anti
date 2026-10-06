@@ -1,0 +1,97 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_podium.idle": {
+      "loop": true,
+      "bones": {
+        "beam1": {
+          "scale": [
+            "1",
+            "1 + math.sin(query.anim_time * 120) * 0.12",
+            "1"
+          ]
+        },
+        "beam2": {
+          "scale": [
+            "1",
+            "1 + math.sin(query.anim_time * 120 + 60) * 0.15",
+            "1"
+          ]
+        },
+        "beam3": {
+          "scale": [
+            "1",
+            "1 + math.sin(query.anim_time * 120 + 120) * 0.15",
+            "1"
+          ]
+        },
+        "top1": {
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 90) * 1.8",
+            "0"
+          ],
+          "rotation": [
+            "0",
+            "query.anim_time * -30",
+            "0"
+          ]
+        },
+        "top2": {
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 90 + 45) * 1.4",
+            "0"
+          ]
+        },
+        "top3": {
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 90 + 90) * 1.4",
+            "0"
+          ]
+        },
+        "crystal": {
+          "rotation": [
+            "0",
+            "query.anim_time * 70",
+            "math.sin(query.anim_time * 45) * 6"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 80) * 2",
+            "0"
+          ]
+        },
+        "ring_a": {
+          "rotation": [
+            "0",
+            "query.anim_time * -70",
+            "0"
+          ]
+        },
+        "ring_b": {
+          "rotation": [
+            "0",
+            "query.anim_time * 110",
+            "0"
+          ]
+        },
+        "banner_l": {
+          "rotation": [
+            "0",
+            "0",
+            "math.sin(query.anim_time * 100) * 3"
+          ]
+        },
+        "banner_r": {
+          "rotation": [
+            "0",
+            "0",
+            "math.sin(query.anim_time * 100 + 40) * -3"
+          ]
+        }
+      }
+    }
+  }
+}

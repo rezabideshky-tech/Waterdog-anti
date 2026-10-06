@@ -1,0 +1,33 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:hologram",
+      "materials": {
+        "default": "entity_alphablend"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_hologram"
+      },
+      "geometry": {
+        "default": "geometry.arvan_hologram"
+      },
+      "animations": {
+        "idle": "animation.arvan_hologram.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "1.0"
+      },
+      "render_controllers": [
+        "controller.render.arvan_leaderboard"
+      ],
+      "spawn_egg": {
+        "base_color": "#5BE0FF",
+        "overlay_color": "#1B2740"
+      }
+    }
+  }
+}

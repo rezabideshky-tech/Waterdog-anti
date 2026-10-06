@@ -26,3 +26,8 @@ jadebaz/.godot/
 jadebaz/build/
 jadebaz/*.zip
 jadebaz-godot*.zip
+
+# ── خروجی‌های بسته‌بندی لیدربورد ─────────────────────────────────
+assets/leaderboard/*.zip
+assets/leaderboard/*.mcpack
+assets/leaderboard/__pycache__/

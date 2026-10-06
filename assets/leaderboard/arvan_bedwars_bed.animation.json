@@ -1,0 +1,62 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_bedwars_bed.idle": {
+      "loop": true,
+      "bones": {
+        "sword": {
+          "rotation": [
+            "math.sin(query.anim_time * 45) * 4",
+            "query.anim_time * 45",
+            "0"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 70) * 2.2",
+            "0"
+          ]
+        },
+        "crown": {
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 90 + 30) * 1.5",
+            "0"
+          ],
+          "rotation": [
+            "0",
+            "query.anim_time * -25",
+            "0"
+          ]
+        },
+        "ring_a": {
+          "rotation": [
+            "0",
+            "query.anim_time * 55",
+            "0"
+          ]
+        },
+        "ring_b": {
+          "rotation": [
+            "0",
+            "query.anim_time * -85",
+            "0"
+          ]
+        },
+        "banner_l": {
+          "rotation": [
+            "0",
+            "0",
+            "math.sin(query.anim_time * 100) * 3.5"
+          ]
+        },
+        "banner_r": {
+          "rotation": [
+            "0",
+            "0",
+            "math.sin(query.anim_time * 100 + 50) * -3.5"
+          ]
+        }
+      }
+    }
+  }
+}
