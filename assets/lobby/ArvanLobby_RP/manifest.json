@@ -3,7 +3,7 @@
   "header": {
     "name": "\u00a7l\u00a7bArvan\u00a7fGaming \u00a7eLobby",
     "description": "\u00a7cBedWars Duos \u00a77& \u00a7aRolePlay City \u00a77portals + \u00a76Battle Pass \u00a77+ \u00a7fCargo Truck",
-    "uuid": "47006f3d-8065-53d6-aa7d-e4a76795fe33",
+    "uuid": "3496dde9-7728-5941-94f3-d3791e78b492",
     "version": [
       1,
       0,
@@ -18,7 +18,7 @@
   "modules": [
     {
       "type": "resources",
-      "uuid": "5004c475-59ee-5230-8d3b-1ec5f79d7da5",
+      "uuid": "8fd46810-ad06-5889-8cde-5bb36785669e",
       "version": [
         1,
         0,
