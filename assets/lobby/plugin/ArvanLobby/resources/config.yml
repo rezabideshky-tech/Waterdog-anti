@@ -1,0 +1,34 @@
+# What happens when a player taps an NPC.
+# action: "transfer" -> sends player to address:port (use your Waterdog proxy / game server)
+# action: "soon"     -> game mode not open yet: shows "Coming Soon", counts interested players ({count})
+# action: "command"  -> runs command from console, {player} is replaced with player name
+#                       e.g. Waterdog/multi-server plugins: "transfer {player} bedwars"
+npcs:
+  duos:
+    nametag: "§l§cBED§9WARS §fDUOS\n§r§7Tap to play! §e2v2v2v2"
+    action: transfer
+    address: "play.arvangaming.ir"
+    port: 19132
+    command: "tell {player} BedWars Duos coming soon!"
+  roleplay:
+    nametag: "§l§aROLEPLAY §fCITY\n§r§7Tap to join! §bArvanGaming"
+    action: transfer
+    address: "play.arvangaming.ir"
+    port: 19133
+    command: "tell {player} RolePlay coming soon!"
+  truck:
+    nametag: "§l§cARVAN §fCARGO\n§r§7Tap to join RolePlay!"
+    action: transfer
+    address: "play.arvangaming.ir"
+    port: 19133
+    command: "tell {player} Cargo jobs coming soon!"
+  skyblock:
+    nametag: "§l§aSKY§2BLOCK §7- §eCOMING SOON\n§r§b{count} §7players waiting!"
+    action: soon
+    title: "§l§aSKYBLOCK"
+    subtitle: "§eComing Soon to ArvanGaming!"
+    message: "§a✔ §7You're on the §aSkyBlock §7waiting list! §8({count} players)\n§7Follow our Discord/Telegram for the launch date §e🔔"
+    message_again: "§eYou're already on the SkyBlock list. §7Stay tuned!"
+    # when SkyBlock opens: change action to "transfer" and set address/port
+    address: "play.arvangaming.ir"
+    port: 19134

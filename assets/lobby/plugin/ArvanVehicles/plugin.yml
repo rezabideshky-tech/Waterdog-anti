@@ -1,0 +1,14 @@
+name: ArvanVehicles
+main: arvan\vehicles\Main
+version: 1.0.0
+api: 5.0.0
+depend: [Customies]
+description: Drivable ArvanGaming truck for RolePlay (needs ArvanLobby_RP resource pack)
+commands:
+  truck:
+    description: Spawn / remove drivable trucks
+    usage: "/truck <spawn|remove>"
+    permission: arvanvehicles.admin
+permissions:
+  arvanvehicles.admin:
+    default: op

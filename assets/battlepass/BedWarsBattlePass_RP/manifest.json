@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "\u00a7l\u00a7bArvan\u00a7fGaming \u00a76Battle Pass",
+    "description": "\u00a7eArvanGaming Battle Pass NPC \u00a77- Season 1",
+    "uuid": "36e02f66-fb91-56fa-aba3-b6de99b3a370",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "382e99c6-c67d-5151-9c30-0c7ed0cae808",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

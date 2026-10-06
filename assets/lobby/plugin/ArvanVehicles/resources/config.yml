@@ -1,0 +1,13 @@
+# Drivable truck settings (speeds in blocks per tick; 0.5 = 10 blocks/second)
+max_speed: 0.55
+reverse_speed: 0.2
+acceleration: 0.03
+brake: 0.06
+turn_speed: 4.0           # degrees per tick at full speed
+invert_steering: false    # set true if A/D steer the wrong way on your client version
+step_height: 1.1          # can drive up 1-block steps
+# Driver seat position relative to the truck (tune if the player sits in the wrong place)
+seat: [0.0, 1.9, 1.8]
+# Only the player who spawned the truck can drive it
+owner_only: false
+nametag: "§l§cARVAN §fTRUCK\n§r§7Tap to drive"

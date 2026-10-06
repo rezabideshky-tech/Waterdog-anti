@@ -1,0 +1,29 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:bedwars_duos",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_bedwars_duos"
+      },
+      "geometry": {
+        "default": "geometry.arvan_bedwars_duos"
+      },
+      "animations": {
+        "idle": "animation.arvan_bedwars_duos.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "3.2"
+      },
+      "render_controllers": [
+        "controller.render.arvan_lobby"
+      ]
+    }
+  }
+}

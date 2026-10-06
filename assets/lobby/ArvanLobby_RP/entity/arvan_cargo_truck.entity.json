@@ -1,0 +1,29 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:cargo_truck",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_cargo_truck"
+      },
+      "geometry": {
+        "default": "geometry.arvan_cargo_truck"
+      },
+      "animations": {
+        "idle": "animation.arvan_cargo_truck.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "2.2"
+      },
+      "render_controllers": [
+        "controller.render.arvan_lobby"
+      ]
+    }
+  }
+}

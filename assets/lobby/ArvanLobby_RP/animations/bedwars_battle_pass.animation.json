@@ -1,0 +1,104 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.bedwars_battle_pass.idle": {
+      "loop": true,
+      "bones": {
+        "stamp0": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 1.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 1.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 1.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "stamp1": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 2.4) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 2.4) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 2.4) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "stamp2": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 3.0) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.0) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.0) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "stamp3": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 3.5999999999999996) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.5999999999999996) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.5999999999999996) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "stamp4": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 4.2) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.2) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.2) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "stamp5": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 4.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "done": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 5.6) * 4, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1) * (1 + math.clamp(1 - (math.mod(query.anim_time, 8) - 5.6) * 3, 0, 1) * 0.6)",
+            "math.clamp((math.mod(query.anim_time, 8) - 5.6) * 4, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1) * (1 + math.clamp(1 - (math.mod(query.anim_time, 8) - 5.6) * 3, 0, 1) * 0.6)",
+            "math.clamp((math.mod(query.anim_time, 8) - 5.6) * 4, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1) * (1 + math.clamp(1 - (math.mod(query.anim_time, 8) - 5.6) * 3, 0, 1) * 0.6)"
+          ]
+        },
+        "cover_r": {
+          "rotation": [
+            0,
+            0,
+            "(1 - math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)) * 178"
+          ]
+        },
+        "float": {
+          "position": [
+            0,
+            "math.sin(query.anim_time * 90) * 0.6",
+            0
+          ],
+          "rotation": [
+            0,
+            "(1 - math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)) * math.sin(query.anim_time * 45) * 25",
+            0
+          ]
+        },
+        "stamper": {
+          "position": [
+            0,
+            "(math.mod(query.anim_time, 8) > 1.5 && math.mod(query.anim_time, 8) < 6.0) ? -(1 - math.abs(math.sin((math.mod(query.anim_time, 8) - 1.8) * 300))) * 4.2 : 6",
+            0
+          ],
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)"
+          ]
+        },
+        "plane": {
+          "rotation": [
+            0,
+            "query.anim_time * -50",
+            "math.sin(query.anim_time * 120) * 8"
+          ]
+        },
+        "stars": {
+          "rotation": [
+            0,
+            "query.anim_time * 40",
+            0
+          ]
+        }
+      }
+    }
+  }
+}

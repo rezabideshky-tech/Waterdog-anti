@@ -1,0 +1,62 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_rp_truck.drive": {
+      "loop": true,
+      "bones": {
+        "axle_f": {
+          "rotation": [
+            "query.modified_distance_moved * -45",
+            0,
+            0
+          ]
+        },
+        "axle_r1": {
+          "rotation": [
+            "query.modified_distance_moved * -45",
+            0,
+            0
+          ]
+        },
+        "axle_r2": {
+          "rotation": [
+            "query.modified_distance_moved * -45",
+            0,
+            0
+          ]
+        },
+        "body": {
+          "position": [
+            0,
+            "math.abs(math.sin(query.anim_time * 720)) * (0.1 + query.modified_move_speed * 0.4)",
+            0
+          ]
+        },
+        "smoke1": {
+          "position": [
+            0,
+            "math.mod(query.anim_time * 6, 6)",
+            "math.mod(query.anim_time * 6, 6) * 0.6"
+          ],
+          "scale": [
+            "1 + math.mod(query.anim_time * 6, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6, 6) * 0.35"
+          ]
+        },
+        "smoke2": {
+          "position": [
+            0,
+            "math.mod(query.anim_time * 6 + 3, 6)",
+            "math.mod(query.anim_time * 6 + 3, 6) * 0.6"
+          ],
+          "scale": [
+            "1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35",
+            "1 + math.mod(query.anim_time * 6 + 3, 6) * 0.35"
+          ]
+        }
+      }
+    }
+  }
+}

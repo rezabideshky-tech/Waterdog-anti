@@ -1,0 +1,33 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "bedwars:battle_pass",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/bedwars_battle_pass"
+      },
+      "geometry": {
+        "default": "geometry.bedwars_battle_pass"
+      },
+      "animations": {
+        "idle": "animation.bedwars_battle_pass.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "2.6"
+      },
+      "render_controllers": [
+        "controller.render.bedwars_battle_pass"
+      ],
+      "spawn_egg": {
+        "base_color": "#DC282D",
+        "overlay_color": "#2864E6"
+      }
+    }
+  }
+}

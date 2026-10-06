@@ -1,0 +1,29 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:roleplay_city",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_roleplay_city"
+      },
+      "geometry": {
+        "default": "geometry.arvan_roleplay_city"
+      },
+      "animations": {
+        "idle": "animation.arvan_roleplay_city.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "3.2"
+      },
+      "render_controllers": [
+        "controller.render.arvan_lobby"
+      ]
+    }
+  }
+}
