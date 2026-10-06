@@ -1,0 +1,96 @@
+name: ArvanLeaderboards pack
+
+# ساخت ریسورس‌پک/مدل‌های لیدربورد BedWars و چسباندن به Release
+# ------------------------------------------------------------------
+# اجراها:
+#   • دستی از تب Actions  (Run workflow)
+#   • با ساختن تگ  leaderboard-vX.Y
+# خروجی‌ها: artifact روی Actions + فایل‌های ضمیمهٔ Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "تگ ریلیزی که فایل‌ها به آن ضمیمه شوند (خالی = فقط artifact)"
+        required: false
+        default: ""
+  push:
+    tags:
+      - "leaderboard-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: نصب پایتون و Pillow
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pillow
+
+      - name: اعتبارسنجی فایل‌های PHP
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq php-cli
+          for f in $(find assets/leaderboard/plugin -name '*.php'); do php -l "$f"; done
+
+      - name: ساخت مدل‌ها، ریسورس‌پک و بسته‌ها
+        working-directory: assets/leaderboard
+        run: |
+          python3 generate.py
+          python3 preview_hero.py
+          python3 package.py
+          ls -la *.zip *.mcpack
+
+      - name: بررسی محتوای ریسورس‌پک
+        working-directory: assets/leaderboard
+        run: |
+          python3 - <<'PY'
+          import json, zipfile, sys
+          z = zipfile.ZipFile("ArvanLeaderboard.mcpack")
+          names = z.namelist()
+          assert "manifest.json" in names, "manifest در ریشهٔ پک نیست"
+          json.loads(z.read("manifest.json"))
+          for stem in ("arvan_leaderboard", "arvan_podium", "arvan_hologram", "arvan_bedwars_bed"):
+              for want in (f"models/entity/{stem}.geo.json",
+                           f"animations/{stem}.animation.json",
+                           f"textures/entity/{stem}.png",
+                           f"entity/{stem}.entity.json"):
+                  assert want in names, f"کم است: {want}"
+              geo = json.loads(z.read(f"models/entity/{stem}.geo.json"))
+              assert geo["minecraft:geometry"][0]["bones"], "بون خالی"
+          print("✅ ریسورس‌پک سالم است:", len(names), "فایل")
+          PY
+
+      - name: بارگذاری artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArvanLeaderboards-pack
+          path: |
+            assets/leaderboard/ArvanLeaderboard.mcpack
+            assets/leaderboard/ArvanLeaderboards_plugin.zip
+            assets/leaderboard/ArvanLeaderboard_models.zip
+            assets/leaderboard/ArvanLeaderboard_RP.zip
+            assets/leaderboard/preview_hero.png
+          if-no-files-found: error
+
+      - name: ضمیمه به Release (اگر تگ داده شده)
+        if: startsWith(github.ref, 'refs/tags/leaderboard-v') || inputs.release_tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ inputs.release_tag }}"
+          if [ -z "$TAG" ]; then TAG="${GITHUB_REF_NAME}"; fi
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" \
+            --title "🏆 ArvanLeaderboards $TAG" --generate-notes
+          gh release upload "$TAG" \
+            assets/leaderboard/ArvanLeaderboard.mcpack \
+            assets/leaderboard/ArvanLeaderboards_plugin.zip \
+            assets/leaderboard/ArvanLeaderboard_models.zip \
+            assets/leaderboard/ArvanLeaderboard_RP.zip \
+            assets/leaderboard/preview_hero.png --clobber
+          echo "✅ فایل‌ها به ریلیز $TAG ضمیمه شدند."
