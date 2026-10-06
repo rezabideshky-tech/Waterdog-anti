@@ -31,3 +31,6 @@ jadebaz-godot*.zip
 assets/leaderboard/*.zip
 assets/leaderboard/*.mcpack
 assets/leaderboard/__pycache__/
+# ... ولی پوشهٔ dist برای دانلود عمومی در گیت نگه داشته می‌شود
+!assets/leaderboard/dist/
+!assets/leaderboard/dist/**
