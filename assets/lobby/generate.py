@@ -968,180 +968,170 @@ def skyblock_soon():
 
 
 # ================================================================== BATTLE PASS CASTLE (replaces bedwars:battle_pass look)
-def battlepass_dragon():
+def battlepass_passport():
+    FONT.update({
+        "0": ["111", "101", "101", "101", "111"], "3": ["111", "001", "011", "001", "111"], "4": ["101", "101", "111", "001", "001"],
+        "5": ["111", "100", "111", "001", "111"], "6": ["111", "100", "111", "101", "111"], "7": ["111", "001", "010", "010", "010"],
+        "8": ["111", "101", "111", "101", "111"], "9": ["111", "101", "111", "001", "111"], "X": ["101", "101", "010", "101", "101"],
+        "Z": ["111", "001", "010", "100", "111"], "#": ["01010", "11111", "01010", "11111", "01010"]})
     A = Atlas(256, 256)
-    DR = [(235, 70, 55), (190, 35, 35), (140, 20, 25), (80, 8, 15)]
-    STONE = [(150, 150, 158), (120, 120, 130), (90, 90, 100), (60, 60, 70)]
-
-    def scales(box, pal, seed=3):
-        x0, y0, x1, y1 = box
-        A.grad(box, pal[1], pal[2])
-        for r, y in enumerate(range(y0, y1, 3)):
-            for x in range(x0 + (r % 2) * 2, x1, 4):
-                A.d.arc([x - 2, y - 2, x + 2, y + 2], 0, 180, fill=pal[3])
-                A.d.point([(x, y)], fill=pal[0])
-        A.noise(box, [pal[0], pal[2]], 9, seed)
-
+    NAVY = [(70, 60, 170), (45, 35, 125), (28, 20, 85), (12, 8, 40)]
+    CREAM, CREAM_D, INK = (250, 240, 215), (225, 210, 175), (120, 95, 70)
     b = A.alloc("grass", 16, 16); A.grad(b, (120, 200, 75), (90, 165, 55)); A.noise(b, [(70, 140, 40), (150, 220, 95)], 2)
     b = A.alloc("grass_side", 16, 16); A.grad(b, (140, 98, 62), (100, 70, 45)); A.noise(b, [(80, 55, 35), (165, 122, 82)], 3)
     for x in range(b[0], b[2]): A.d.line([(x, b[1]), (x, b[1] + 2 + (x * 7) % 3)], fill=(105, 185, 65))
     b = A.alloc("dirt", 16, 16); A.grad(b, (125, 88, 55), (85, 58, 38)); A.noise(b, [(70, 48, 30), (150, 110, 75)], 3, 2)
-    b = A.alloc("rock", 16, 16); A.grad(b, STONE[1], STONE[2]); A.noise(b, [STONE[0], STONE[3]], 3, 9)
-    b = A.alloc("goldpile", 32, 32); A.grad(b, GOLD[0], GOLD[2])
-    for i in range(40):
-        x, y = b[0] + (i * 37) % 30, b[1] + (i * 53) % 30
-        A.d.ellipse([x, y, x + 3, y + 2], fill=GOLD[1], outline=GOLD[3]); A.d.point([(x + 1, y)], fill=WHITE)
-    b = A.alloc("scale", 32, 32); scales(b, DR)
-    b = A.alloc("scale_s", 16, 16); scales(b, DR, 5)
-    b = A.alloc("belly", 16, 32); A.grad(b, GOLD[0], (220, 140, 40))
-    for y in range(b[1] + 3, b[3], 4): A.d.line([(b[0], y), (b[2] - 1, y)], fill=GOLD[3])
-    # skull front: glowing eyes + brow
-    b = A.alloc("face", 24, 20); x0, y0, x1, y1 = b; scales(b, DR, 7)
-    for ex in (x0 + 2, x1 - 8):
-        A.d.rectangle([ex, y0 + 6, ex + 5, y0 + 10], fill=(255, 230, 60)); A.d.rectangle([ex + 2, y0 + 6, ex + 3, y0 + 10], fill=(20, 10, 10))
-        A.d.line([(ex - 1, y0 + 4), (ex + 6, y0 + 5)], fill=DR[3]); A.d.line([(ex - 1, y0 + 5), (ex + 6, y0 + 5)], fill=DR[3])
-    b = A.alloc("snout_f", 16, 12); x0, y0, x1, y1 = b; scales(b, DR, 8)
-    for nx in (x0 + 3, x1 - 6): A.d.rectangle([nx, y0 + 2, nx + 2, y0 + 4], fill=(30, 5, 5))
-    A.d.rectangle([x0, y1 - 3, x1 - 1, y1 - 1], fill=DR[3])
-    for tx in range(x0 + 1, x1 - 1, 3): A.d.polygon([(tx, y1 - 3), (tx + 2, y1 - 3), (tx + 1, y1)], fill=WHITE)
-    b = A.alloc("teeth", 16, 8); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], fill=(90, 10, 20))
-    for tx in range(b[0], b[2] - 1, 3): A.d.polygon([(tx, b[1]), (tx + 2, b[1]), (tx + 1, b[1] + 4)], fill=WHITE)
-    b = A.alloc("mouth", 16, 16); A.grad(b, (150, 20, 35), (70, 5, 15))
-    b = A.alloc("horn", 8, 16); A.grad(b, (250, 240, 210), (170, 150, 110))
-    for y in range(b[1] + 2, b[3], 4): A.d.line([(b[0], y), (b[2] - 1, y)], fill=(140, 120, 90))
-    b = A.alloc("spike", 8, 8); A.grad(b, GOLD[0], GOLD[2])
-    # wings: membrane with ribs fanning from the shoulder
-    for nm, flip in (("wing_l", False), ("wing_r", True)):
-        b = A.alloc(nm, 64, 64); x0, y0, x1, y1 = b
-        sx = x1 - 1 if not flip else x0
-        A.d.polygon([(sx, y0), (x0 if not flip else x1 - 1, y0 + 4), (x0 if not flip else x1 - 1, y1 - 1), (sx, y1 - 20)], fill=(150, 25, 35))
-        A.noise(b, [(120, 15, 25), (175, 40, 45)], 5, 11)
-        A.d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=None)
-        tips = [(x0 + i * 16 if not flip else x1 - 1 - i * 16, y1 - 1 - (i % 2) * 10) for i in range(4)]
-        for i in range(3):
-            a, c = tips[i], tips[i + 1]
-            m = ((a[0] + c[0]) // 2, (a[1] + c[1]) // 2 - 20)
-            A.d.polygon([a, m, c, (c[0], y1 - 1), (a[0], y1 - 1)], fill=(0, 0, 0, 0))
-        A.d.polygon([(sx, y1 - 20), tips[3], (tips[3][0], y1 - 1), (sx, y1 - 1)], fill=(0, 0, 0, 0))
-        for tx, ty in tips: A.d.line([(sx, y0 + 1), (tx, ty)], fill=DR[3], width=2)
-        A.d.line([(sx, y0), (x0 if not flip else x1 - 1, y0 + 4)], fill=GOLD[2], width=3)
-        A.d.polygon([(x0 + 1, y0 + 4), (x0 + 1, y0)] if not flip else [(x1 - 2, y0 + 4), (x1 - 2, y0)], outline=GOLD[1])
-    b = A.alloc("flame", 16, 16); A.grad(b, (255, 250, 170), (255, 90, 20)); A.noise(b, [(255, 200, 60), (255, 140, 30)], 3, 4)
-    b = A.alloc("smoke", 8, 8); A.grad(b, (200, 200, 205), (130, 130, 140))
-    # chest + card + coins + gems
-    b = A.alloc("tchest", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
-    A.d.rectangle([b[0] + 2, b[1] + 2, b[2] - 3, b[3] - 3], fill=(150, 25, 40)); A.d.rectangle([b[0] + 6, b[1] + 1, b[0] + 9, b[1] + 5], fill=GOLD[0])
-    b = A.alloc("tchest_top", 16, 16); A.grad(b, (190, 35, 50), (130, 18, 30)); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[2])
-    b = A.alloc("glow", 16, 16); A.grad(b, (255, 250, 200), (255, 200, 60))
-    b = A.alloc("card", 16, 24); x0, y0, x1, y1 = b
-    A.grad(b, (150, 40, 220), (60, 10, 110)); A.d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=GOLD[1]); A.d.rectangle([x0 + 1, y0 + 1, x1 - 2, y1 - 2], outline=GOLD[3])
-    A.d.polygon([(x0 + 8, y0 + 6), (x0 + 9, y0 + 10), (x0 + 13, y0 + 11), (x0 + 9, y0 + 12), (x0 + 8, y0 + 16), (x0 + 7, y0 + 12), (x0 + 3, y0 + 11), (x0 + 7, y0 + 10)], fill=GOLD[0])
-    A.text("BP", (x0 + x1) // 2, y1 - 7, WHITE)
-    b = A.alloc("coin", 8, 8); A.d.ellipse([b[0], b[1], b[2] - 1, b[3] - 1], fill=GOLD[1], outline=GOLD[3]); A.d.point([(b[0] + 2, b[1] + 2)], fill=WHITE)
-    b = A.alloc("diamond", 16, 16); A.grad(b, (220, 255, 255), (30, 130, 160))
-    A.d.polygon([(b[0] + 8, b[1] + 2), (b[0] + 13, b[1] + 8), (b[0] + 8, b[1] + 13), (b[0] + 3, b[1] + 8)], fill=(90, 225, 235), outline=WHITE)
-    b = A.alloc("emerald", 16, 16); A.grad(b, (170, 255, 190), (10, 100, 45))
-    A.d.polygon([(b[0] + 8, b[1] + 2), (b[0] + 13, b[1] + 8), (b[0] + 8, b[1] + 13), (b[0] + 3, b[1] + 8)], fill=(40, 210, 100), outline=WHITE)
+    b = A.alloc("rock", 16, 16); A.grad(b, (150, 150, 158), (95, 95, 105)); A.noise(b, [(175, 175, 180), (70, 70, 80)], 3, 9)
+    # ---- passport cover (10 x 14 -> 40 x 56)
+    b = A.alloc("cover", 40, 56); x0, y0, x1, y1 = b
+    A.grad(b, NAVY[1], NAVY[2]); A.noise(b, [NAVY[0], NAVY[3]], 6, 21)
+    A.d.rectangle([x0 + 2, y0 + 2, x1 - 3, y1 - 3], outline=GOLD[1]); A.d.rectangle([x0 + 3, y0 + 3, x1 - 4, y1 - 4], outline=GOLD[3])
+    A.outlined("ARVAN", (x0 + x1) // 2, y0 + 6, GOLD[0], 1)
+    cx, cy = (x0 + x1) // 2, y0 + 24
+    A.d.ellipse([cx - 9, cy - 9, cx + 9, cy + 9], outline=GOLD[1], width=2)
+    A.d.line([(cx - 9, cy), (cx + 9, cy)], fill=GOLD[1]); A.d.ellipse([cx - 4, cy - 9, cx + 4, cy + 9], outline=GOLD[1])
+    A.d.polygon([(cx, cy - 6), (cx + 2, cy - 2), (cx + 6, cy - 1), (cx + 3, cy + 2), (cx + 4, cy + 6), (cx, cy + 4), (cx - 4, cy + 6), (cx - 3, cy + 2), (cx - 6, cy - 1), (cx - 2, cy - 2)], fill=GOLD[0], outline=GOLD[3])
+    A.outlined("BATTLE", cx, y0 + 37, GOLD[0], 1)
+    A.outlined("PASS", cx, y0 + 44, GOLD[1], 1)
+    b = A.alloc("cover_s", 16, 16); A.grad(b, NAVY[1], NAVY[2]); A.d.line([(b[0], b[1] + 2), (b[2] - 1, b[1] + 2)], fill=GOLD[2])
+    b = A.alloc("cover_in", 16, 16); A.grad(b, NAVY[2], NAVY[3])
+    b = A.alloc("edge", 16, 16); A.grad(b, CREAM, CREAM_D)
+    for y in range(b[1], b[3], 2): A.d.line([(b[0], y), (b[2] - 1, y)], fill=CREAM_D)
+    # ---- left page: holder info
+    b = A.alloc("page_l", 40, 56); x0, y0, x1, y1 = b
+    A.grad(b, CREAM, CREAM_D)
+    for i in range(y0 + 2, y1, 4): A.d.line([(x0 + 1, i), (x1 - 2, i)], fill=(244, 232, 205))
+    A.text("PASSPORT", (x0 + x1) // 2, y0 + 3, NAVY[2])
+    A.d.rectangle([x0 + 4, y0 + 11, x0 + 19, y0 + 28], fill=(200, 225, 245), outline=INK)
+    S = {"H": (58, 38, 20), "S": (199, 143, 108), "W": WHITE, "E": (73, 62, 160), "M": (150, 70, 60)}
+    face = ["HHHHHH", "HSSSSH", "SWESEW", "SSSSSS", "SSMMSS", "SSSSSS"]
+    for gy, row in enumerate(face):
+        for gx, ch in enumerate(row):
+            A.d.rectangle([x0 + 6 + gx * 2, y0 + 13 + gy * 2, x0 + 7 + gx * 2, y0 + 14 + gy * 2], fill=S[ch])
+    A.d.rectangle([x0 + 5, y0 + 25, x0 + 18, y0 + 27], fill=RED[1])
+    A.text("NAME", x0 + 30, y0 + 12, INK); A.text("ARVAN", x0 + 30, y0 + 18, NAVY[1])
+    A.text("VIP", x0 + 30, y0 + 25, RED[1])
+    A.text("SEASON 1", (x0 + x1) // 2, y0 + 32, RED[2])
+    A.d.rectangle([x0 + 4, y0 + 40, x1 - 5, y0 + 46], fill=(235, 220, 185))
+    A.text("TIER 100", (x0 + x1) // 2, y0 + 41, GOLD[3])
+    A.text("#ARVAN#", (x0 + x1) // 2, y1 - 7, (200, 180, 140))
+    # ---- right page: stamp slots
+    b = A.alloc("page_r", 40, 56); x0, y0, x1, y1 = b
+    A.grad(b, CREAM, CREAM_D)
+    for i in range(y0 + 2, y1, 4): A.d.line([(x0 + 1, i), (x1 - 2, i)], fill=(244, 232, 205))
+    A.text("STAMPS", (x0 + x1) // 2, y0 + 3, NAVY[2])
+    for r in range(3):
+        for c in range(2):
+            sx, sy = x0 + 5 + c * 17, y0 + 11 + r * 14
+            for a in range(0, 360, 30): A.d.arc([sx, sy, sx + 12, sy + 12], a, a + 15, fill=(200, 180, 140))
+    # ---- stamps (3x3 units -> 12x12)
+    icons = {
+        "sword": ["....w", "...w.", "w.w..", ".w...", "w.w.."], "bed": [".....", "w....", "wwwww", "wwwww", "w...w"],
+        "star": ["..w..", "wwwww", ".www.", ".w.w.", "w...w"], "gem": [".www.", "wwwww", ".www.", "..w..", "....."],
+        "crown": ["w.w.w", "wwwww", "wwwww", ".....", "....."], "cup": ["wwwww", ".www.", "..w..", ".www.", "....."]}
+    cols = [RED, BLUE, GOLD, [(150, 255, 230), (40, 200, 180), (20, 120, 110), (5, 60, 55)], [(230, 150, 255), (160, 60, 220), (90, 20, 140), (40, 5, 70)], [(150, 255, 150), (50, 190, 70), (20, 110, 35), (5, 50, 15)]]
+    for (nm, ic), P in zip(icons.items(), cols):
+        b = A.alloc(f"st_{nm}", 12, 12); x0, y0, x1, y1 = b
+        A.d.ellipse([x0, y0, x1 - 1, y1 - 1], fill=P[1], outline=P[3]); A.d.ellipse([x0 + 1, y0 + 1, x1 - 2, y1 - 2], outline=P[0])
+        for gy, row in enumerate(ic):
+            for gx, ch in enumerate(row):
+                if ch == "w": A.d.rectangle([x0 + 2 + gx * 2 - 1, y0 + 2 + gy * 2 - 1, x0 + 2 + gx * 2, y0 + 2 + gy * 2], fill=WHITE) if False else A.d.point([(x0 + 3 + gx * 1.5, y0 + 3 + gy * 1.5)], fill=WHITE)
+    # redo icons crisper at 1px scale centred
+    for (nm, ic), P in zip(icons.items(), cols):
+        x0, y0, w, h = A.R[f"st_{nm}"]
+        A.d.ellipse([x0, y0, x0 + 11, y0 + 11], fill=P[1], outline=P[3]); A.d.ellipse([x0 + 1, y0 + 1, x0 + 10, y0 + 10], outline=P[0])
+        for gy, row in enumerate(ic):
+            for gx, ch in enumerate(row):
+                if ch == "w": A.d.point([(x0 + 3 + gx, y0 + 3 + gy)], fill=WHITE)
+    b = A.alloc("completed", 48, 12); x0, y0, x1, y1 = b
+    A.d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=(0, 0, 0, 0))
+    A.d.rectangle([x0, y0, x1 - 1, y1 - 1], outline=(200, 20, 40)); A.d.rectangle([x0 + 1, y0 + 1, x1 - 2, y1 - 2], outline=(200, 20, 40))
+    A.text("COMPLETED", (x0 + x1) // 2, y0 + 4, (210, 25, 45))
+    # ---- misc
+    b = A.alloc("velvet", 32, 32); A.grad(b, (150, 40, 200), (75, 15, 115)); A.noise(b, [(170, 70, 220), (60, 10, 95)], 4, 33)
+    b = A.alloc("trim", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
     b = A.alloc("wood", 8, 8); A.grad(b, (150, 100, 55), (105, 68, 35))
-    b = A.alloc("trim", 8, 8); A.grad(b, GOLD[0], GOLD[2])
+    b = A.alloc("rubber", 8, 8); A.grad(b, (220, 40, 55), (140, 15, 30))
+    b = A.alloc("paper", 16, 16); A.grad(b, WHITE, (210, 220, 235)); A.d.line([(b[0], b[1] + 8), (b[2] - 1, b[1] + 8)], fill=(170, 185, 210))
+    b = A.alloc("star", 16, 16); A.d.polygon([(b[0] + 8, b[1] + 1), (b[0] + 10, b[1] + 6), (b[0] + 15, b[1] + 6), (b[0] + 11, b[1] + 9), (b[0] + 13, b[1] + 15), (b[0] + 8, b[1] + 11), (b[0] + 3, b[1] + 15), (b[0] + 5, b[1] + 9), (b[0] + 1, b[1] + 6), (b[0] + 6, b[1] + 6)], fill=GOLD[1], outline=GOLD[3])
+    b = A.alloc("gold", 16, 16); A.grad(b, GOLD[0], GOLD[2]); A.d.rectangle([b[0], b[1], b[2] - 1, b[3] - 1], outline=GOLD[3])
+    b = A.alloc("coin", 8, 8); A.d.ellipse([b[0], b[1], b[2] - 1, b[3] - 1], fill=GOLD[1], outline=GOLD[3]); A.d.point([(b[0] + 2, b[1] + 2)], fill=WHITE)
+    b = A.alloc("glow", 16, 16); A.grad(b, (255, 250, 210), (255, 210, 80))
+    b = A.alloc("sign", 48, 16); x0, y0, x1, y1 = b
+    A.grad(b, NAVY[1], NAVY[3]); A.frame(b); A.outlined("BATTLE PASS", (x0 + x1) // 2, y0 + 5, GOLD[0], 1)
     b = A.alloc("none", 8, 8)
-    # sign (12 wide x 8 tall -> 48x32)
-    b = A.alloc("banner", 48, 32); x0, y0, x1, y1 = b
-    A.grad(b, (120, 20, 40), (55, 5, 20)); A.frame(b)
-    A.outlined("BATTLE", (x0 + x1) // 2, y0 + 4, GOLD[0], 1)
-    A.outlined("PASS", (x0 + x1) // 2, y0 + 11, GOLD[0], 2)
-    A.text("SEASON 1", (x0 + x1) // 2, y1 - 8, (120, 255, 160), (10, 60, 30))
+    for k in ["page_l", "page_r", "completed"] + [f"st_{n}" for n in icons]:  # face the viewer
+        x, y, w, h = A.R[k]; A.img.paste(A.img.crop((x, y, x + w, y + h)).rotate(180), (x, y))
 
+    BY = 17  # book height
     bones = [("root", [0, 0, 0], None), ("base", [0, 0, 0], "root"),
-             ("body", [0, 6, 11], "root"), ("neck", [0, 13, 8], "body"), ("head", [0, 20, 3], "neck"),
-             ("jaw", [0, 19.5, 0], "head"), ("fire", [0, 20, -9], "head"),
-             ("smoke1", [-1, 22, -8], "head"), ("smoke2", [1, 22, -8], "head"),
-             ("wing_l", [-4, 14, 11], "body"), ("wing_r", [4, 14, 11], "body"),
-             ("tail", [-2, 5, 18], "root"), ("tail_tip", [-11, 4.5, 5], "tail"),
-             ("card", [0, 9, -1.5], "root"), ("coins", [0, 6, -6], "root"), ("orbit", [0, 30, 6], "root")]
-    S_ = F("scale_s"); SC = F("scale")
+             ("float", [0, BY, 0], "root"), ("tilt", [0, BY, 0], "float", [35, 0, 0]),
+             ("cover_r", [0, BY + 1.2, 0], "tilt"),
+             ("stamper", [-5, BY + 9, 0], "tilt"), ("plane", [0, BY, 0], "root"), ("stars", [0, BY + 2, 0], "root")]
     C = [
-        ("ground", "base", (-17, 0, -15), (17, 3, 15), F("grass_side", u="grass", dn="dirt")),
-        ("under1", "base", (-13, -3, -11), (13, 0, 11), F("dirt")),
-        ("under2", "base", (-9, -6, -7), (9, -3, 7), F("rock")),
-        ("under3", "base", (-4, -9, -3), (4, -6, 3), F("rock")),
-        ("rock1", "base", (12, 3, 8), (16, 8, 14), F("rock")), ("rock2", "base", (-16, 3, 9), (-12, 6, 14), F("rock")),
-        # gold hoard
-        ("pile1", "base", (-11, 3, -6), (11, 5, 14), F("goldpile")),
-        ("pile2", "base", (-8, 5, -3), (8, 7, 12), F("goldpile")),
-        ("pile3", "base", (-5, 7, 0), (5, 8.5, 10), F("goldpile")),
-        ("tchest", "base", (-2.5, 5, -5.5), (2.5, 9, -1.5), F("tchest", u="glow", dn="tchest")),
-        ("lid", "base", (-2.6, 9, -1.6), (2.6, 13.5, -0.6), F("tchest_top")),
-        ("card", "card", (-1.6, 9.5, -3.6), (1.6, 14.3, -3.4), F("none") | dict(north="card", south="card")),
-        ("c1", "coins", (-6, 5, -7), (-5, 5.3, -6), F("coin")), ("c2", "coins", (4.5, 5, -7.5), (5.5, 5.3, -6.5), F("coin")),
-        ("c3", "coins", (-8.5, 3, -9), (-7.5, 3.3, -8), F("coin")), ("c4", "coins", (7, 3, -10), (8, 3.3, -9), F("coin")),
-        ("c5", "coins", (-3.5, 3, -11), (-2.5, 3.3, -10), F("coin")),
-        # dragon body
-        ("torso", "body", (-4.5, 7, 7), (4.5, 15, 17), F("scale", u="scale")),
-        ("belly", "body", (-3.5, 8, 6.8), (3.5, 14, 7), F("none") | dict(north="belly")),
-        ("leg_fl", "body", (-6, 3, 5), (-3, 10, 8), SC), ("leg_fr", "body", (3, 3, 5), (6, 10, 8), SC),
-        ("claw_fl", "body", (-6.2, 3, 3.8), (-2.8, 4.2, 5), F("horn")), ("claw_fr", "body", (2.8, 3, 3.8), (6.2, 4.2, 5), F("horn")),
-        ("leg_bl", "body", (-7, 3, 12), (-4, 10, 17), SC), ("leg_br", "body", (4, 3, 12), (7, 10, 17), SC),
-        ("neck1", "neck", (-2.5, 13, 6), (2.5, 19, 10), F("belly", s="scale_s", e="scale_s", u="scale_s")),
-        ("neck2", "neck", (-2, 17, 3), (2, 21, 7), F("belly", s="scale_s", e="scale_s", u="scale_s")),
-        # head (faces -Z)
-        ("skull", "head", (-3.5, 19.5, -3), (3.5, 24.5, 4), F("face", s="scale_s", e="scale_s", u="scale_s", dn="mouth")),
-        ("snout", "head", (-2.5, 20, -9), (2.5, 22.5, -3), F("snout_f", s="scale_s", e="scale_s", u="scale_s", dn="teeth")),
-        ("brow_l", "head", (-3.8, 23.5, -3.3), (-0.5, 24.5, -2.5), F("spike")), ("brow_r", "head", (0.5, 23.5, -3.3), (3.8, 24.5, -2.5), F("spike")),
-        ("horn_l", "head", (-3, 24, 2), (-2, 28, 3), F("horn"), (-35, 0, -15), (-2.5, 24, 2.5)),
-        ("horn_r", "head", (2, 24, 2), (3, 28, 3), F("horn"), (-35, 0, 15), (2.5, 24, 2.5)),
-        ("fin_l", "head", (-4.5, 21, 1), (-3.5, 23, 4), F("spike")), ("fin_r", "head", (3.5, 21, 1), (4.5, 23, 4), F("spike")),
-        ("jaw", "jaw", (-2.3, 18.6, -8.7), (2.3, 20, 0), F("scale_s", u="teeth", dn="scale_s")),
-        ("fire", "fire", (-1.5, 18.8, -16), (1.5, 21.5, -9), F("flame")),
-        ("fire2", "fire", (-2.5, 18.3, -20), (2.5, 22.3, -15), F("flame")),
-        ("smoke1", "smoke1", (-1.5, 22, -8.5), (-0.5, 23, -7.5), F("smoke")),
-        ("smoke2", "smoke2", (0.5, 22, -8.5), (1.5, 23, -7.5), F("smoke")),
-        # wings
-        ("wing_l", "wing_l", (-20, 10, 11), (-4, 26, 11.4), F("none") | dict(north="wing_l", south="wing_l")),
-        ("wing_r", "wing_r", (4, 10, 11), (20, 26, 11.4), F("none") | dict(north="wing_r", south="wing_r")),
-        ("warm_l", "wing_l", (-20, 25.5, 10.8), (-4, 26.5, 11.6), F("spike")),
-        ("warm_r", "wing_r", (4, 25.5, 10.8), (20, 26.5, 11.6), F("spike")),
-        # tail curling around the hoard to the front-left
-        ("tail1", "tail", (-2.5, 4, 16), (2.5, 8, 21), S_),
-        ("tail2", "tail", (-8, 3.5, 18), (-2, 7, 22), S_),
-        ("tail3", "tail", (-12, 3, 12), (-8, 6, 20), S_),
-        ("tail4", "tail", (-13.5, 3, 3), (-10.5, 5.5, 12), S_),
-        ("tail5", "tail_tip", (-13, 3, -4), (-11, 5, 3), S_),
-        ("tail_spike", "tail_tip", (-13.3, 3, -7), (-10.7, 6, -4), F("spike")),
-        # sign on posts (front right)
-        ("post_l", "base", (5, 3, -12), (6, 9, -11), F("wood")), ("post_r", "base", (14, 3, -12), (15, 9, -11), F("wood")),
-        ("sign", "base", (4, 8, -12.4), (16, 16, -11.6), F("trim") | dict(north="banner", south="banner")),
-        # orbiting gems
-        ("o1", "orbit", (13, 29, 5), (15, 31, 7), F("diamond"), (45, 0, 45), (14, 30, 6)),
-        ("o2", "orbit", (-15, 29, 5), (-13, 31, 7), F("emerald"), (45, 0, 45), (-14, 30, 6)),
-        ("o3", "orbit", (-1, 29, -9), (1, 31, -7), F("trim"), (45, 0, 45), (0, 30, -8)),
+        ("ground", "base", (-14, 0, -14), (14, 3, 14), F("grass_side", u="grass", dn="dirt")),
+        ("under1", "base", (-11, -3, -11), (11, 0, 11), F("dirt")),
+        ("under2", "base", (-7, -6, -7), (7, -3, 7), F("rock")),
+        ("under3", "base", (-3, -9, -3), (3, -6, 3), F("rock")),
+        # podium
+        ("step1", "base", (-8, 3, -8), (8, 4, 8), F("trim")),
+        ("step2", "base", (-6.5, 4, -6.5), (6.5, 5, 6.5), F("velvet", u="velvet")),
+        ("column", "base", (-3, 5, -3), (3, 12, 3), F("velvet")),
+        ("ring1", "base", (-3.5, 5, -3.5), (3.5, 6, 3.5), F("trim")), ("ring2", "base", (-3.5, 11, -3.5), (3.5, 12, 3.5), F("trim")),
+        ("top", "base", (-5, 12, -5), (5, 13, 5), F("trim")),
+        ("halo", "base", (-4, 13, -4), (4, 13.2, 4), F("none") | dict(up="glow")),
+        ("sign", "base", (-6, 3.5, -8.6), (6, 7.5, -8.1), F("trim") | dict(north="sign")),
+        # book: left half (fixed), right half on hinge
+        ("l_cover", "tilt", (-10.4, BY - 0.4, -7.4), (0, BY, 7.4), F("cover_s", u="cover_in", dn="cover_in")),
+        ("l_pages", "tilt", (-10, BY, -7), (0, BY + 1.2, 7), F("edge", u="page_r")),
+        ("r_cover", "cover_r", (0, BY - 0.4, -7.4), (10.4, BY, 7.4), F("cover_s", u="cover_in", dn="cover")),
+        ("r_pages", "cover_r", (0, BY, -7), (10, BY + 1.2, 7), F("edge", u="page_l")),
+        ("spine", "tilt", (-0.6, BY - 0.5, -7.4), (0.6, BY + 0.3, 7.4), F("cover_s")),
+        ("ribbon", "tilt", (-0.3, BY - 3, 6), (0.3, BY + 1.25, 6.3), F("rubber")),
+        # stamper (rubber stamp)
+        ("st_handle", "stamper", (-5.75, BY + 6, -0.75), (-4.25, BY + 9, 0.75), F("wood")),
+        ("st_knob", "stamper", (-6.25, BY + 9, -1.25), (-3.75, BY + 10.5, 1.25), F("rubber")),
+        ("st_base", "stamper", (-7, BY + 4.5, -2), (-3, BY + 6, 2), F("trim", dn="rubber")),
+        # paper plane circling
+        ("plane_body", "plane", (12, BY + 2, -1.5), (13, BY + 2.6, 1.5), F("paper")),
+        ("plane_wing", "plane", (10, BY + 2.4, -1), (15, BY + 2.6, 1.2), F("paper")),
+        ("s1", "stars", (-15, BY + 1, -1), (-13, BY + 3, 1), F("star"), (0, 45, 0), (-14, BY + 2, 0)),
+        ("s2", "stars", (13, BY + 7, -1), (15, BY + 9, 1), F("star"), (0, 45, 0), (14, BY + 8, 0)),
+        ("s3", "stars", (-1, BY + 11, 12), (1, BY + 13, 14), F("star"), (0, 45, 0), (0, BY + 12, 13)),
+        ("c1", "base", (-11, 3, -11), (-10, 3.3, -10), F("coin")), ("c2", "base", (9, 3, -10), (10, 3.3, -9), F("coin")),
+        ("c3", "base", (10, 3, 8), (11, 3.3, 9), F("coin")), ("c4", "base", (-10, 3, 9), (-9, 3.3, 10), F("coin")),
     ]
-    for i, z in enumerate((8, 11, 14)):
-        C.append((f"sp_b{i}", "body", (-0.5, 15, z), (0.5, 16.5, z + 1.5), F("spike")))
-    C.append(("sp_n", "neck", (-0.5, 21, 4), (0.5, 22.5, 5.5), F("spike")))
-    for i, (x, z) in enumerate(((-1, 19), (-5, 20), (-10, 16), (-12, 8))):
-        C.append((f"sp_t{i}", "tail", (x - 0.5, 7, z - 0.5), (x + 0.5, 8, z + 0.5), F("spike")))
-    roar = "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1)"
-    anim = {
-        "body": {"position": [0, "math.sin(query.anim_time * 120) * 0.25", 0]},
-        "neck": {"rotation": [f"math.sin(query.anim_time * 120) * 2 - {roar} * 6", "math.sin(query.anim_time * 60) * 6 * (1 - {roar})".replace("{roar}", roar), 0]},
-        "head": {"rotation": [f"{roar} * -12", 0, 0]},
-        "jaw": {"rotation": [f"{roar} * 32", 0, 0]},
-        "fire": {"scale": [f"{roar}", f"{roar}", f"{roar} * (0.8 + math.abs(math.sin(query.anim_time * 1200)) * 0.4)"]},
-        "smoke1": {"position": [0, "math.mod(query.anim_time * 3, 3)", "-math.mod(query.anim_time * 3, 3) * 0.5"], "scale": ["1 + math.mod(query.anim_time * 3, 3) * 0.6"] * 3},
-        "smoke2": {"position": [0, "math.mod(query.anim_time * 3 + 1.5, 3)", "-math.mod(query.anim_time * 3 + 1.5, 3) * 0.5"], "scale": ["1 + math.mod(query.anim_time * 3 + 1.5, 3) * 0.6"] * 3},
-        "wing_l": {"rotation": [0, "math.sin(query.anim_time * 120) * 22 - 10", "math.sin(query.anim_time * 120) * 12"]},
-        "wing_r": {"rotation": [0, "math.sin(query.anim_time * 120) * -22 + 10", "math.sin(query.anim_time * 120) * -12"]},
-        "tail": {"rotation": [0, "math.sin(query.anim_time * 90) * 3", 0]},
-        "tail_tip": {"rotation": [0, "math.sin(query.anim_time * 180) * 14", 0]},
-        "card": {"position": [0, "math.sin(query.anim_time * 120) * 0.6 + 0.5", 0], "rotation": [0, "query.anim_time * 90", 0]},
-        "coins": {"position": [0, f"math.abs(math.sin(query.anim_time * 360)) * {roar} * 0.8", 0]},
-        "orbit": {"rotation": [0, "query.anim_time * -60", 0]},
-    }
-    return build("bedwars_battle_pass", "bedwars:battle_pass", A, bones, C, anim, 6, 2.6, [6, 6, 2])
+    # stamps on the right page (page texture 40x56 => 4px per unit; slots at px (5+17c, 11+14r), 12px)
+    T = "math.mod(query.anim_time, 8)"
+    stamp_names = list(icons)
+    anim = {}
+    for i, nm in enumerate(stamp_names):
+        r, c = divmod(i, 2)
+        x0 = -10 + (40 - (5 + c * 17) - 12) / 4; z0 = -7 + (56 - (11 + r * 14) - 12) / 4
+        bn = f"stamp{i}"
+        bones.append((bn, [x0 + 1.5, BY + 1.25, z0 + 1.5], "tilt"))
+        C.append((bn, bn, (x0, BY + 1.22, z0), (x0 + 3, BY + 1.3, z0 + 3), F("none") | dict(up=f"st_{nm}")))
+        t0 = 1.8 + 0.6 * i
+        s = f"math.clamp(({T} - {t0}) * 5, 0, 1) * math.clamp((7.2 - {T}) * 5, 0, 1)"
+        anim[bn] = {"scale": [s, s, s]}
+    bones.append(("done", [-5, BY + 1.3, 0], "tilt"))
+    C.append(("done", "done", (-11, BY + 1.33, -1.5), (1, BY + 1.38, 1.5), F("none") | dict(up="completed"), (0, -20, 0), (-5, BY + 1.35, 0)))
+    ds = f"math.clamp(({T} - 5.6) * 4, 0, 1) * math.clamp((7.2 - {T}) * 5, 0, 1) * (1 + math.clamp(1 - ({T} - 5.6) * 3, 0, 1) * 0.6)"
+    opn = f"math.clamp(({T} - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - {T}) * 1.5, 0, 1)"
+    anim.update({
+        "done": {"scale": [ds, ds, ds]},
+        "cover_r": {"rotation": [0, 0, f"(1 - {opn}) * 178"]},
+        "float": {"position": [0, "math.sin(query.anim_time * 90) * 0.6", 0],
+                  "rotation": [0, f"(1 - {opn}) * math.sin(query.anim_time * 45) * 25", 0]},
+        "stamper": {"position": [0, f"({T} > 1.5 && {T} < 6.0) ? -(1 - math.abs(math.sin(({T} - 1.8) * 300))) * 4.2 : 6", 0],
+                    "scale": [f"{opn}"] * 3},
+        "plane": {"rotation": [0, "query.anim_time * -50", "math.sin(query.anim_time * 120) * 8"]},
+        "stars": {"rotation": [0, "query.anim_time * 40", 0]},
+    })
+    return build("bedwars_battle_pass", "bedwars:battle_pass", A, bones, C, anim, 8, 2.6, [6, 6, 2])
 
 
-models = [bedwars_duos(), roleplay_city(), cargo_truck(), skyblock_soon(), battlepass_dragon()]
+models = [bedwars_duos(), roleplay_city(), cargo_truck(), skyblock_soon(), battlepass_passport()]
 
 # ------------------------------------------------------------------ resource pack
 RP = os.path.join(OUT, "ArvanLobby_RP")

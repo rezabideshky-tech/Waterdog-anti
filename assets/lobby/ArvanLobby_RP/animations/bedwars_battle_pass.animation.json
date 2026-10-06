@@ -4,116 +4,97 @@
     "animation.bedwars_battle_pass.idle": {
       "loop": true,
       "bones": {
-        "body": {
-          "position": [
-            0,
-            "math.sin(query.anim_time * 120) * 0.25",
-            0
-          ]
-        },
-        "neck": {
-          "rotation": [
-            "math.sin(query.anim_time * 120) * 2 - math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * 6",
-            "math.sin(query.anim_time * 60) * 6 * (1 - math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1))",
-            0
-          ]
-        },
-        "head": {
-          "rotation": [
-            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * -12",
-            0,
-            0
-          ]
-        },
-        "jaw": {
-          "rotation": [
-            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * 32",
-            0,
-            0
-          ]
-        },
-        "fire": {
+        "stamp0": {
           "scale": [
-            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1)",
-            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1)",
-            "math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * (0.8 + math.abs(math.sin(query.anim_time * 1200)) * 0.4)"
+            "math.clamp((math.mod(query.anim_time, 8) - 1.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 1.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 1.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
           ]
         },
-        "smoke1": {
-          "position": [
-            0,
-            "math.mod(query.anim_time * 3, 3)",
-            "-math.mod(query.anim_time * 3, 3) * 0.5"
-          ],
+        "stamp1": {
           "scale": [
-            "1 + math.mod(query.anim_time * 3, 3) * 0.6",
-            "1 + math.mod(query.anim_time * 3, 3) * 0.6",
-            "1 + math.mod(query.anim_time * 3, 3) * 0.6"
+            "math.clamp((math.mod(query.anim_time, 8) - 2.4) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 2.4) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 2.4) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
           ]
         },
-        "smoke2": {
-          "position": [
-            0,
-            "math.mod(query.anim_time * 3 + 1.5, 3)",
-            "-math.mod(query.anim_time * 3 + 1.5, 3) * 0.5"
-          ],
+        "stamp2": {
           "scale": [
-            "1 + math.mod(query.anim_time * 3 + 1.5, 3) * 0.6",
-            "1 + math.mod(query.anim_time * 3 + 1.5, 3) * 0.6",
-            "1 + math.mod(query.anim_time * 3 + 1.5, 3) * 0.6"
+            "math.clamp((math.mod(query.anim_time, 8) - 3.0) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.0) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.0) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
           ]
         },
-        "wing_l": {
+        "stamp3": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 3.5999999999999996) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.5999999999999996) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 3.5999999999999996) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "stamp4": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 4.2) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.2) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.2) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "stamp5": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 4.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 4.8) * 5, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1)"
+          ]
+        },
+        "done": {
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 5.6) * 4, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1) * (1 + math.clamp(1 - (math.mod(query.anim_time, 8) - 5.6) * 3, 0, 1) * 0.6)",
+            "math.clamp((math.mod(query.anim_time, 8) - 5.6) * 4, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1) * (1 + math.clamp(1 - (math.mod(query.anim_time, 8) - 5.6) * 3, 0, 1) * 0.6)",
+            "math.clamp((math.mod(query.anim_time, 8) - 5.6) * 4, 0, 1) * math.clamp((7.2 - math.mod(query.anim_time, 8)) * 5, 0, 1) * (1 + math.clamp(1 - (math.mod(query.anim_time, 8) - 5.6) * 3, 0, 1) * 0.6)"
+          ]
+        },
+        "cover_r": {
           "rotation": [
             0,
-            "math.sin(query.anim_time * 120) * 22 - 10",
-            "math.sin(query.anim_time * 120) * 12"
-          ]
-        },
-        "wing_r": {
-          "rotation": [
             0,
-            "math.sin(query.anim_time * 120) * -22 + 10",
-            "math.sin(query.anim_time * 120) * -12"
+            "(1 - math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)) * 178"
           ]
         },
-        "tail": {
-          "rotation": [
-            0,
-            "math.sin(query.anim_time * 90) * 3",
-            0
-          ]
-        },
-        "tail_tip": {
-          "rotation": [
-            0,
-            "math.sin(query.anim_time * 180) * 14",
-            0
-          ]
-        },
-        "card": {
+        "float": {
           "position": [
             0,
-            "math.sin(query.anim_time * 120) * 0.6 + 0.5",
+            "math.sin(query.anim_time * 90) * 0.6",
             0
           ],
           "rotation": [
             0,
-            "query.anim_time * 90",
+            "(1 - math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)) * math.sin(query.anim_time * 45) * 25",
             0
           ]
         },
-        "coins": {
+        "stamper": {
           "position": [
             0,
-            "math.abs(math.sin(query.anim_time * 360)) * math.clamp(math.sin(query.anim_time * 60) * 2.2, 0, 1) * 0.8",
+            "(math.mod(query.anim_time, 8) > 1.5 && math.mod(query.anim_time, 8) < 6.0) ? -(1 - math.abs(math.sin((math.mod(query.anim_time, 8) - 1.8) * 300))) * 4.2 : 6",
             0
+          ],
+          "scale": [
+            "math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)",
+            "math.clamp((math.mod(query.anim_time, 8) - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - math.mod(query.anim_time, 8)) * 1.5, 0, 1)"
           ]
         },
-        "orbit": {
+        "plane": {
           "rotation": [
             0,
-            "query.anim_time * -60",
+            "query.anim_time * -50",
+            "math.sin(query.anim_time * 120) * 8"
+          ]
+        },
+        "stars": {
+          "rotation": [
+            0,
+            "query.anim_time * 40",
             0
           ]
         }
