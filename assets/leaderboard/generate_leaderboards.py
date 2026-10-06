@@ -41,6 +41,12 @@ UV = {
     "bronze": (80, 48, 16, 16),
     "accent": (96, 48, 16, 16),
     "accent_side": (112, 48, 16, 16),
+    "portal": (0, 64, 16, 16),
+    "grass_top": (16, 64, 16, 16),
+    "dirt": (32, 64, 16, 16),
+    "crystal": (48, 64, 16, 16),
+    "rune": (64, 64, 16, 16),
+    "grass_side": (80, 64, 16, 16),
 }
 NAMESPACE = uuid.UUID("92d21e37-bb44-4bf1-9a3e-4d7d70c76f59")
 
@@ -190,6 +196,12 @@ def draw_block_tile(draw, rect, name, accent):
                    tuple(round(v * 0.42) for v in accent)),
         "accent_side": (tuple(round(v * 0.85 + 20) for v in accent),
                         tuple(round(v * 0.30) for v in accent)),
+        "portal": ((105, 104, 177), (18, 20, 47)),
+        "grass_top": ((119, 205, 82), (63, 142, 59)),
+        "dirt": ((157, 111, 71), (84, 56, 49)),
+        "crystal": ((157, 255, 255), (21, 105, 166)),
+        "rune": ((126, 245, 255), (19, 77, 114)),
+        "grass_side": ((125, 187, 82), (90, 62, 43)),
     }
     top, bottom = palettes[name]
     gradient(draw, (x, y, x + w, y + h), top, bottom)
@@ -200,6 +212,33 @@ def draw_block_tile(draw, rect, name, accent):
         factor = 1.20 if (px + py) % 2 else 0.68
         bright = tuple(min(255, int(c * factor)) for c in top)
         draw.point((x + px, y + py), fill=rgba(bright))
+    if name == "portal":
+        draw.polygon([(x + 7, y + 2), (x + 12, y + 7), (x + 7, y + 13), (x + 3, y + 8)],
+                     outline=(115, 100, 203, 255))
+        draw.line((x + 5, y + 8, x + 10, y + 8), fill=(99, 232, 255, 255))
+        draw.point((x + 7, y + 6), fill=(228, 244, 255, 255))
+    elif name == "grass_top":
+        draw.line((x + 2, y + 4, x + 5, y + 2), fill=(188, 239, 125, 255))
+        draw.line((x + 8, y + 5, x + 10, y + 2), fill=(188, 239, 125, 255))
+        draw.point((x + 13, y + 6), fill=(62, 132, 54, 255))
+    elif name == "dirt":
+        for px, py, color in [(3, 4, (199, 145, 89, 255)), (10, 7, (74, 50, 43, 255)),
+                              (6, 12, (198, 142, 91, 255)), (13, 13, (111, 73, 54, 255))]:
+            draw.rectangle((x + px, y + py, x + px + 1, y + py + 1), fill=color)
+    elif name == "grass_side":
+        draw.rectangle((x, y, x + 15, y + 3), fill=(119, 196, 77, 255))
+        draw.line((x, y + 3, x + 15, y + 3), fill=(72, 137, 56, 255))
+        for px, py in [(2, 5), (8, 8), (12, 12), (5, 14)]:
+            draw.point((x + px, y + py), fill=(193, 133, 78, 255))
+    elif name == "crystal":
+        draw_gem(draw, (x + 2, y + 1, x + 14, y + 15),
+                 (214, 255, 255), (75, 211, 249), (14, 74, 146))
+    elif name == "rune":
+        draw.line((x + 4, y + 3, x + 4, y + 12), fill=(126, 245, 255, 255))
+        draw.line((x + 4, y + 3, x + 10, y + 3), fill=(126, 245, 255, 255))
+        draw.line((x + 10, y + 3, x + 10, y + 9), fill=(91, 186, 255, 255))
+        draw.line((x + 6, y + 9, x + 10, y + 9), fill=(91, 186, 255, 255))
+        draw.point((x + 12, y + 12), fill=(255, 224, 112, 255))
 
 
 def make_texture(variant):
@@ -258,8 +297,11 @@ def add_cube(cubes, name, f, t, front="obsidian", side=None, top=None, bottom=No
 
 def make_cubes():
     cubes = []
-    # Stable floating plinth: stepped obsidian with warm metal trim and team wool.
-    add_cube(cubes, "island_shadow", [-10, -1, -5], [10, 0, 5], "dark", "stone", "dark", "dark")
+    # Floating BedWars island: grass cap, dirt rim and a tapered stone underside.
+    # The island is deliberately stepped so it reads clearly at lobby distance.
+    add_cube(cubes, "island_tip", [-4.5, -7, -2.5], [4.5, -4, 2.5], "stone", "stone", "stone", "dark")
+    add_cube(cubes, "island_mid", [-8, -4, -5], [8, -1, 5], "stone", "stone", "dirt", "dark")
+    add_cube(cubes, "island_grass_cap", [-14, -1.2, -8], [14, 0.6, 8], "grass_side", "grass_side", "grass_top", "stone")
     add_cube(cubes, "base_foot", [-12, 0, -6], [12, 2, 6], "obsidian", "dark", "gold_side", "dark")
     add_cube(cubes, "base_trim", [-10, 2, -5], [10, 3, 5], "gold_side", "gold_side", "gold")
     add_cube(cubes, "base_center", [-4, 3, -3], [4, 5, 3], "obsidian", "stone", "gold_side")
@@ -268,7 +310,22 @@ def make_cubes():
     add_cube(cubes, "team_wool_red", [-9, 2.6, -6.5], [-6, 5.5, -3.5], "red_wool", "red_wool", "red_wool")
     add_cube(cubes, "team_wool_blue", [6, 2.6, -6.5], [9, 5.5, -3.5], "blue_wool", "blue_wool", "blue_wool")
 
-    # Shared main chassis; the large inset panel is intentionally uncluttered.
+    # Shared portal gate behind the sign. Voxel-stepped shoulders create an arch
+    # without intruding into the open hologram panel.
+    add_cube(cubes, "portal_pillar_left", [-24, 9, -0.8], [-20, 35, 3.8], "portal", "obsidian", "gold_side", "dark")
+    add_cube(cubes, "portal_pillar_right", [20, 9, -0.8], [24, 35, 3.8], "portal", "obsidian", "gold_side", "dark")
+    add_cube(cubes, "portal_shoulder_left", [-24, 34, -0.8], [-18, 39, 3.8], "portal", "obsidian", "gold_side")
+    add_cube(cubes, "portal_shoulder_right", [18, 34, -0.8], [24, 39, 3.8], "portal", "obsidian", "gold_side")
+    add_cube(cubes, "portal_step_left", [-21, 38, -0.8], [-14, 43, 3.8], "obsidian", "portal", "gold_side")
+    add_cube(cubes, "portal_step_right", [14, 38, -0.8], [21, 43, 3.8], "obsidian", "portal", "gold_side")
+    add_cube(cubes, "portal_cap_left", [-15, 41, -0.8], [-8, 45, 3.8], "portal", "obsidian", "gold_side")
+    add_cube(cubes, "portal_cap_right", [8, 41, -0.8], [15, 45, 3.8], "portal", "obsidian", "gold_side")
+    add_cube(cubes, "portal_rune_left", [-23.3, 13, -1.35], [-22.9, 31, -0.95], "rune", "accent_side", "accent")
+    add_cube(cubes, "portal_rune_right", [22.9, 13, -1.35], [23.3, 31, -0.95], "rune", "accent_side", "accent")
+    add_cube(cubes, "portal_glyph_left", [-23, 35, -1.4], [-21, 37, -0.9], "accent", "accent_side", "accent")
+    add_cube(cubes, "portal_glyph_right", [21, 35, -1.4], [23, 37, -0.9], "accent", "accent_side", "accent")
+
+    # Shared display chassis; category content stays in the broad glass inset.
     add_cube(cubes, "rear_body", [-18, 8, -0.5], [18, 42, 3.5], "dark", "obsidian", "obsidian", "dark")
     add_cube(cubes, "bezel_left", [-18, 8, -3.15], [-14, 38, -1], "obsidian", "gold_side", "obsidian")
     add_cube(cubes, "bezel_right", [14, 8, -3.15], [18, 38, -1], "obsidian", "gold_side", "obsidian")
@@ -276,7 +333,7 @@ def make_cubes():
     add_cube(cubes, "bezel_top", [-18, 36, -3.15], [18, 42, -1], "obsidian", "gold_side", "obsidian")
     add_cube(cubes, "hologram_screen", [-14, 12, -3.42], [14, 36, -3.16], "screen", "cyan", "cyan", "dark", "obsidian")
 
-    # Refined gold corner brackets and a cyan inner light rail.
+    # Thin gold corner brackets and a clean cyan inner rail.
     add_cube(cubes, "corner_tl_h", [-18, 39.5, -3.8], [-14, 40.5, -3.5], "gold", "gold_side", "gold")
     add_cube(cubes, "corner_tl_v", [-17.7, 36, -3.8], [-16.7, 40.5, -3.5], "gold", "gold_side", "gold")
     add_cube(cubes, "corner_tr_h", [14, 39.5, -3.8], [18, 40.5, -3.5], "gold", "gold_side", "gold")
@@ -289,7 +346,7 @@ def make_cubes():
     add_cube(cubes, "light_right", [14.05, 12, -3.85], [14.45, 36, -3.55], "cyan", "glow", "cyan")
     add_cube(cubes, "light_top", [-14, 36.05, -3.85], [14, 36.45, -3.55], "cyan", "glow", "cyan")
 
-    # Floating shared badge. The badge and paired gems get a subtle idle animation.
+    # The animated, interchangeable category medal attaches to the portal crown.
     badge_bone = "floating_badge"
     add_cube(cubes, "badge_back", [-7.5, 40.5, -1.8], [7.5, 50, 2.2], "obsidian", "gold_side", "gold_side", bone=badge_bone)
     add_cube(cubes, "badge_top", [-8.5, 48.5, -4.2], [8.5, 50, -1.5], "gold", "gold_side", "gold", bone=badge_bone)
@@ -300,14 +357,17 @@ def make_cubes():
     add_cube(cubes, "badge_gem_left", [-11.5, 44, -3.2], [-8.5, 47, -0.2], "accent", "accent_side", "accent", bone=badge_bone)
     add_cube(cubes, "badge_gem_right", [8.5, 44, -3.2], [11.5, 47, -0.2], "accent", "accent_side", "accent", bone=badge_bone)
 
-    # BedWars team markers are common to every board.
-    add_cube(cubes, "red_side_tab", [-20, 31, -1.5], [-18, 34, 1.5], "red_wool", "red_wool", "red_wool")
-    add_cube(cubes, "blue_side_tab", [18, 31, -1.5], [20, 34, 1.5], "blue_wool", "blue_wool", "blue_wool")
+    # BedWars red/blue markers on the gate frame.
+    add_cube(cubes, "red_side_tab", [-26, 29, -1.5], [-23.5, 32, 1.5], "red_wool", "red_wool", "red_wool")
+    add_cube(cubes, "blue_side_tab", [23.5, 29, -1.5], [26, 32, 1.5], "blue_wool", "blue_wool", "blue_wool")
 
-    # Lower jewels float in the opposite phase to the badge.
+    # Category-independent gems and portal core hover gently on a shared phase.
     for name, f, t, mat in [
-        ("lower_emerald", [-20, 12, -3.5], [-17, 15, -0.5], "emerald"),
-        ("lower_diamond", [17, 12, -3.5], [20, 15, -0.5], "diamond"),
+        ("lower_emerald", [-22.5, 11, -3.5], [-19.5, 14, -0.5], "emerald"),
+        ("lower_diamond", [19.5, 11, -3.5], [22.5, 14, -0.5], "diamond"),
+        ("portal_core", [-1.5, -8, -1.5], [1.5, -5, 1.5], "crystal"),
+        ("floating_rock_left", [-16, -2, -2], [-13, 1, 1], "stone"),
+        ("floating_rock_right", [13, -2, -2], [16, 1, 1], "stone"),
     ]:
         add_cube(cubes, name, f, t, mat, mat, mat, bone="floating_gems")
     return cubes
@@ -434,8 +494,8 @@ def build_geometry(key, cubes, group_ids, badge_origin=(0, 45, 0)):
         "minecraft:geometry": [{
             "description": {
                 "identifier": "geometry." + key, "texture_width": MODEL_RES[0], "texture_height": MODEL_RES[1],
-                "visible_bounds_width": 4.6, "visible_bounds_height": 5.8,
-                "visible_bounds_offset": [0, 2.7, 0],
+                "visible_bounds_width": 5.2, "visible_bounds_height": 6.5,
+                "visible_bounds_offset": [0, 2.3, 0],
             },
             "bones": bones,
         }],
@@ -463,7 +523,7 @@ def make_model(variant):
     bbmodel = {
         "meta": {"format_version": "4.10", "model_format": "bedrock", "box_uv": False},
         "name": key, "model_identifier": key,
-        "visible_box": [5.2, 5.9, 2.7],
+        "visible_box": [5.4, 6.2, 3.0],
         "resolution": {"width": MODEL_RES[0], "height": MODEL_RES[1]},
         "elements": elements, "outliner": outliner,
         "textures": [{
@@ -504,7 +564,7 @@ def make_overview(models):
         title_font = label_font = sub_font = ImageFont.load_default()
     d.text((width // 2, 28), "BEDWARS LEADERBOARD SET", font=title_font,
            fill=(231, 244, 255), anchor="ma")
-    d.text((width // 2, 82), "ONE SHARED DESIGN  /  SEVEN ANIMATED CATEGORIES",
+    d.text((width // 2, 82), "PORTAL FRAME  /  FLOATING BEDWARS ISLAND  /  SWAPPABLE MEDALS",
            font=sub_font, fill=(107, 215, 232), anchor="ma")
 
     card_w, card_h = 430, 535
@@ -551,10 +611,11 @@ Seven matching, editable models:
 - bedwars_top_level
 - bedwars_top_final_kills
 
-Every model shares the same obsidian-and-gold chassis, readable 10-row panel,
-BedWars red/blue details and a floating category badge. Only the icon/accent
-colour changes. Each .bbmodel embeds its 128x128 texture and includes a subtle
-6-second idle animation: badge bob/tilt and slowly floating side gems.
+Every model shares the same obsidian-and-gold portal gate, a stepped floating
+BedWars island base, a readable 10-row glass panel, and a swappable category
+medal. Only the icon/accent colour changes. Each .bbmodel embeds its 128x128
+texture and includes a subtle 6-second idle animation: badge bob/tilt and
+slowly floating side gems and island crystals.
 
 Each model also includes a PNG texture, Bedrock .geo.json geometry,
 .animation.json export and rendered preview. Open a .bbmodel directly in

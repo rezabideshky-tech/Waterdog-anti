@@ -9,10 +9,11 @@ Seven matching, editable models:
 - bedwars_top_level
 - bedwars_top_final_kills
 
-Every model shares the same obsidian-and-gold chassis, readable 10-row panel,
-BedWars red/blue details and a floating category badge. Only the icon/accent
-colour changes. Each .bbmodel embeds its 128x128 texture and includes a subtle
-6-second idle animation: badge bob/tilt and slowly floating side gems.
+Every model shares the same obsidian-and-gold portal gate, a stepped floating
+BedWars island base, a readable 10-row glass panel, and a swappable category
+medal. Only the icon/accent colour changes. Each .bbmodel embeds its 128x128
+texture and includes a subtle 6-second idle animation: badge bob/tilt and
+slowly floating side gems and island crystals.
 
 Each model also includes a PNG texture, Bedrock .geo.json geometry,
 .animation.json export and rendered preview. Open a .bbmodel directly in
