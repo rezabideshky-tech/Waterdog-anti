@@ -5,7 +5,7 @@ import base64, json, math, os, shutil, uuid, zipfile
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-NS = uuid.UUID("edf3f26f-97c4-4762-aacc-fdeccd33b732")
+NS = uuid.UUID("e2f006de-e372-4785-be50-222fb767b5bc")
 WHITE, BLACK = (255, 255, 255), (15, 10, 20)
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
 RED = [(255, 110, 100), (220, 40, 45), (140, 15, 25), (60, 5, 12)]
@@ -1061,7 +1061,7 @@ def battlepass_passport():
     A.grad(b, NAVY[1], NAVY[3]); A.frame(b); A.outlined("BATTLE PASS", (x0 + x1) // 2, y0 + 5, GOLD[0], 1)
     b = A.alloc("none", 8, 8)
     for k in ["page_l", "page_r", "completed"] + [f"st_{n}" for n in icons]:  # face the viewer
-        x, y, w, h = A.R[k]; A.img.paste(A.img.crop((x, y, x + w, y + h)).rotate(180), (x, y))
+        x, y, w, h = A.R[k]; A.img.paste(A.img.crop((x, y, x + w, y + h)).transpose(Image.FLIP_LEFT_RIGHT), (x, y))
 
     BY = 17  # book height
     bones = [("root", [0, 0, 0], None), ("base", [0, 0, 0], "root"),
@@ -1107,7 +1107,7 @@ def battlepass_passport():
     anim = {}
     for i, nm in enumerate(stamp_names):
         r, c = divmod(i, 2)
-        x0 = -10 + (40 - (5 + c * 17) - 12) / 4; z0 = -7 + (56 - (11 + r * 14) - 12) / 4
+        x0 = -10 + (40 - (5 + c * 17) - 12) / 4; z0 = -7 + (11 + r * 14) / 4
         bn = f"stamp{i}"
         bones.append((bn, [x0 + 1.5, BY + 1.25, z0 + 1.5], "tilt"))
         C.append((bn, bn, (x0, BY + 1.22, z0), (x0 + 3, BY + 1.3, z0 + 3), F("none") | dict(up=f"st_{nm}")))
@@ -1115,7 +1115,7 @@ def battlepass_passport():
         s = f"math.clamp(({T} - {t0}) * 5, 0, 1) * math.clamp((7.2 - {T}) * 5, 0, 1)"
         anim[bn] = {"scale": [s, s, s]}
     bones.append(("done", [-5, BY + 1.3, 0], "tilt"))
-    C.append(("done", "done", (-11, BY + 1.33, -1.5), (1, BY + 1.38, 1.5), F("none") | dict(up="completed"), (0, -20, 0), (-5, BY + 1.35, 0)))
+    C.append(("done", "done", (-11, BY + 1.33, -1.5), (1, BY + 1.38, 1.5), F("none") | dict(up="completed"), (0, 20, 0), (-5, BY + 1.35, 0)))
     ds = f"math.clamp(({T} - 5.6) * 4, 0, 1) * math.clamp((7.2 - {T}) * 5, 0, 1) * (1 + math.clamp(1 - ({T} - 5.6) * 3, 0, 1) * 0.6)"
     opn = f"math.clamp(({T} - 0.4) * 1.2, 0, 1) * math.clamp((7.6 - {T}) * 1.5, 0, 1)"
     anim.update({
