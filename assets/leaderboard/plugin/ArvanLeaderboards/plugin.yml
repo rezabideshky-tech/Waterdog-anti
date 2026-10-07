@@ -1,14 +1,16 @@
 name: ArvanLeaderboards
 main: arvan\leaderboards\Main
-version: 1.0.0
+version: 1.2.0
 api: 5.0.0
 depend: [Customies]
-description: Animated BedWars leaderboards, podium and holograms (needs ArvanLeaderboard resource pack)
+softdepend: [BedWarsCore]
+author: ArvanGaming
+description: "لیدربورد و هولوگرام BedWars — ۱۵ مدل + 👑 غول‌پیکر تاج‌ها (آمار از BedWarsCore v2)"
 commands:
   lb:
-    description: Manage ArvanGaming leaderboards
-    usage: "/lb <spawn|remove|reload|set|add|show|track> ..."
-    permission: arvan.leaderboards.admin
+    description: "لیدربوردها: spawn/crown/remove/set/add/show/track/refresh/reload"
+    usage: "/lb <spawn|crown|remove|set|add|show|track|refresh|reload>"
+    permission: arvan.lb.admin
 permissions:
-  arvan.leaderboards.admin:
+  arvan.lb.admin:
     default: op

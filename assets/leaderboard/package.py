@@ -38,12 +38,26 @@ zip_paths(os.path.join(OUT, "ArvanLeaderboards_plugin.zip"),
 
 # ۲) مدل‌ها و ابزارها
 model_files = [
-    "README.md", "generate.py", "bb_lib.py", "package.py",
+    "README.md", "generate.py", "bb_lib.py", "hw_models.py", "crown_models.py",
+    "package.py", "preview_crowns.py", "preview_hero.py",
+    "preview_crowns.png", "preview_halloween.png", "preview_hero.png",
     "arvan_leaderboard_atlas.png", "preview_atlas.png", "preview_pack_icon.png",
+    "docs/PATCH_bedwars_v7.md",
 ]
-for stem in ("arvan_leaderboard", "arvan_podium", "arvan_hologram", "arvan_bedwars_bed"):
+CLASSIC = ["arvan_leaderboard", "arvan_podium", "arvan_hologram", "arvan_bedwars_bed"]
+HW = ["arvan_hw_top", "arvan_hw_podium", "arvan_hw_projector", "arvan_hw_bed", "arvan_hw_sign"]
+CROWNS = ["arvan_giant_crown_kills", "arvan_giant_crown_wins", "arvan_giant_crown_beds_broken",
+          "arvan_giant_crown_final_kills", "arvan_giant_crown_level", "arvan_giant_crown_coins"]
+
+for stem in CLASSIC + HW:
     model_files += [stem + ".bbmodel", stem + ".geo.json", stem + ".animation.json",
                     "preview_%s.png" % stem]
+
+# 👑 تاج‌ها: هندسه/انیمیشن هر شش نسخه + یک پروژهٔ .bbmodel پایه (بقیه همانند‌اند، فقط جواهر عوض است)
+for stem in CROWNS:
+    model_files += [stem + ".geo.json", stem + ".animation.json", "preview_%s.png" % stem]
+model_files += ["arvan_giant_crown_kills.bbmodel", "arvan_giant_crown_kills.png"]
+
 zip_paths(os.path.join(OUT, "ArvanLeaderboard_models.zip"),
           [(os.path.join(OUT, f), f) for f in model_files if os.path.exists(os.path.join(OUT, f))]
           + [(os.path.join(OUT, "ArvanLeaderboard.mcpack"), "ArvanLeaderboard.mcpack")])

@@ -18,6 +18,7 @@ import os
 import shutil
 import uuid
 
+import crown_models
 import hw_models
 from bb_lib import (ATLAS, F, REG, Model, core_plaza, core_signature, model_top, bed_icon, center_text, crown_icon, endstone,
                     gem, glow, goldblock, grad, holo_beam, holo_glass, medal, noise,
@@ -498,16 +499,37 @@ for hw_model, hw_scale, hw_egg in hw_models.ENTRIES:
     SCALE[hw_model.name] = hw_scale
     EGG[hw_model.name] = hw_egg
 
+# 👑 غول‌پیکر تاج‌ها (۶ نسخه؛ فقط رنگ جواهر وسط تاج عوض می‌شود)
+crown_models.define_textures()
+TEX_SHARE = dict(crown_models.CROWN_TEX_SHARE)
+CROWN_NAMES = {
+    "arvan_giant_crown_kills": "👑 GIANT CROWN · KILLS",
+    "arvan_giant_crown_wins": "👑 GIANT CROWN · WINS",
+    "arvan_giant_crown_beds_broken": "👑 GIANT CROWN · BEDS",
+    "arvan_giant_crown_final_kills": "👑 GIANT CROWN · FINALS",
+    "arvan_giant_crown_level": "👑 GIANT CROWN · LEVEL",
+    "arvan_giant_crown_coins": "👑 GIANT CROWN · COINS",
+}
+for cr_model, cr_scale, cr_egg in crown_models.entries():
+    MODELS.append(cr_model)
+    SCALE[cr_model.name] = cr_scale
+    EGG[cr_model.name] = cr_egg
+    # فقط نسخهٔ پایه .bbmodel بگیرد (بقیه هندسهٔ یکسان با جواهر متفاوت دارند)
+    if cr_model.name != "arvan_giant_crown_kills":
+        cr_model.skip_bbmodel = True
+
 TEX_PATH = os.path.join(OUT, "arvan_leaderboard_atlas.png")
 ATLAS.img.save(TEX_PATH)
 
 print("🧱 خروجی مدل‌ها…")
 for m in MODELS:
     base = os.path.join(OUT, m.name)
-    save_bbmodel(m, base + ".bbmodel", m.name + ".png", open(TEX_PATH, "rb").read(), S)
+    if not getattr(m, "skip_bbmodel", False):
+        save_bbmodel(m, base + ".bbmodel", m.name + ".png", open(TEX_PATH, "rb").read(), S)
     save_geo(m, base + ".geo.json", S)
     save_anim(m, base + ".animation.json")
-    render_model(m, os.path.join(OUT, "preview_%s.png" % m.name), scale=4)
+    render_model(m, os.path.join(OUT, "preview_%s.png" % m.name),
+                 scale=3 if m.name.startswith("arvan_giant_crown") else 4)
     print("   ✔", m.name, "|", sum(len(b.cubes) for b in m.bones), "مکعب |",
           len(m.bones), "بون |", sum(len(c) for c in m.anims.values()), "کانال انیمیشن")
 
@@ -534,17 +556,18 @@ NAMES = {
     "arvan_hw_sign": "TRICK OR TREAT",
 }
 lang = []
+TEX_SHARE = globals().get("TEX_SHARE", {})
 for m in MODELS:
-    shutil.copy(TEX_PATH, os.path.join(RP, "textures/entity/%s.png" % m.name))
+    shutil.copy(TEX_PATH, os.path.join(RP, "textures/entity/%s.png" % TEX_SHARE.get(m.name, m.name)))
     shutil.copy(os.path.join(OUT, m.name + ".geo.json"),
                 os.path.join(RP, "models/entity/%s.geo.json" % m.name))
     shutil.copy(os.path.join(OUT, m.name + ".animation.json"),
                 os.path.join(RP, "animations/%s.animation.json" % m.name))
-    save_entity(m.name, m.ident, m.name, "geometry." + m.name,
+    save_entity(m.name, m.ident, TEX_SHARE.get(m.name, m.name), "geometry." + m.name,
                 "animation.%s.idle" % m.name, SCALE[m.name],
                 "controller.render.arvan_leaderboard",
                 os.path.join(RP, "entity/%s.entity.json" % m.name), EGG[m.name])
-    pretty = NAMES.get(m.name, m.name.replace("arvan_", "").upper())
+    pretty = CROWN_NAMES.get(m.name) or NAMES.get(m.name, m.name.replace("arvan_", "").upper())
     lang.append("entity.%s.name=§l§6%s" % (m.ident, pretty))
 
 with open(os.path.join(RP, "texts/en_US.lang"), "w", encoding="utf-8") as f:

@@ -1,0 +1,33 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:giant_crown_wins",
+      "materials": {
+        "default": "entity_alphablend"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_giant_crown_kills"
+      },
+      "geometry": {
+        "default": "geometry.arvan_giant_crown_wins"
+      },
+      "animations": {
+        "idle": "animation.arvan_giant_crown_wins.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "1.35"
+      },
+      "render_controllers": [
+        "controller.render.arvan_leaderboard"
+      ],
+      "spawn_egg": {
+        "base_color": "#FCD24A",
+        "overlay_color": "#7A4A10"
+      }
+    }
+  }
+}

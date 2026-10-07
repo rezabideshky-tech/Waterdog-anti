@@ -1,0 +1,33 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:giant_crown_beds_broken",
+      "materials": {
+        "default": "entity_alphablend"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_giant_crown_kills"
+      },
+      "geometry": {
+        "default": "geometry.arvan_giant_crown_beds_broken"
+      },
+      "animations": {
+        "idle": "animation.arvan_giant_crown_beds_broken.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "1.35"
+      },
+      "render_controllers": [
+        "controller.render.arvan_leaderboard"
+      ],
+      "spawn_egg": {
+        "base_color": "#2EC8F0",
+        "overlay_color": "#1B2740"
+      }
+    }
+  }
+}

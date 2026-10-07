@@ -15,6 +15,8 @@ use pocketmine\utils\Config;
  * Main — پلاگین لیدربوردهای انیمیشنی ArvanGaming
  *
  * دستورات:
+ *   /lb crown <kills|wins|beds_broken|final_kills|level|coins>  👑 ساخت تاج غول‌پیکر
+ *   /lb crown remove [radius] | list
  *   /lb spawn <top|podium|holo|bed|hw_top|hw_podium|hw_projector|hw_bed|hw_sign>
  *                                          ساخت NPC در محل ایستادن شما
  *   /lb remove [شعاع]                     حذف NPCهای اطراف
@@ -29,6 +31,7 @@ final class Main extends PluginBase
 {
     private static self $instance;
     private StatsStore $stats;
+    private ?CrownManager $crowns = null;
 
     /** @var array<string, class-string<FloatingNpc>> */
     private const TYPES = [
@@ -42,6 +45,13 @@ final class Main extends PluginBase
         'hw_projector' => HwProjectorNpc::class,
         'hw_bed' => HwBedNpc::class,
         'hw_sign' => HwSignNpc::class,
+        // 👑 غول‌پیکر تاج‌ها (Giant Crowns) — رنگ جواهر وسط تاج = دستهٔ آمار
+        'crown_kills' => CrownKillsNpc::class,
+        'crown_wins' => CrownWinsNpc::class,
+        'crown_beds_broken' => CrownBedsBrokenNpc::class,
+        'crown_final_kills' => CrownFinalKillsNpc::class,
+        'crown_level' => CrownLevelNpc::class,
+        'crown_coins' => CrownCoinsNpc::class,
     ];
 
     public static function get(): self
@@ -59,6 +69,7 @@ final class Main extends PluginBase
         self::$instance = $this;
         $this->saveDefaultConfig();
         $this->stats = new StatsStore($this->getDataFolder() . 'stats.yml');
+        $this->crowns = new CrownManager($this);
 
         $factory = CustomiesEntityFactory::getInstance();
         foreach (self::TYPES as $id => $class) {
@@ -73,6 +84,24 @@ final class Main extends PluginBase
         }), $seconds * 20);
 
         $this->getLogger()->info('§aArvanLeaderboards فعال شد — /lb spawn top');
+        if (BedWarsSource::hasBedWars()) {
+            $this->getLogger()->info('§a✔ اتصال به BedWarsCore برقرار شد — آمار تاج‌ها از bw_players خوانده می‌شود.');
+        } else {
+            $this->getLogger()->info('§eBedWarsCore پیدا نشد — تاج‌ها از stats.yml محلی تغذیه می‌شوند.');
+        }
+    }
+
+    /** کلاس تاج مربوط به یک دسته (یا null اگر دسته نامعتبر باشد) */
+    public static function crownClass(string $stat): ?string
+    {
+        $key = 'crown_' . $stat;
+        $class = self::TYPES[$key] ?? null;
+        return is_string($class) ? $class : null;
+    }
+
+    public function crowns(): CrownManager
+    {
+        return $this->crowns;
     }
 
     /** @return array<string, mixed> */
@@ -97,6 +126,12 @@ final class Main extends PluginBase
     public function onTap(Player $player, FloatingNpc $npc): void
     {
         $limit = 10;
+        // 👑 تاج‌ها: جدول کامل همان دسته در چت (با همان اعداد BedWarsCore)
+        if ($npc instanceof CrownNpc) {
+            $this->crowns()->showTable($player, $npc->stat(), (int) $this->npcConfig($npc->getKey())['limit'] ?? 10);
+            return;
+        }
+
         switch ($npc->getKey()) {
             case 'top':
             case 'podium':
@@ -144,6 +179,30 @@ final class Main extends PluginBase
                 $sender->sendMessage($e === null
                     ? '§cنوع نامعتبر. یکی از: §f' . implode(', ', array_keys(self::TYPES))
                     : '§aساخته شد: §f' . $type . ' §7(مدلش با ریسورس‌پک ArvanLeaderboard نمایش داده می‌شود)');
+                return true;
+
+            case 'crown':
+                $sub = strtolower((string) ($args[1] ?? ''));
+                if ($sub === 'list') {
+                    $sender->sendMessage('§6دسته‌های تاج: §f' . implode('§7, §f', CrownManager::CROWN_STATS));
+                    $sender->sendMessage('§7روش: §f/lb crown <دسته> §7— ساخت تاج در محل ایستادنت');
+                    return true;
+                }
+                if ($sub === 'remove') {
+                    $n = (int) ($args[2] ?? 10);
+                    $sender->sendMessage('§e' . $this->crowns()->remove($sender, $n) . ' تاج حذف شد.');
+                    return true;
+                }
+                if (!in_array($sub, CrownManager::CROWN_STATS, true)) {
+                    $sender->sendMessage('§cدسته نامعتبر. یکی از: §f' . implode(', ', CrownManager::CROWN_STATS));
+                    $sender->sendMessage('§7مثال: §f/lb crown kills');
+                    return true;
+                }
+                $crown = $this->crowns()->spawn($sender, $sub);
+                $sender->sendMessage($crown === null
+                    ? '§cساخت تاج ناموفق بود.'
+                    : '§a👑 تاج ساخته شد: §f' . $sub
+                        . ' §7(رنگ جواهر وسط تاج همین دسته را نشان می‌دهد؛ با ضربه، جدول کامل باز می‌شود)');
                 return true;
 
             case 'remove':

@@ -43,6 +43,7 @@ jobs:
         run: |
           python3 generate.py
           python3 preview_hero.py
+          python3 preview_crowns.py
           python3 package.py
           ls -la *.zip *.mcpack
 
@@ -56,7 +57,9 @@ jobs:
           assert "manifest.json" in names, "manifest در ریشهٔ پک نیست"
           json.loads(z.read("manifest.json"))
           stems = ["arvan_leaderboard", "arvan_podium", "arvan_hologram", "arvan_bedwars_bed",
-                   "arvan_hw_top", "arvan_hw_podium", "arvan_hw_projector", "arvan_hw_bed", "arvan_hw_sign"]
+                   "arvan_hw_top", "arvan_hw_podium", "arvan_hw_projector", "arvan_hw_bed", "arvan_hw_sign",
+                   "arvan_giant_crown_kills", "arvan_giant_crown_wins", "arvan_giant_crown_beds_broken",
+                   "arvan_giant_crown_final_kills", "arvan_giant_crown_level", "arvan_giant_crown_coins"]
           for stem in stems:
               for want in (f"models/entity/{stem}.geo.json",
                            f"animations/{stem}.animation.json",
@@ -79,6 +82,8 @@ jobs:
             assets/leaderboard/ArvanLeaderboard_RP.zip
             assets/leaderboard/preview_hero.png
             assets/leaderboard/preview_halloween.png
+            assets/leaderboard/preview_crowns.png
+            assets/leaderboard/preview_holo_design.png
           if-no-files-found: error
 
       - name: ضمیمه به Release (اگر تگ داده شده)
@@ -96,5 +101,7 @@ jobs:
             assets/leaderboard/ArvanLeaderboard_models.zip \
             assets/leaderboard/ArvanLeaderboard_RP.zip \
             assets/leaderboard/preview_hero.png \
-            assets/leaderboard/preview_halloween.png --clobber
+            assets/leaderboard/preview_halloween.png \
+            assets/leaderboard/preview_crowns.png \
+            assets/leaderboard/preview_holo_design.png --clobber
           echo "✅ فایل‌ها به ریلیز $TAG ضمیمه شدند."
