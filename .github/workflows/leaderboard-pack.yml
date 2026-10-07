@@ -63,11 +63,17 @@ jobs:
           for stem in stems:
               for want in (f"models/entity/{stem}.geo.json",
                            f"animations/{stem}.animation.json",
-                           f"textures/entity/{stem}.png",
                            f"entity/{stem}.entity.json"):
                   assert want in names, f"کم است: {want}"
+              desc = json.loads(z.read(f"entity/{stem}.entity.json"))["minecraft:client_entity"]["description"]
+              tex = desc["textures"]["default"] + ".png"          # تاج‌ها بافت مشترک دارند
+              assert tex in names, f"بافت نیست: {tex} ({stem})"
+              assert desc["geometry"]["default"] == "geometry." + stem
               geo = json.loads(z.read(f"models/entity/{stem}.geo.json"))
               assert geo["minecraft:geometry"][0]["bones"], "بون خالی"
+              anim = json.loads(z.read(f"animations/{stem}.animation.json"))
+              key = desc["animations"]["idle"]
+              assert anim["animations"][key]["bones"], "انیمیشن خالی: " + stem
           print("✅ ریسورس‌پک سالم است:", len(names), "فایل")
           PY
 
