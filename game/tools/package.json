@@ -1,0 +1,13 @@
+{
+  "name": "gharchekhor-devtools",
+  "private": true,
+  "type": "module",
+  "description": "ابزارهای توسعهٔ بازی قارچ‌خور: شبیه‌ساز DOM برای رندر و تست خودکار",
+  "scripts": {
+    "spritesheet": "node spritesheet.mjs",
+    "shots": "node shots.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.80"
+  }
+}

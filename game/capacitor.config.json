@@ -1,0 +1,15 @@
+{
+  "appId": "ir.hajireza.gharchekhor",
+  "appName": "قارچ‌خور",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false,
+    "backgroundColor": "#12102aff"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

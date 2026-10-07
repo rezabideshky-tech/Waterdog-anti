@@ -1,0 +1,9 @@
+# ابزارها و خروجی‌های محلی
+node_modules/
+.arena/
+android/
+*.log
+
+# خروجی ساخت
+dist/
+build/

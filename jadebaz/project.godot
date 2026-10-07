@@ -1,0 +1,52 @@
+; پروژهٔ بازی «جاده‌باز» — نسخهٔ موبایل (اندروید)
+; Godot 4.4 / سازگار با ۴.۳ و بالاتر
+
+config_version=5
+
+[application]
+
+config/name="جاده‌باز"
+config/description="بازی ایرانی رانندگی و فیزیک — ماشین‌های ایرانی، جاده‌های ایران"
+config/version="0.9.0"
+run/main_scene="res://src/Main.tscn"
+config/features=PackedStringArray("4.4", "GL Compatibility")
+config/icon="res://icon.png"
+boot_splash/bg_color=Color(0.08, 0.12, 0.22, 1)
+boot_splash/image="res://icon.png"
+
+[autoload]
+
+Game="*res://src/autoload/Game.gd"
+Snd="*res://src/autoload/Snd.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/mode=2
+window/handheld/orientation=4
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/vsync/vsync_mode=1
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+pointing/emulate_mouse_from_touch=true
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.45, 0.72, 0.92, 1)
+anti_aliasing/quality/msaa_2d=1
+
+[physics]
+
+common/physics_ticks_per_second=60
+2d/default_gravity=1400.0
+
+[audio]
+
+buses/default_bus_layout=""

@@ -1,0 +1,16 @@
+name: ArvanLeaderboards
+main: arvan\leaderboards\Main
+version: 1.2.0
+api: 5.0.0
+depend: [Customies]
+softdepend: [BedWarsCore]
+author: ArvanGaming
+description: "لیدربورد و هولوگرام BedWars — ۱۵ مدل + 👑 غول‌پیکر تاج‌ها (آمار از BedWarsCore v2)"
+commands:
+  lb:
+    description: "لیدربوردها: spawn/crown/remove/set/add/show/track/refresh/reload"
+    usage: "/lb <spawn|crown|remove|set|add|show|track|refresh|reload>"
+    permission: arvan.lb.admin
+permissions:
+  arvan.lb.admin:
+    default: op

@@ -1,0 +1,36 @@
+# ── بازی قارچ‌خور ────────────────────────────────────────────────
+game/node_modules/
+game/tools/node_modules/
+game/android/
+game/.arena/
+game/www/**/*.map
+.arena/
+resources/
+
+# ── خروجی ساخت ──────────────────────────────────────────────────
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# ── سیستم و ویرایشگر ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# ── جاده‌باز (Godot) ─────────────────────────────────────────────
+jadebaz/tools/node_modules/
+jadebaz/.godot/
+jadebaz/build/
+jadebaz/*.zip
+jadebaz-godot*.zip
+
+# ── خروجی‌های بسته‌بندی لیدربورد ─────────────────────────────────
+assets/leaderboard/*.zip
+assets/leaderboard/*.mcpack
+assets/leaderboard/__pycache__/
+# ... ولی پوشهٔ dist برای دانلود عمومی در گیت نگه داشته می‌شود
+!assets/leaderboard/dist/
+!assets/leaderboard/dist/**

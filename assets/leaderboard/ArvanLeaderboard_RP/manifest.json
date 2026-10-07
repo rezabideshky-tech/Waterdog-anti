@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "\u00a7l\u00a7bArvan\u00a7fGaming \u00a76Leaderboards",
+    "description": "\u00a7eAnimated BedWars leaderboards & holograms \u00a77- TOP, Podium, Projector, Bed",
+    "uuid": "4940b577-235f-556d-a876-b961917d7f43",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "bb086b93-ed26-5643-8c43-5b2f4b571f26",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>قارچ‌خور | ماجراهای کوکو در ایران</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#12102a" />
+<meta name="description" content="قارچ‌خور: بازی پلتفرمر ایرانی برای موبایل و وب — ۸ مرحله، دیو کویر و اژدهای دماوند." />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="assets/img/icon-192.png" />
+<link rel="apple-touch-icon" href="assets/img/icon-192.png" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="app">
+  <canvas id="game" aria-label="صفحهٔ بازی قارچ‌خور"></canvas>
+  <div id="fx-overlay" class="fx-hidden"></div>
+
+  <!-- دکمه‌های لمسی -->
+  <div id="touch-controls" class="hidden">
+    <div class="pad-side">
+      <button id="btn-left" class="tbtn" aria-label="چپ">◀</button>
+      <button id="btn-right" class="tbtn" aria-label="راست">▶</button>
+    </div>
+    <div class="pad-side">
+      <button id="btn-run" class="tbtn round small" aria-label="دویدن">🏃</button>
+      <button id="btn-fire" class="tbtn round small" aria-label="شوت آتش">🔥</button>
+      <button id="btn-jump" class="tbtn round" aria-label="پرش">▲</button>
+    </div>
+  </div>
+  <button id="btn-pause" class="hidden corner-btn" aria-label="توقف">⏸</button>
+
+  <!-- صفحهٔ بارگذاری -->
+  <section id="screen-loading" class="screen active">
+    <div class="logo-wrap">
+      <img src="assets/img/icon-192.png" alt="" class="logo" />
+      <h1 class="game-title">قارچ‌خور</h1>
+      <p class="game-sub">ماجراهای کوکو در ایران</p>
+      <div class="loading-bar"><span id="loading-fill"></span></div>
+      <p class="small muted" id="loading-text">در حال آماده‌سازی…</p>
+      <button id="btn-sound-start" class="btn primary big">شروع بازی 🎮</button>
+    </div>
+  </section>
+
+  <!-- منوی اصلی -->
+  <section id="screen-title" class="screen">
+    <div class="panel">
+      <h1 class="game-title">قارچ‌خور</h1>
+      <p class="game-sub">ماجراهای کوکو در ایران</p>
+      <div class="menu-grid">
+        <button class="btn primary big" data-action="play">▶️ بازی جدید</button>
+        <button class="btn" data-action="map">🗺️ انتخاب مرحله</button>
+        <button class="btn" data-action="endless">♾️ دوی بی‌پایان</button>
+        <button class="btn" data-action="shop">🛒 فروشگاه</button>
+        <button class="btn" data-action="chars">🧒 شخصیت‌ها</button>
+        <button class="btn" data-action="ach">🏆 دستاوردها</button>
+        <button class="btn" data-action="records">📋 کارنامه</button>
+        <button class="btn" data-action="settings">⚙️ تنظیمات</button>
+        <button class="btn" data-action="help">❓ راهنما</button>
+      </div>
+      <div class="stats-row">
+        <span>🪙 بانک: <b id="stat-bank">۰</b></span>
+        <span>🍄 قارچ‌ها: <b id="stat-mush">۰</b></span>
+        <span>⭐ ستاره‌ها: <b id="stat-stars">۰</b></span>
+      </div>
+      <p class="small muted">نسخه <span id="app-version">۱.۰.۰</span> — ساخته‌شده برای موبایل و وب</p>
+    </div>
+  </section>
+
+  <!-- انتخاب مرحله -->
+  <section id="screen-map" class="screen">
+    <div class="panel wide">
+      <h2>🗺️ نقشهٔ ایران</h2>
+      <p class="small muted">هر مرحله در یک جای ایران می‌گذرد. ستاره بگیر تا قهرمان ایران شوی!</p>
+      <div id="map-grid" class="map-grid"></div>
+      <button class="btn" data-action="back">بازگشت</button>
+    </div>
+  </section>
+
+  <!-- فروشگاه -->
+  <section id="screen-shop" class="screen">
+    <div class="panel wide">
+      <h2>🛒 فروشگاه</h2>
+      <p class="small muted">با سکه‌های بانک آیتم بخر. سکه‌ها از مرحله‌ها به بانک اضافه می‌شوند.</p>
+      <div id="shop-list" class="card-list"></div>
+      <button class="btn" data-action="back">بازگشت</button>
+    </div>
+  </section>
+
+  <!-- شخصیت‌ها -->
+  <section id="screen-chars" class="screen">
+    <div class="panel wide">
+      <h2>🧒 شخصیت‌ها</h2>
+      <div id="char-list" class="card-list"></div>
+      <button class="btn" data-action="back">بازگشت</button>
+    </div>
+  </section>
+
+  <!-- دستاوردها -->
+  <section id="screen-ach" class="screen">
+    <div class="panel wide">
+      <h2>🏆 دستاوردها</h2>
+      <div id="ach-list" class="card-list"></div>
+      <button class="btn" data-action="back">بازگشت</button>
+    </div>
+  </section>
+
+  <!-- کارنامه -->
+  <section id="screen-records" class="screen">
+    <div class="panel wide">
+      <h2>📋 کارنامهٔ کوکو</h2>
+      <p class="small muted">آمار ماجراجویی‌ات در ایران — با دکمهٔ اشتراک‌گذاری، نتیجه را برای دوستانت بفرست.</p>
+      <div id="records-body"></div>
+      <div class="menu-grid">
+        <button class="btn primary" id="btn-share">📤 اشتراک‌گذاری کارنامه</button>
+        <button class="btn" data-action="back">بازگشت</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- تنظیمات -->
+  <section id="screen-settings" class="screen">
+    <div class="panel">
+      <h2>⚙️ تنظیمات</h2>
+      <label class="row"><span>🎵 موسیقی</span><input type="checkbox" id="set-music" /></label>
+      <label class="row"><span>🔊 افکت‌ها</span><input type="checkbox" id="set-sfx" /></label>
+      <label class="row"><span>📳 لرزش گوشی</span><input type="checkbox" id="set-vibrate" /></label>
+      <label class="row"><span>🤚 حالت چپ‌دست</span><input type="checkbox" id="set-lefthanded" /></label>
+      <label class="row"><span>🌓 سایه و جزئیات</span><input type="checkbox" id="set-shadows" /></label>
+      <div class="row">
+        <span>🎚️ کیفیت</span>
+        <select id="set-quality">
+          <option value="auto">خودکار</option>
+          <option value="high">بالا</option>
+          <option value="low">سبک</option>
+        </select>
+      </div>
+      <button class="btn danger" id="btn-reset">پاک‌کردن پیشرفت</button>
+      <button class="btn" data-action="back">بازگشت</button>
+    </div>
+  </section>
+
+  <!-- راهنما -->
+  <section id="screen-help" class="screen">
+    <div class="panel">
+      <h2>❓ راهنما</h2>
+      <ul class="help-list">
+        <li><b>موبایل:</b> دکمه‌های ◀ ▶ برای حرکت، ▲ برای پرش، 🏃 برای دویدن، 🔥 برای شوت آتش.</li>
+        <li><b>کیبورد:</b> کلیدهای جهت‌دار برای حرکت، Space پرش، Shift دویدن، K شوت آتش، P توقف.</li>
+        <li><b>قارچ:</b> بزرگ می‌شوی و یک ضربه مقاوم‌تر.</li>
+        <li><b>گل آتش:</b> با 🔥 گلوله پرت کن (برای گیاه‌ها و دیو و اژدها).</li>
+        <li><b>ستارهٔ اقبال:</b> چند ثانیه نامرئی... نه، شکست‌ناپذیر می‌شوی!</li>
+        <li><b>پَر سیمرغ:</b> یک پرش دوم در هوا به تو می‌دهد.</li>
+        <li><b>دیو کویر:</b> وقتی غرش می‌کند روی سرش بپر. <b>اژدهای دماوند:</b> هنگام شیرجه روی سرش فرود بیا.</li>
+        <li><b>پرچم میانی:</b> ایستگاه ذخیره است؛ اگر بمیری از آنجا ادامه می‌دهی.</li>
+      </ul>
+      <button class="btn" data-action="back">بازگشت</button>
+    </div>
+  </section>
+
+  <!-- توقف -->
+  <section id="screen-pause" class="screen">
+    <div class="panel">
+      <h2>⏸️ توقف</h2>
+      <div id="pause-tips" class="tips"></div>
+      <div class="menu-grid">
+        <button class="btn primary" id="btn-resume">ادامه</button>
+        <button class="btn" id="btn-restart">شروع دوبارهٔ مرحله</button>
+        <button class="btn" id="btn-quit">بازگشت به منو</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- پایان مرحله -->
+  <section id="screen-complete" class="screen">
+    <div class="panel">
+      <h2 id="complete-title">🎉 مرحله تمام شد!</h2>
+      <div class="stars-row" id="complete-stars">⭐⭐⭐</div>
+      <div class="score-table" id="complete-table"></div>
+      <div class="menu-grid">
+        <button class="btn primary" id="btn-next">مرحلهٔ بعد ➡️</button>
+        <button class="btn" id="btn-again">دوباره</button>
+        <button class="btn" id="btn-menu">منو</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- پایان بازی -->
+  <section id="screen-gameover" class="screen">
+    <div class="panel">
+      <h2 id="gameover-title">💀 بازی تمام شد</h2>
+      <p id="gameover-text" class="muted"></p>
+      <div class="menu-grid">
+        <button class="btn primary" id="btn-retry">تلاش دوباره</button>
+        <button class="btn" id="btn-go-menu">منو</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- معرفی داستان -->
+  <section id="screen-intro" class="screen">
+    <div class="panel">
+      <h2>📜 داستان</h2>
+      <p class="story">
+        در کوچه‌های کاهگلی، قارچ‌های جادویی سبز شده‌اند. <b>کوکو</b> با کلاه نمدی‌اش راه می‌افتد
+        تا از بازار بزرگ، گلستان ارم، کاروانسرای کویر، قنات زیرزمینی، تخت جمشید و بام‌های تهران بگذرد
+        و به قلهٔ دماوند برسد؛ جایی که <b>اژدها</b> قارچ‌ها را دزدیده است.
+      </p>
+      <p class="story muted">راهنمایی: سکه‌ها را جمع کن، ستاره‌ها را بگیر و از سقوط در آب و نیزه‌ها دوری کن.</p>
+      <div class="menu-grid">
+        <button class="btn primary" data-action="start-level">شروع ماجرا 🚀</button>
+        <button class="btn" data-action="back">بازگشت</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="toast hidden"></div>
+  <div id="rotate-hint" class="hidden">
+    <div>📱 گوشی را افقی بگیر تا بهتر بازی کنی!</div>
+  </div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

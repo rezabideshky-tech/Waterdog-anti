@@ -1,0 +1,67 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_hw_projector.idle": {
+      "loop": true,
+      "bones": {
+        "core_ring_a": {
+          "rotation": [
+            "0",
+            "query.anim_time * 70",
+            "0"
+          ]
+        },
+        "core_ring_b": {
+          "rotation": [
+            "0",
+            "query.anim_time * -100",
+            "0"
+          ]
+        },
+        "core_gem": {
+          "rotation": [
+            "0",
+            "query.anim_time * 120",
+            "0"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 80) * 1.6",
+            "0"
+          ]
+        },
+        "bats": {
+          "rotation": [
+            "0",
+            "query.anim_time * 76",
+            "0"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 120) * 1.2",
+            "0"
+          ]
+        },
+        "beam": {
+          "scale": [
+            "1 + math.sin(query.anim_time * 110) * 0.1",
+            "1",
+            "1 + math.sin(query.anim_time * 110) * 0.1"
+          ]
+        },
+        "ghost": {
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 60) * 2.4",
+            "0"
+          ],
+          "rotation": [
+            "0",
+            "math.sin(query.anim_time * 30) * 12",
+            "0"
+          ]
+        }
+      }
+    }
+  }
+}
