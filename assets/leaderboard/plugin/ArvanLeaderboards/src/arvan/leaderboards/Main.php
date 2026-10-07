@@ -15,7 +15,8 @@ use pocketmine\utils\Config;
  * Main — پلاگین لیدربوردهای انیمیشنی ArvanGaming
  *
  * دستورات:
- *   /lb spawn <top|podium|holo|bed>       ساخت NPC در محل ایستادن شما
+ *   /lb spawn <top|podium|holo|bed|hw_top|hw_podium|hw_projector|hw_bed|hw_sign>
+ *                                          ساخت NPC در محل ایستادن شما
  *   /lb remove [شعاع]                     حذف NPCهای اطراف
  *   /lb set <kills|wins|beds|deaths|points> <بازیکن> <مقدار>
  *   /lb add <track> <بازیکن> [مقدار]      افزودن به آمار (از پلاگین BedWars صدا بزنید)
@@ -35,6 +36,12 @@ final class Main extends PluginBase
         'podium' => PodiumNpc::class,
         'holo' => HoloNpc::class,
         'bed' => BedNpc::class,
+        // ست هالووین (نسخهٔ ۱.۱) — همان امضای مشترک، تم کدو/روح/خفاش
+        'hw_top' => HwTopNpc::class,
+        'hw_podium' => HwPodiumNpc::class,
+        'hw_projector' => HwProjectorNpc::class,
+        'hw_bed' => HwBedNpc::class,
+        'hw_sign' => HwSignNpc::class,
     ];
 
     public static function get(): self
@@ -135,7 +142,7 @@ final class Main extends PluginBase
                 $type = (string) ($args[1] ?? 'top');
                 $e = $this->spawn($sender, $type);
                 $sender->sendMessage($e === null
-                    ? '§cنوع نامعتبر. یکی از: §ftop, podium, holo, bed'
+                    ? '§cنوع نامعتبر. یکی از: §f' . implode(', ', array_keys(self::TYPES))
                     : '§aساخته شد: §f' . $type . ' §7(مدلش با ریسورس‌پک ArvanLeaderboard نمایش داده می‌شود)');
                 return true;
 
@@ -201,7 +208,7 @@ final class Main extends PluginBase
                 $sender->sendMessage('§aconfig.yml دوباره خوانده شد.');
                 return true;
         }
-        $sender->sendMessage("§6/lb spawn <top|podium|holo|bed>\n§6/lb remove [radius]\n§6/lb set|add <track> <player> <value>\n§6/lb show [player]\n§6/lb track <top|podium> <track>\n§6/lb refresh | reload");
+        $sender->sendMessage("§6/lb spawn <" . implode('|', array_keys(self::TYPES)) . ">\n§6/lb remove [radius]\n§6/lb set|add <track> <player> <value>\n§6/lb show [player]\n§6/lb track <top|podium> <track>\n§6/lb refresh | reload");
         return true;
     }
 }

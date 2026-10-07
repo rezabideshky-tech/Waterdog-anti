@@ -513,6 +513,107 @@ def zip_dir(path: str, dest: str):
                 z.write(full, os.path.relpath(full, path))
 
 
+
+# ======================================================= امضای مشترک مدل‌ها
+# همهٔ مدل‌های ArvanGaming (لیدربورد، سکو، هولوگرام، تخت و نسخه‌های هالووین)
+# این پنج عنصر مشترک را دارند تا لابی یک‌دست دیده شود:
+#   ۱) پایهٔ ابسیدین با لبهٔ طلایی   ۲) چهار ستون طلایی با کلاهک فیروزه‌ای
+#   ۳) حلقهٔ چرخان فیروزه‌ای پایین    ۴) حلقهٔ چرخان طلایی بالا
+#   ۵) نگین الماسی شناور در ارتفاع ثابت (امضای اصلی)
+CORE = {
+    "gold": (252, 206, 60),
+    "gold_light": (255, 240, 150),
+    "gold_dark": (140, 85, 15),
+    "obsidian": (34, 26, 54),
+    "cyan": (90, 220, 255),
+    "emerald": (40, 210, 100),
+    "blood": (190, 38, 44),
+    "pumpkin": (240, 130, 30),
+    "soul": (120, 255, 150),
+}
+
+# ارتفاع‌های استاندارد لایه‌ها (پیکسل مدل) — همهٔ مدل‌ها روی این شبکه ساخته می‌شوند
+CORE_LEVELS = {
+    "platform_top": 2.0,     # رویهٔ سکو
+    "rim_top": 3.5,          # لبهٔ طلایی
+    "floor_top": 4.5,        # کف ابسیدین (پایهٔ همه‌چیز)
+    "post_top": 20.0,        # ارتفاع ستون‌های گوشه
+    "ring_a": 6.0,           # حلقهٔ فیروزه‌ای
+    "ring_b": 13.5,          # حلقهٔ طلایی
+}
+
+
+def core_signature(m: "Model", hw: float = 20.0, hd: float = 16.0, gem_y: float = 60.0,
+                   ring_r: float = 26.0, post_top: float = 20.0, gem: str = "gem_diamond",
+                   posts: bool = True):
+    """پنج عنصر مشترک را به مدل اضافه می‌کند و کانال‌های انیمیشن استاندارد را برمی‌گرداند.
+
+    hw/hd: نیم‌پهنای سکو (برای جای ستون‌ها) — gem_y: ارتفاع نگین شناور.
+    """
+    import math as _m
+    base = m.bones[0]
+    if posts:
+        for i, (sx, sz) in enumerate(((-1, -1), (1, -1), (-1, 1), (1, 1))):
+            px, pz = sx * hw, sz * hd
+            m.cube(base, "core_post%d" % i, (px - 2.5, 4.5, pz - 2.5), (px + 2.5, post_top, pz + 2.5),
+                   F(all="gold_dark"))
+            m.cube(base, "core_post%d_cap" % i, (px - 3.1, post_top, pz - 3.1),
+                   (px + 3.1, post_top + 2, pz + 3.1), F(all="holo_cyan"))
+    n_a = max(18, int(round(_m.tau * ring_r / 3.0)))          # قطر قطعه ~۳ پیکسل → حلقهٔ پیوسته
+    ring_a = m.bone("core_ring_a", (0, CORE_LEVELS["ring_a"], 0))
+    for i in range(n_a):
+        a = _m.tau * i / n_a
+        px, pz = _m.cos(a) * ring_r, _m.sin(a) * ring_r
+        m.cube(ring_a, "cra%d" % i, (px - 1.6, CORE_LEVELS["ring_a"] - 1, pz - 1.6),
+               (px + 1.6, CORE_LEVELS["ring_a"] + 1, pz + 1.6), F(all="holo_cyan"))
+    r_b = ring_r * 0.78
+    n_b = max(14, int(round(_m.tau * r_b / 3.2)))
+    ring_b = m.bone("core_ring_b", (0, CORE_LEVELS["ring_b"], 0))
+    for i in range(n_b):
+        a = _m.tau * i / n_b
+        px, pz = _m.cos(a) * r_b, _m.sin(a) * r_b
+        m.cube(ring_b, "crb%d" % i, (px - 1.8, CORE_LEVELS["ring_b"] - 1, pz - 1.8),
+               (px + 1.8, CORE_LEVELS["ring_b"] + 1, pz + 1.8), F(all="gold"))
+    gem_bone = m.bone("core_gem", (0, gem_y, 0))
+    m.cube(gem_bone, "core_gem_body", (-4, gem_y - 4, -4), (4, gem_y + 8, 4),
+           F(all=gem), rot=(0, 45, 0))
+    m.cube(gem_bone, "core_gem_halo", (-5.5, gem_y - 0.5, -5.5), (5.5, gem_y + 4.5, 5.5),
+           F(all="holo_cyan"))
+    return {
+        "core_ring_a": {"rotation": ["0", "query.anim_time * 70", "0"]},
+        "core_ring_b": {"rotation": ["0", "query.anim_time * -100", "0"]},
+        "core_gem": {"rotation": ["0", "query.anim_time * 120", "0"],
+                     "position": ["0", "math.sin(query.anim_time * 80) * 1.6", "0"]},
+    }
+
+
+def model_top(m: "Model", ignore_prefix: str = "core_") -> float:
+    """بالاترین y مدل (به‌جز عناصر امضا) — برای شناور کردن نگین دقیقاً بالای مدل."""
+    top = 0.0
+    for b in m.bones:
+        if b.name.startswith(ignore_prefix):
+            continue
+        for c in b.cubes:
+            top = max(top, float(c.to[1]))
+    return top
+
+
+def core_plaza(m: "Model", hw: float = 20.0, hd: float = 16.0, floor: str = "obsidian"):
+    """سکوی استاندارد جمع‌وجور: پلتفرم سنگی + لبهٔ طلایی + کف ابسیدین."""
+    base = m.bones[0]
+    m.cube(base, "core_platform", (-hw, -2, -hd), (hw, CORE_LEVELS["platform_top"], hd),
+           F(top="endstone", all="stone"))
+    m.cube(base, "core_rim_n", (-hw, 2, -hd), (hw, CORE_LEVELS["rim_top"], -hd + 4),
+           F(top="gold", all="gold_dark"))
+    m.cube(base, "core_rim_s", (-hw, 2, hd - 4), (hw, CORE_LEVELS["rim_top"], hd),
+           F(top="gold", all="gold_dark"))
+    m.cube(base, "core_rim_w", (-hw, 2, -hd + 4), (-hw + 4, CORE_LEVELS["rim_top"], hd - 4),
+           F(top="gold", all="gold_dark"))
+    m.cube(base, "core_rim_e", (hw - 4, 2, -hd + 4), (hw, CORE_LEVELS["rim_top"], hd - 4),
+           F(top="gold", all="gold_dark"))
+    m.cube(base, "core_floor", (-hw + 4, CORE_LEVELS["rim_top"], -hd + 4),
+           (hw - 4, CORE_LEVELS["floor_top"], hd - 4), F(top=floor, all=floor))
+
 # ------------------------------------------------------- پیش‌نمایش سه‌بعدی
 def _reg_px(name: str):
     x, y, w, h = REG[name]

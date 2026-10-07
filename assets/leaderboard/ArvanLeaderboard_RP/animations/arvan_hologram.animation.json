@@ -4,6 +4,32 @@
     "animation.arvan_hologram.idle": {
       "loop": true,
       "bones": {
+        "core_ring_a": {
+          "rotation": [
+            "0",
+            "query.anim_time * 70",
+            "0"
+          ]
+        },
+        "core_ring_b": {
+          "rotation": [
+            "0",
+            "query.anim_time * -100",
+            "0"
+          ]
+        },
+        "core_gem": {
+          "rotation": [
+            "0",
+            "query.anim_time * 120",
+            "0"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 80) * 1.6",
+            "0"
+          ]
+        },
         "core": {
           "scale": [
             "1 + math.sin(query.anim_time * 150) * 0.06",
@@ -27,32 +53,6 @@
           "position": [
             "0",
             "math.sin(query.anim_time * 60) * 1.2",
-            "0"
-          ]
-        },
-        "ring_a": {
-          "rotation": [
-            "0",
-            "query.anim_time * 85",
-            "0"
-          ]
-        },
-        "ring_b": {
-          "rotation": [
-            "0",
-            "query.anim_time * -130",
-            "0"
-          ]
-        },
-        "gem": {
-          "rotation": [
-            "0",
-            "query.anim_time * 150",
-            "0"
-          ],
-          "position": [
-            "0",
-            "math.sin(query.anim_time * 75) * 2",
             "0"
           ]
         }

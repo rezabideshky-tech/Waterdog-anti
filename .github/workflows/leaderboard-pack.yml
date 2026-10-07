@@ -55,7 +55,9 @@ jobs:
           names = z.namelist()
           assert "manifest.json" in names, "manifest در ریشهٔ پک نیست"
           json.loads(z.read("manifest.json"))
-          for stem in ("arvan_leaderboard", "arvan_podium", "arvan_hologram", "arvan_bedwars_bed"):
+          stems = ["arvan_leaderboard", "arvan_podium", "arvan_hologram", "arvan_bedwars_bed",
+                   "arvan_hw_top", "arvan_hw_podium", "arvan_hw_projector", "arvan_hw_bed", "arvan_hw_sign"]
+          for stem in stems:
               for want in (f"models/entity/{stem}.geo.json",
                            f"animations/{stem}.animation.json",
                            f"textures/entity/{stem}.png",
@@ -76,6 +78,7 @@ jobs:
             assets/leaderboard/ArvanLeaderboard_models.zip
             assets/leaderboard/ArvanLeaderboard_RP.zip
             assets/leaderboard/preview_hero.png
+            assets/leaderboard/preview_halloween.png
           if-no-files-found: error
 
       - name: ضمیمه به Release (اگر تگ داده شده)
@@ -92,5 +95,6 @@ jobs:
             assets/leaderboard/ArvanLeaderboards_plugin.zip \
             assets/leaderboard/ArvanLeaderboard_models.zip \
             assets/leaderboard/ArvanLeaderboard_RP.zip \
-            assets/leaderboard/preview_hero.png --clobber
+            assets/leaderboard/preview_hero.png \
+            assets/leaderboard/preview_halloween.png --clobber
           echo "✅ فایل‌ها به ریلیز $TAG ضمیمه شدند."

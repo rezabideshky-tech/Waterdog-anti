@@ -1,0 +1,33 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:hw_projector",
+      "materials": {
+        "default": "entity_alphablend"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_hw_projector"
+      },
+      "geometry": {
+        "default": "geometry.arvan_hw_projector"
+      },
+      "animations": {
+        "idle": "animation.arvan_hw_projector.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "1.0"
+      },
+      "render_controllers": [
+        "controller.render.arvan_leaderboard"
+      ],
+      "spawn_egg": {
+        "base_color": "#78FF96",
+        "overlay_color": "#2C2246"
+      }
+    }
+  }
+}

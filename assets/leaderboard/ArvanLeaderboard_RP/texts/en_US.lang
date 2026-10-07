@@ -1,4 +1,9 @@
 entity.arvan:leaderboard.name=§l§6LEADERBOARD
 entity.arvan:podium.name=§l§6PODIUM
 entity.arvan:hologram.name=§l§6HOLOGRAM
-entity.arvan:bedwars_bed.name=§l§6BEDWARS_BED
+entity.arvan:bedwars_bed.name=§l§6BEDWARS BED
+entity.arvan:hw_top.name=§l§6🎃 SPOOKY TOP
+entity.arvan:hw_podium.name=§l§6🎃 PUMPKIN PODIUM
+entity.arvan:hw_projector.name=§l§6👻 HAUNTED HOLO
+entity.arvan:hw_bed.name=§l§6🦇 VAMPIRE BED
+entity.arvan:hw_sign.name=§l§6TRICK OR TREAT

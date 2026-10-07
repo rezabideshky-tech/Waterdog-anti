@@ -1,0 +1,33 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:hw_top",
+      "materials": {
+        "default": "entity_alphablend"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_hw_top"
+      },
+      "geometry": {
+        "default": "geometry.arvan_hw_top"
+      },
+      "animations": {
+        "idle": "animation.arvan_hw_top.idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ],
+        "scale": "1.0"
+      },
+      "render_controllers": [
+        "controller.render.arvan_leaderboard"
+      ],
+      "spawn_egg": {
+        "base_color": "#F08A1E",
+        "overlay_color": "#2C2246"
+      }
+    }
+  }
+}

@@ -4,6 +4,32 @@
     "animation.arvan_podium.idle": {
       "loop": true,
       "bones": {
+        "core_ring_a": {
+          "rotation": [
+            "0",
+            "query.anim_time * 70",
+            "0"
+          ]
+        },
+        "core_ring_b": {
+          "rotation": [
+            "0",
+            "query.anim_time * -100",
+            "0"
+          ]
+        },
+        "core_gem": {
+          "rotation": [
+            "0",
+            "query.anim_time * 120",
+            "0"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 80) * 1.6",
+            "0"
+          ]
+        },
         "beam1": {
           "scale": [
             "1",
@@ -48,32 +74,6 @@
           "position": [
             "0",
             "math.sin(query.anim_time * 90 + 90) * 1.4",
-            "0"
-          ]
-        },
-        "crystal": {
-          "rotation": [
-            "0",
-            "query.anim_time * 70",
-            "math.sin(query.anim_time * 45) * 6"
-          ],
-          "position": [
-            "0",
-            "math.sin(query.anim_time * 80) * 2",
-            "0"
-          ]
-        },
-        "ring_a": {
-          "rotation": [
-            "0",
-            "query.anim_time * -70",
-            "0"
-          ]
-        },
-        "ring_b": {
-          "rotation": [
-            "0",
-            "query.anim_time * 110",
             "0"
           ]
         },

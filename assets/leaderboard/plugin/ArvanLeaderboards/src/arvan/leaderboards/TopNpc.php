@@ -28,9 +28,15 @@ final class TopNpc extends FloatingNpc
         return in_array($t, StatsStore::TRACKS, true) ? $t : 'wins';
     }
 
+    /** عنوان پیش‌فرض نام‌تگ (کلاس‌های هالووین بازنویسی می‌کنند) */
+    protected function defaultTitle(): string
+    {
+        return '§l§6BEDWARS §fTOP';
+    }
+
     public function refreshNameTag(): void
     {
-        $title = (string) $this->cfg('title', '§l§6BEDWARS §fTOP');
+        $title = (string) $this->cfg('title', $this->defaultTitle());
         $limit = (int) $this->cfg('limit', 10);
         $track = $this->track();
         $label = (string) $this->cfg('tracks.' . $track . '.label', $track);

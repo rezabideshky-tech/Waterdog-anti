@@ -1,0 +1,60 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_hw_sign.idle": {
+      "loop": true,
+      "bones": {
+        "core_ring_a": {
+          "rotation": [
+            "0",
+            "query.anim_time * 70",
+            "0"
+          ]
+        },
+        "core_ring_b": {
+          "rotation": [
+            "0",
+            "query.anim_time * -100",
+            "0"
+          ]
+        },
+        "core_gem": {
+          "rotation": [
+            "0",
+            "query.anim_time * 120",
+            "0"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 80) * 1.6",
+            "0"
+          ]
+        },
+        "bats": {
+          "rotation": [
+            "0",
+            "query.anim_time * 76",
+            "0"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 120) * 1.2",
+            "0"
+          ]
+        },
+        "base": {
+          "rotation": [
+            "0",
+            "0",
+            "math.sin(query.anim_time * 55) * 2"
+          ],
+          "position": [
+            "0",
+            "math.sin(query.anim_time * 55) * 0.6",
+            "0"
+          ]
+        }
+      }
+    }
+  }
+}

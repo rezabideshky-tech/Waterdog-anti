@@ -18,7 +18,8 @@ import os
 import shutil
 import uuid
 
-from bb_lib import (ATLAS, F, REG, Model, bed_icon, center_text, crown_icon, endstone,
+import hw_models
+from bb_lib import (ATLAS, F, REG, Model, core_plaza, core_signature, model_top, bed_icon, center_text, crown_icon, endstone,
                     gem, glow, goldblock, grad, holo_beam, holo_glass, medal, noise,
                     outline, pixel_text, plank, plate, rect, render_model,
                     save_anim, save_bbmodel, save_entity, save_geo, save_manifest,
@@ -27,7 +28,7 @@ from bb_lib import (ATLAS, F, REG, Model, bed_icon, center_text, crown_icon, end
 from PIL import Image, ImageDraw
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-S = 512                      # اندازهٔ بافت
+S = 768                      # اندازهٔ بافت
 NS = uuid.UUID("8f2c1d44-7a91-4c3e-9c11-2ab24e6f9d10")   # برای uuid پایدار
 
 GOLD = [(255, 240, 150), (252, 206, 60), (220, 150, 25), (140, 85, 15)]
@@ -301,37 +302,13 @@ def build_leaderboard() -> Model:
     br = m.bone("banner_r", (38, 58, 0))
     m.cube(br, "banner_r_cloth", (34, 34, 0.2), (46, 58, 0.8), F(front="flag_blue", all="wool_blue"))
     m.cube(br, "banner_r_rod", (33.5, 58, 0), (46.5, 59.5, 1), F(all="gold_dark"))
-    # حلقه‌های چرخان
-    ra = m.bone("ring_a", (0, 6, 0))
-    for i in range(24):
-        import math as _m
-        a = _m.tau * i / 24
-        px, pz = _m.cos(a) * 44, _m.sin(a) * 44
-        m.cube(ra, "ring_a_%d" % i, (px - 2, 5, pz - 2), (px + 2, 7, pz + 2), F(all="gold"))
-    rb = m.bone("ring_b", (0, 14, 0))
-    for i in range(18):
-        import math as _m
-        a = _m.tau * i / 18
-        px, pz = _m.cos(a) * 34, _m.sin(a) * 34
-        m.cube(rb, "ring_b_%d" % i, (px - 2, 13, pz - 2), (px + 2, 15, pz + 2), F(all="holo_cyan"))
-    # مدار نگین‌ها
-    orb = m.bone("orbit", (0, 70, 0))
-    for i, (g, ang) in enumerate((("gem_diamond", 0), ("gem_emerald", 90),
-                                  ("gem_gold", 180), ("gem_purple", 270))):
-        import math as _m
-        a = _m.radians(ang)
-        px, pz = _m.cos(a) * 44, _m.sin(a) * 44
-        m.cube(orb, "orb_%d" % i, (px - 3.5, 68, pz - 3.5), (px + 3.5, 75, pz + 3.5),
-               F(all=g), rot=(45, 0, 45), pivot=(px, 71.5, pz))
+    core = core_signature(m, hw=36, hd=18, gem_y=model_top(m) + 9, ring_r=26, posts=False)
     m.anim("animation.arvan_leaderboard.idle", {
+        **core,
         "board": {"position": ["0", "math.sin(query.anim_time * 60) * 0.8", "0"],
                   "rotation": ["math.sin(query.anim_time * 45) * 0.6", "0", "0"]},
         "crown": {"position": ["0", "math.sin(query.anim_time * 90) * 1.6", "0"],
                   "rotation": ["0", "query.anim_time * -35", "0"]},
-        "ring_a": {"rotation": ["0", "query.anim_time * 60", "0"]},
-        "ring_b": {"rotation": ["0", "query.anim_time * -95", "0"]},
-        "orbit": {"rotation": ["0", "query.anim_time * 40", "0"],
-                  "position": ["0", "math.cos(query.anim_time * 80) * 1.4", "0"]},
         "banner_l": {"rotation": ["0", "0", "math.sin(query.anim_time * 100) * 3"]},
         "banner_r": {"rotation": ["0", "0", "math.sin(query.anim_time * 100 + 40) * -3"]},
     })
@@ -380,29 +357,14 @@ def build_podium() -> Model:
                F(front="num%s" % txt, all=col))
         m.cube(bid, "top%d_ring" % (i + 2), (bx - 7.5, by - 1.5, -2.5), (bx + 7.5, by + 1, 2.5),
                F(all="holo_cyan"))
-    # کریستال بالای سکو
-    cry = m.bone("crystal", (0, 74, 0))
-    m.cube(cry, "crystal_core", (-8, 68, -8), (8, 84, 8), F(all="gem_diamond"), rot=(0, 0, 0))
-    m.cube(cry, "crystal_base", (-4, 64, -4), (4, 68, 4), F(all="holo_cyan"))
-    # حلقه‌های چرخان پای سکو
-    ra = m.bone("ring_a", (0, 6, 0))
-    for i in range(24):
-        import math as _m
-        a = _m.tau * i / 24
-        px, pz = _m.cos(a) * 46, _m.sin(a) * 46
-        m.cube(ra, "ra_%d" % i, (px - 2, 5, pz - 2), (px + 2, 7, pz + 2), F(all="holo_cyan"))
-    rb = m.bone("ring_b", (0, 12, 0))
-    for i in range(16):
-        import math as _m
-        a = _m.tau * i / 16
-        px, pz = _m.cos(a) * 36, _m.sin(a) * 36
-        m.cube(rb, "rb_%d" % i, (px - 2.5, 11, pz - 2.5), (px + 2.5, 13, pz + 2.5), F(all="gold"))
     # پرچم‌ها
     bl = m.bone("banner_l", (-30, 46, 16))
     m.cube(bl, "bl_cloth", (-37, 24, 16.2), (-25, 46, 16.9), F(front="flag_red", all="wool_red"))
     br = m.bone("banner_r", (30, 46, 16))
     m.cube(br, "br_cloth", (25, 24, 16.2), (37, 46, 16.9), F(front="flag_blue", all="wool_blue"))
+    core = core_signature(m, hw=36, hd=24, gem_y=model_top(m) + 9, ring_r=28, gem="gem_purple", posts=False)
     m.anim("animation.arvan_podium.idle", {
+        **core,
         "beam1": {"scale": ["1", "1 + math.sin(query.anim_time * 120) * 0.12", "1"]},
         "beam2": {"scale": ["1", "1 + math.sin(query.anim_time * 120 + 60) * 0.15", "1"]},
         "beam3": {"scale": ["1", "1 + math.sin(query.anim_time * 120 + 120) * 0.15", "1"]},
@@ -410,10 +372,6 @@ def build_podium() -> Model:
                  "rotation": ["0", "query.anim_time * -30", "0"]},
         "top2": {"position": ["0", "math.sin(query.anim_time * 90 + 45) * 1.4", "0"]},
         "top3": {"position": ["0", "math.sin(query.anim_time * 90 + 90) * 1.4", "0"]},
-        "crystal": {"rotation": ["0", "query.anim_time * 70", "math.sin(query.anim_time * 45) * 6"],
-                    "position": ["0", "math.sin(query.anim_time * 80) * 2", "0"]},
-        "ring_a": {"rotation": ["0", "query.anim_time * -70", "0"]},
-        "ring_b": {"rotation": ["0", "query.anim_time * 110", "0"]},
         "banner_l": {"rotation": ["0", "0", "math.sin(query.anim_time * 100) * 3"]},
         "banner_r": {"rotation": ["0", "0", "math.sin(query.anim_time * 100 + 40) * -3"]},
     })
@@ -455,31 +413,13 @@ def build_hologram() -> Model:
                                                              all="holo_cyan"))
     m.cube(disc, "disc_rim", (-21, 52, -21), (21, 55, -20.4), F(all="holo_cyan"))
     m.cube(disc, "disc_rim2", (-21, 52, 20.4), (21, 55, 21), F(all="holo_cyan"))
-    ra = m.bone("ring_a", (0, 60, 0))
-    for i in range(20):
-        import math as _m
-        a = _m.tau * i / 20
-        px, pz = _m.cos(a) * 30, _m.sin(a) * 30
-        m.cube(ra, "ra_%d" % i, (px - 2, 59, pz - 2), (px + 2, 61, pz + 2), F(all="holo_cyan"))
-    rb = m.bone("ring_b", (0, 66, 0))
-    for i in range(14):
-        import math as _m
-        a = _m.tau * i / 14
-        px, pz = _m.cos(a) * 20, _m.sin(a) * 20
-        m.cube(rb, "rb_%d" % i, (px - 2, 65, pz - 2), (px + 2, 67, pz + 2), F(all="gold"))
-    # نگین شناور بالای همه
-    g = m.bone("gem", (0, 74, 0))
-    m.cube(g, "gem_core", (-6, 71, -6), (6, 83, 6), F(all="gem_diamond"), rot=(0, 45, 0))
-    m.cube(g, "gem_halo", (-9, 74, -9), (9, 80, 9), F(all="holo_cyan"))
+    core = core_signature(m, hw=24, hd=24, gem_y=78, ring_r=24, posts=False)
     m.anim("animation.arvan_hologram.idle", {
+        **core,
         "core": {"scale": ["1 + math.sin(query.anim_time * 150) * 0.06", "1", "1 + math.sin(query.anim_time * 150) * 0.06"]},
         "beam": {"scale": ["1 + math.sin(query.anim_time * 90) * 0.08", "1", "1 + math.sin(query.anim_time * 90) * 0.08"]},
         "disc": {"rotation": ["0", "query.anim_time * 24", "0"],
                  "position": ["0", "math.sin(query.anim_time * 60) * 1.2", "0"]},
-        "ring_a": {"rotation": ["0", "query.anim_time * 85", "0"]},
-        "ring_b": {"rotation": ["0", "query.anim_time * -130", "0"]},
-        "gem": {"rotation": ["0", "query.anim_time * 150", "0"],
-                "position": ["0", "math.sin(query.anim_time * 75) * 2", "0"]},
     })
     return m
 
@@ -528,31 +468,22 @@ def build_bed() -> Model:
     br = m.bone("banner_r", (34, 44, -8))
     m.cube(br, "br_cloth", (28, 22, -8.2), (40, 44, -7.5), F(front="flag_blue", all="wool_blue"))
     m.cube(br, "br_rod", (27, 44, -9), (41, 45.5, -6.5), F(all="gold_dark"))
-    # حلقه‌های چرخان
-    ra = m.bone("ring_a", (0, 6, 0))
-    for i in range(26):
-        import math as _m
-        a = _m.tau * i / 26
-        px, pz = _m.cos(a) * 48, _m.sin(a) * 48
-        m.cube(ra, "ra_%d" % i, (px - 2, 5, pz - 2), (px + 2, 7, pz + 2), F(all="holo_cyan"))
-    rb = m.bone("ring_b", (0, 20, 0))
-    for i in range(18):
-        import math as _m
-        a = _m.tau * i / 18
-        px, pz = _m.cos(a) * 38, _m.sin(a) * 38
-        m.cube(rb, "rb_%d" % i, (px - 2.5, 19, pz - 2.5), (px + 2.5, 21, pz + 2.5), F(all="gold"))
+    core = core_signature(m, hw=38, hd=26, gem_y=model_top(m) + 9, ring_r=30, gem="gem_emerald", posts=False)
     m.anim("animation.arvan_bedwars_bed.idle", {
+        **core,
         "sword": {"rotation": ["math.sin(query.anim_time * 45) * 4", "query.anim_time * 45", "0"],
                   "position": ["0", "math.sin(query.anim_time * 70) * 2.2", "0"]},
         "crown": {"position": ["0", "math.sin(query.anim_time * 90 + 30) * 1.5", "0"],
                   "rotation": ["0", "query.anim_time * -25", "0"]},
-        "ring_a": {"rotation": ["0", "query.anim_time * 55", "0"]},
-        "ring_b": {"rotation": ["0", "query.anim_time * -85", "0"]},
         "banner_l": {"rotation": ["0", "0", "math.sin(query.anim_time * 100) * 3.5"]},
         "banner_r": {"rotation": ["0", "0", "math.sin(query.anim_time * 100 + 50) * -3.5"]},
     })
     return m
 
+
+# ======================================================== بافت‌های هالووین
+print("🎃 بافت‌های هالووین…")
+hw_models.define_textures()
 
 # ================================================================ ساخت همه
 MODELS = [build_leaderboard(), build_podium(), build_hologram(), build_bed()]
@@ -560,6 +491,12 @@ SCALE = {"arvan_leaderboard": "1.0", "arvan_podium": "1.0",
          "arvan_hologram": "1.0", "arvan_bedwars_bed": "1.0"}
 EGG = {"arvan_leaderboard": ("#FFD24A", "#1B2740"), "arvan_podium": ("#FFD24A", "#C8282D"),
        "arvan_hologram": ("#5BE0FF", "#1B2740"), "arvan_bedwars_bed": ("#DC282D", "#F0F0F5")}
+
+# ست هالووین (هم‌خانواده با همان پنج عنصر مشترک)
+for hw_model, hw_scale, hw_egg in hw_models.ENTRIES:
+    MODELS.append(hw_model)
+    SCALE[hw_model.name] = hw_scale
+    EGG[hw_model.name] = hw_egg
 
 TEX_PATH = os.path.join(OUT, "arvan_leaderboard_atlas.png")
 ATLAS.img.save(TEX_PATH)
@@ -589,6 +526,13 @@ save_manifest(os.path.join(RP, "manifest.json"),
 save_render_controller("controller.render.arvan_leaderboard",
                        os.path.join(RP, "render_controllers/arvan_leaderboard.render_controllers.json"))
 
+NAMES = {
+    "arvan_leaderboard": "LEADERBOARD", "arvan_podium": "PODIUM",
+    "arvan_hologram": "HOLOGRAM", "arvan_bedwars_bed": "BEDWARS BED",
+    "arvan_hw_top": "🎃 SPOOKY TOP", "arvan_hw_podium": "🎃 PUMPKIN PODIUM",
+    "arvan_hw_projector": "👻 HAUNTED HOLO", "arvan_hw_bed": "🦇 VAMPIRE BED",
+    "arvan_hw_sign": "TRICK OR TREAT",
+}
 lang = []
 for m in MODELS:
     shutil.copy(TEX_PATH, os.path.join(RP, "textures/entity/%s.png" % m.name))
@@ -600,7 +544,8 @@ for m in MODELS:
                 "animation.%s.idle" % m.name, SCALE[m.name],
                 "controller.render.arvan_leaderboard",
                 os.path.join(RP, "entity/%s.entity.json" % m.name), EGG[m.name])
-    lang.append("entity.%s.name=§l§6%s" % (m.ident, m.name.replace("arvan_", "").upper()))
+    pretty = NAMES.get(m.name, m.name.replace("arvan_", "").upper())
+    lang.append("entity.%s.name=§l§6%s" % (m.ident, pretty))
 
 with open(os.path.join(RP, "texts/en_US.lang"), "w", encoding="utf-8") as f:
     f.write("\n".join(lang) + "\n")
