@@ -38,7 +38,7 @@ class LobbyManager {
         $this->loadLobbyData();
         $this->loadHologramData();
 
-        // دکور هالووینی: انتیتی‌های Customies که دور ستون متن هر leaderboard می‌شینن
+        // دکور هالووینی لیدربوردها: پایه‌ی Customies که دور ستون متن هولوگرام می‌شینه
         // (پایه زیر متن، تاج بالای متن — جزئیات هم‌ترازی در HalloweenPedestal::Y_OFFSET)
         $this->pedestals = new HalloweenLeaderboardManager($plugin);
         $this->pedestals->registerVariants();
@@ -217,7 +217,9 @@ class LobbyManager {
             $idSuffix = "_lm_" . substr(md5((string) $posKey), 0, 8);
             $provider->getLeaderboard($stat, 10, function(array $rows) use ($hologramManager, $world, $pos, $stat, $displayName, $idSuffix) {
                 $hologramManager->createLeaderboard($stat, $displayName, $world, $pos, $rows, $idSuffix);
-                $this->pedestals->summon($stat, $world, $pos);
+                if (isset($this->pedestals)) {
+                    $this->pedestals->summon($stat, $world, $pos);
+                }
             });
         }
     }

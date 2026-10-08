@@ -8,15 +8,17 @@ use pocketmine\entity\Location;
 use pocketmine\math\Vector3;
 use pocketmine\world\World;
 use sergittos\bedwars\lobby\BedWarsLobby;
+use Throwable;
 
 /**
  * HalloweenLeaderboardManager — ساخت/حذف پایه‌های هالووینی لیدربوردها.
  *
- * محل مصرف: بعد از این‌که LobbyManager (یا LeaderboardManager) هولوگرام متن لیدربورد رو
- * روی $pos ساختن، همون $pos و $world به summon() داده می‌شه و انتیتی روی
- * $pos.y - HalloweenPedestal::Y_OFFSET اسپاون می‌شه (پایین پای متن، تاج بالای متن).
+ * محل مصرف: بعد از این‌که BedWarsCore هولوگرام متن لیدربورد رو روی $pos ساخت، همون
+ * $pos و $world به summon() داده می‌شه و انتیتی روی $pos.y - HalloweenPedestal::Y_OFFSET
+ * اسپاون می‌شه؛ یعنی پایه زیر متن و تاج بالای متن.
  *
- * اگر Customies نصب نباشه، پایه‌ها بی‌صدا غیرفعال می‌شن و لیدربورد متنی سر جاش می‌مونه.
+ * همه‌ی مسیرها fail-safe هستن: اگه Customies نصب نباشه، رجیستریشن خطا بده یا دنیا
+ * لود نباشه، فقط دکور لود نمی‌شه و خود متن لیدربوردها هیچ آسیبی نمی‌بینه.
  */
 final class HalloweenLeaderboardManager {
 
@@ -35,6 +37,7 @@ final class HalloweenLeaderboardManager {
     private BedWarsLobby $plugin;
     private bool $enabled = false;
     private bool $active = true;
+    private bool $warned = false;
 
     /** @var array<string, int> key => entity id */
     private array $spawned = [];
@@ -49,14 +52,19 @@ final class HalloweenLeaderboardManager {
     /** در onEnable صدا زده می‌شه: ثبت ۸ واریانت در Customies. */
     public function registerVariants() : void{
         if(!class_exists(CustomiesEntityFactory::class)) {
-            $this->plugin->getLogger()->notice("Customies پیدا نشد — دکور هالووینی لیدربوردها غیرفعال موند (خود متن لیدربوردها مشکلی نداره).");
+            $this->plugin->getLogger()->notice("Customies پیدا نشد — دکور هالووینی لیدربوردها غیرفعال موند (خود لیدربوردهای متنی سالم کار می‌کنن).");
             return;
         }
-        $factory = CustomiesEntityFactory::getInstance();
-        foreach(self::VARIANTS as $class) {
-            $factory->registerEntity($class, $class::NETWORK_ID);
+        try {
+            $factory = CustomiesEntityFactory::getInstance();
+            foreach(self::VARIANTS as $class) {
+                $factory->registerEntity($class, $class::NETWORK_ID);
+            }
+            $this->enabled = true;
+        } catch(Throwable $e) {
+            $this->enabled = false;
+            $this->plugin->getLogger()->warning("ثبت دکور هالووینی لیدربوردها ناموفق بود: " . $e->getMessage());
         }
-        $this->enabled = true;
     }
 
     public function isEnabled() : bool{
@@ -68,14 +76,16 @@ final class HalloweenLeaderboardManager {
         $this->plugin->getConfig()->setNested("halloween_pedestals", $active);
         $this->plugin->getConfig()->save();
         if(!$active) {
-            foreach($this->spawned as $key => $id) {
+            foreach(array_keys($this->spawned) as $key) {
                 $this->despawnByKey($key);
             }
         }
     }
 
     /**
-     * پایه‌ی مخصوص یک استت را روی نقطه‌ی هولوگرام می‌سازه (یا اگه از قبل هست، هم‌جا می‌کنه).
+     * پایه‌ی مخصوص یک استت را روی نقطه‌ی هولوگرام می‌سازه.
+     * امن برای صدا زدن مکرر (هر refresh لیدربورد): اگه انتیتی موجود باشه فقط
+     * در صورت جابه‌جایی واقعی teleport می‌شه، وگرنه دست نمی‌خوره.
      */
     public function summon(string $stat, World $world, Vector3 $pos) : void{
         $class = self::VARIANTS[$stat] ?? null;
@@ -84,18 +94,32 @@ final class HalloweenLeaderboardManager {
         }
 
         $key = $this->key($stat, $world, $pos);
-        $this->positions[$key] = ["world" => $world->getFolderName(), "x" => $pos->x, "y" => $pos->y, "z" => $pos->z, "stat" => $stat];
+        $this->positions[$key] = [
+            "world" => $world->getFolderName(),
+            "x" => $pos->x, "y" => $pos->y, "z" => $pos->z,
+            "stat" => $stat,
+        ];
 
-        $existing = $this->resolve($key);
-        if($existing !== null) {
-            $existing->teleport(self::baseLocation($pos, $world));
-            return;
+        try {
+            $existing = $this->resolve($key);
+            if($existing !== null) {
+                if($existing->getPosition()->distanceSquared(self::base($pos)) > 0.0001) {
+                    $existing->teleport(self::baseLocation($pos, $world));
+                }
+                return;
+            }
+
+            /** @var HalloweenPedestal $entity */
+            $entity = new $class(self::baseLocation($pos, $world));
+            $entity->spawnToAll();
+            $this->spawned[$key] = $entity->getId();
+        } catch(Throwable $e) {
+            if(!$this->warned) {
+                $this->warned = true;
+                $this->plugin->getLogger()->warning("ساخت دکور هالووینی («{$stat}») ناموفق بود — دکور غیرفعال می‌شه: " . $e->getMessage());
+            }
+            $this->enabled = false;
         }
-
-        /** @var HalloweenPedestal $entity */
-        $entity = new $class(self::baseLocation($pos, $world));
-        $entity->spawnToAll();
-        $this->spawned[$key] = $entity->getId();
     }
 
     public function remove(string $stat, World $world, Vector3 $pos) : void{
@@ -104,7 +128,7 @@ final class HalloweenLeaderboardManager {
         $this->despawnByKey($key);
     }
 
-    /** همه‌ی پایه‌های ثبت‌شده را از نو می‌سازه (بعد از ری‌لود چانک/ورلد یا /bwhalloween respawn). */
+    /** همه‌ی پایه‌های ثبت‌شده را از نو می‌سازه (بعد از ری‌لود ورلد یا /bwhalloween respawn). */
     public function respawnAll() : int{
         $count = 0;
         foreach($this->positions as $data) {
@@ -149,12 +173,13 @@ final class HalloweenLeaderboardManager {
         return $entity;
     }
 
+    private static function base(Vector3 $pos) : Vector3{
+        return new Vector3($pos->x, $pos->y - HalloweenPedestal::Y_OFFSET, $pos->z);
+    }
+
     private static function baseLocation(Vector3 $pos, World $world) : Location{
-        // پای مدل روی زمین پایه می‌شینه؛ متن هم دقیقاً وسط قاب قرار می‌گیره.
-        return Location::fromObject(
-            new Vector3($pos->x, $pos->y - HalloweenPedestal::Y_OFFSET, $pos->z),
-            $world
-        );
+        // پای مدل روی زمین پایه می‌شینه؛ متن هولوگرام هم دقیقاً وسط قاب قرار می‌گیره.
+        return Location::fromObject(self::base($pos), $world);
     }
 
     private function key(string $stat, World $world, Vector3 $pos) : string{

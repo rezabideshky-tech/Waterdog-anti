@@ -21,10 +21,10 @@ final class HalloweenLeaderboardCommand extends Command {
         parent::__construct(
             "bwhalloween",
             "Manage the Halloween leaderboard pedestals",
-            "/bwhalloween <on|off|respawn|info>"
+            "/bwhalloween <on|off|respawn|info>",
+            ["bwlbdecor", "lbcrown"]   // alias از طریق سازنده (همون امضای استاندارد Command)
         );
         $this->setPermission("bedwars.admin");
-        $this->setAliases(["bwlbdecor", "lbcrown"]);
     }
 
     public function execute(CommandSender $sender, string $label, array $args) : void{

@@ -41,8 +41,9 @@ class LeaderboardManager {
 
         if ($removed !== null) {
             $world = $this->plugin->getServer()->getWorldManager()->getWorldByName($removed["world"]);
-            if ($world !== null) {
-                \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManager()->getPedestals()->remove(
+            $lobby = \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManagerOrNull();
+            if ($world !== null && $lobby !== null) {
+                $lobby->getPedestals()->remove(
                     $stat, $world, new Vector3((float) $removed["x"], (float) $removed["y"], (float) $removed["z"])
                 );
             }
@@ -73,8 +74,12 @@ class LeaderboardManager {
 
         BedWarsCore::getInstance()->getProvider()->getLeaderboard($stat, 10, function(array $rows) use ($stat, $displayName, $world, $pos): void {
             BedWarsCore::getInstance()->getHologramManager()->createLeaderboard($stat, $displayName, $world, $pos, $rows);
-            // پایه‌ی هالووینی همراه همون هولوگرام بالا/پایین می‌شه
-            \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManager()->getPedestals()->summon($stat, $world, $pos);
+
+            // پایه‌ی هالووینی همراه همون هولوگرام بالا/پایین می‌شه.
+            // نکته: این manager داخل constructor خودش spawnAll() صدا می‌زنه و ممکنه
+            // هنوز LobbyManager ساخته نشده باشه؛ پس فقط از راه accessor امن استفاده می‌کنیم.
+            $lobby = \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManagerOrNull();
+            $lobby?->getPedestals()->summon($stat, $world, $pos);
         });
     }
 

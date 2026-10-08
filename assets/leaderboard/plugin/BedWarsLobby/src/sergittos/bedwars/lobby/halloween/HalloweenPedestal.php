@@ -47,7 +47,7 @@ abstract class HalloweenPedestal extends Entity {
         $this->setNameTag("");
         $this->setNameTagAlwaysVisible(false);
         $this->setNoClientPredictions();
-        $this->setHasGravity(false);
+        // گرانش از طریق getInitialGravityMultiplier() = 0 خاموش شده (همون الگوی LobbyNpc).
     }
 
     /** دکور موقتی است — با سیو شدن چانک نباید توی دنیا تکثیر بشه. */

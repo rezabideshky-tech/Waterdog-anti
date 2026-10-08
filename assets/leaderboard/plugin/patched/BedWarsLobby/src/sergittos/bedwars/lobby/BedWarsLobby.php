@@ -148,6 +148,13 @@ class BedWarsLobby extends PluginBase{
 
     public function getLeaderboardManager() : LeaderboardManager{ return $this->leaderboardManager; }
     public function getLobbyManager() : LobbyManager{ return $this->lobbyManager; }
+
+    /**
+     * دسترسی امن به LobbyManager برای جاهایی که ممکنه قبل از پایان onEnable صدا زده بشن
+     * (مثلاً LeaderboardManager داخل constructor خودش spawnAll() می‌کنه). روی typed property
+     * مقداردهی‌نشده، isset() درست و بدون خطا false برمی‌گردونه.
+     */
+    public function getLobbyManagerOrNull() : ?LobbyManager{ return isset($this->lobbyManager) ? $this->lobbyManager : null; }
     public function getFriendManager() : FriendManager{ return $this->friendManager; }
     public function getQuestData() : PlayerQuestDataManager{ return $this->questData; }
 

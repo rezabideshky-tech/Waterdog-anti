@@ -21,7 +21,7 @@
          $this->loadLobbyData();
          $this->loadHologramData();
 +
-+        // دکور هالووینی: انتیتی‌های Customies که دور ستون متن هر leaderboard می‌شینن
++        // دکور هالووینی لیدربوردها: پایه‌ی Customies که دور ستون متن هولوگرام می‌شینه
 +        // (پایه زیر متن، تاج بالای متن — جزئیات هم‌ترازی در HalloweenPedestal::Y_OFFSET)
 +        $this->pedestals = new HalloweenLeaderboardManager($plugin);
 +        $this->pedestals->registerVariants();
@@ -39,17 +39,19 @@
      }
  
      // ─── Update ──────────────────────────────────
-@@ -206,6 +217,7 @@
+@@ -206,6 +217,9 @@
              $idSuffix = "_lm_" . substr(md5((string) $posKey), 0, 8);
              $provider->getLeaderboard($stat, 10, function(array $rows) use ($hologramManager, $world, $pos, $stat, $displayName, $idSuffix) {
                  $hologramManager->createLeaderboard($stat, $displayName, $world, $pos, $rows, $idSuffix);
-+                $this->pedestals->summon($stat, $world, $pos);
++                if (isset($this->pedestals)) {
++                    $this->pedestals->summon($stat, $world, $pos);
++                }
              });
          }
      }
 --- a/BedWarsLobby/src/sergittos/bedwars/lobby/leaderboard/LeaderboardManager.php
 +++ b/BedWarsLobby/src/sergittos/bedwars/lobby/leaderboard/LeaderboardManager.php
-@@ -33,10 +33,20 @@
+@@ -33,10 +33,21 @@
      }
  
      public function removePosition(string $stat): void {
@@ -61,8 +63,9 @@
 +
 +        if ($removed !== null) {
 +            $world = $this->plugin->getServer()->getWorldManager()->getWorldByName($removed["world"]);
-+            if ($world !== null) {
-+                \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManager()->getPedestals()->remove(
++            $lobby = \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManagerOrNull();
++            if ($world !== null && $lobby !== null) {
++                $lobby->getPedestals()->remove(
 +                    $stat, $world, new Vector3((float) $removed["x"], (float) $removed["y"], (float) $removed["z"])
 +                );
 +            }
@@ -70,12 +73,16 @@
      }
  
      public function spawnAll(): void {
-@@ -63,6 +73,8 @@
+@@ -63,6 +74,12 @@
  
          BedWarsCore::getInstance()->getProvider()->getLeaderboard($stat, 10, function(array $rows) use ($stat, $displayName, $world, $pos): void {
              BedWarsCore::getInstance()->getHologramManager()->createLeaderboard($stat, $displayName, $world, $pos, $rows);
-+            // پایه‌ی هالووینی همراه همون هولوگرام بالا/پایین می‌شه
-+            \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManager()->getPedestals()->summon($stat, $world, $pos);
++
++            // پایه‌ی هالووینی همراه همون هولوگرام بالا/پایین می‌شه.
++            // نکته: این manager داخل constructor خودش spawnAll() صدا می‌زنه و ممکنه
++            // هنوز LobbyManager ساخته نشده باشه؛ پس فقط از راه accessor امن استفاده می‌کنیم.
++            $lobby = \sergittos\bedwars\lobby\BedWarsLobby::getInstance()->getLobbyManagerOrNull();
++            $lobby?->getPedestals()->summon($stat, $world, $pos);
          });
      }
  
@@ -96,6 +103,20 @@
 +            new HalloweenLeaderboardCommand($this),
              new DeleteJoinEntityCommand(),
              new QuestsCommand($this->questData),
+ 
+@@ -146,6 +148,13 @@
+ 
+     public function getLeaderboardManager() : LeaderboardManager{ return $this->leaderboardManager; }
+     public function getLobbyManager() : LobbyManager{ return $this->lobbyManager; }
++
++    /**
++     * دسترسی امن به LobbyManager برای جاهایی که ممکنه قبل از پایان onEnable صدا زده بشن
++     * (مثلاً LeaderboardManager داخل constructor خودش spawnAll() می‌کنه). روی typed property
++     * مقداردهی‌نشده، isset() درست و بدون خطا false برمی‌گردونه.
++     */
++    public function getLobbyManagerOrNull() : ?LobbyManager{ return isset($this->lobbyManager) ? $this->lobbyManager : null; }
+     public function getFriendManager() : FriendManager{ return $this->friendManager; }
+     public function getQuestData() : PlayerQuestDataManager{ return $this->questData; }
  
 --- a/BedWarsLobby/resources/config.yml
 +++ b/BedWarsLobby/resources/config.yml
