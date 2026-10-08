@@ -1,0 +1,25 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.field_open_ammo_case.close": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 1,
+      "bones": {
+        "lid_hinge": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "1.0": [
+              105,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}
