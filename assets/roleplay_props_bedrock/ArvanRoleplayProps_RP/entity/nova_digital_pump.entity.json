@@ -1,0 +1,30 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:rp_digital_pump",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/nova_digital_pump"
+      },
+      "geometry": {
+        "default": "geometry.nova_digital_pump"
+      },
+      "animations": {
+        "idle": "animation.nova_digital_pump.idle",
+        "nozzle_demo": "animation.nova_digital_pump.nozzle_demo"
+      },
+      "scripts": {
+        "animate": [
+          "idle",
+          "nozzle_demo"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.arvan_props"
+      ]
+    }
+  }
+}

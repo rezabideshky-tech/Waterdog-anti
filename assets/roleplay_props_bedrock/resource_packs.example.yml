@@ -1,0 +1,5 @@
+# Example only. Merge this entry into your EXISTING resource_packs.yml.
+# Do not remove other packs from your resource_stack.
+force_resources: true
+resource_stack:
+  - ArvanRoleplayProps_RP.zip

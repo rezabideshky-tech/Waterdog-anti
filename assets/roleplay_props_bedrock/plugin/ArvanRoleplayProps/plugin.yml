@@ -1,0 +1,17 @@
+name: ArvanRoleplayProps
+main: arvan\props\Main
+version: 1.0.0
+api: 5.1.3
+load: STARTUP
+depend: [Customies]
+author: ArvanGaming
+description: Animated Arvan Gaming digital pump and ammo case display entities
+commands:
+  arvanprops:
+    description: Place or remove Arvan Gaming decorative props
+    usage: "/arvanprops <spawn pump|spawn ammo|remove>"
+    permission: arvanprops.admin
+permissions:
+  arvanprops.admin:
+    description: Place and remove roleplay display props
+    default: op

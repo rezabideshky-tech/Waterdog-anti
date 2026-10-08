@@ -1,0 +1,30 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:rp_ammo_case",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/field_open_ammo_case"
+      },
+      "geometry": {
+        "default": "geometry.field_open_ammo_case"
+      },
+      "animations": {
+        "open": "animation.field_open_ammo_case.open",
+        "close": "animation.field_open_ammo_case.close",
+        "open_close": "animation.field_open_ammo_case.open_close"
+      },
+      "scripts": {
+        "animate": [
+          "open_close"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.arvan_props"
+      ]
+    }
+  }
+}
