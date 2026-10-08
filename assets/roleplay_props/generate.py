@@ -71,6 +71,7 @@ class Model:
         self.name, self.atlas = name, atlas
         self.groups = {}
         self.cubes = []
+        self.animations = []
         self.group('root')
 
     def group(self, name, parent='root', origin=(0, 0, 0), rotation=(0, 0, 0)):
@@ -119,14 +120,21 @@ class Model:
             textures=[dict(path='', name=self.name+'.png', id='0', uuid=uid(self.name+'/texture'),
                 width=512, height=512, uv_width=512, uv_height=512, render_mode='default',
                 visible=True, internal=True, saved=True, source='data:image/png;base64,'+base64.b64encode(data.getvalue()).decode())])
-        if 'lid_hinge' in self.groups:
-            # The rest pose is open. The animation adds -105 degrees, closing the lid.
-            bb['animations'] = [dict(uuid=uid(self.name+'/close'), name='animation.'+self.name+'.close',
-                loop='hold', override=False, length=1, snapping=24,
-                animators={self.groups['lid_hinge']['uuid']: dict(name='lid_hinge', type='bone', keyframes=[
-                    dict(channel='rotation', data_points=[dict(x=str(x),y='0',z='0')],
-                         uuid=uid(self.name+'/key/'+str(t)), time=t, color=-1, interpolation='linear')
-                    for t,x in [(0,0),(1,-105)]])})]
+        bb['animations'] = []
+        for a in self.animations:
+            animators = {}
+            for bone, channels in a['tracks'].items():
+                keys = []
+                for channel, track in channels.items():
+                    for time, values in track:
+                        keys.append(dict(channel=channel,
+                            data_points=[dict(zip('xyz', map(str, values)))],
+                            uuid=uid(self.name+'/'+a['name']+'/'+bone+'/'+channel+'/'+str(time)),
+                            time=time, color=-1, interpolation='linear'))
+                animators[self.groups[bone]['uuid']] = dict(name=bone, type='bone', keyframes=keys)
+            bb['animations'].append(dict(uuid=uid(self.name+'/'+a['name']),
+                name='animation.'+self.name+'.'+a['name'], loop=a['loop'], override=False,
+                length=a['length'], snapping=24, animators=animators))
         (folder/(self.name+'.bbmodel')).write_text(json.dumps(bb, indent=2))
         bones=[]
         mirror=lambda a: [-a[0],a[1],a[2]]
@@ -149,11 +157,22 @@ class Model:
             texture_width=512, texture_height=512, visible_bounds_width=6, visible_bounds_height=6,
             visible_bounds_offset=[0,2,0]), bones=bones)]}
         (folder/(self.name+'.geo.json')).write_text(json.dumps(geo,indent=2))
-        if 'lid_hinge' in self.groups:
-            anim={'format_version':'1.8.0','animations':{'animation.'+self.name+'.close':{
-                'loop':'hold_on_last_frame','animation_length':1,'bones':{'lid_hinge':{
-                    'rotation':{'0.0':[0,0,0],'1.0':[105,0,0]}}}}}}
-            (folder/(self.name+'.animation.json')).write_text(json.dumps(anim,indent=2))
+        animations = {}
+        for a in self.animations:
+            tracks = {}
+            for bone, channels in a['tracks'].items():
+                tracks[bone] = {}
+                for channel, keys in channels.items():
+                    def bedrock_values(v):
+                        if channel == 'rotation': return [-v[0], -v[1], v[2]]
+                        if channel == 'position': return [-v[0], v[1], v[2]]
+                        return v
+                    tracks[bone][channel] = {str(t): bedrock_values(v) for t,v in keys}
+            animations['animation.'+self.name+'.'+a['name']] = dict(
+                loop={'loop':True, 'hold':'hold_on_last_frame', 'once':False}[a['loop']],
+                animation_length=a['length'], bones=tracks)
+        (folder/(self.name+'.animation.json')).write_text(json.dumps(
+            {'format_version':'1.8.0', 'animations':animations}, indent=2))
         return folder
 
 
@@ -199,6 +218,8 @@ def pump():
     m=Model('nova_digital_pump',a)
     for g in ['cabinet','interface','lighting','service_panel','hoses','nozzles']:
         m.group(g)
+    m.group('status_indicator','lighting',origin=(6.7,21.5,-5.66))
+    m.group('led_scan','lighting',origin=(-7.85,20.4,-5.495))
     c=m.cube
     c('foot plinth',(-10,0,-6.5),(10,1.2,6.5),'dark','cabinet')
     c('brushed base reveal',(-9.7,1.2,-6.1),(9.7,1.7,6.1),'metal','cabinet')
@@ -216,7 +237,7 @@ def pump():
     for x in range(3):
         for y in range(2):
             c('payment key %s %s'%(x,y),(2.9+x*1.05,20.8+y*.65,-5.8),(3.55+x*1.05,21.2+y*.65,-5.42),'edge','interface')
-    c('status light',(6.5,21,-5.82),(6.9,22,-5.5),'green','lighting')
+    c('status light',(6.5,21,-5.82),(6.9,22,-5.5),'green','status_indicator')
     c('front identity plate',(-7,13.5,-5.2),(7,16.3,-5.02),'dark','service_panel',{'north':'brand'})
     c('service door seam',(-6.9,3,-5.13),(6.9,12.6,-5.01),'dark','service_panel')
     c('service door',(-6.65,3.25,-5.22),(6.65,12.35,-5.14),'white','service_panel')
@@ -226,6 +247,7 @@ def pump():
         c('lower ventilation grille %d'%i,(-5.2,4+i*.48,-5.3),(4.5,4.18+i*.48,-5.23),'dark','service_panel')
     for x in [-8,7.7]:
         c('vertical cyan edge',(x,19.9,-5.46),(x+.3,31.3,-5.22),'cyan','lighting')
+    c('LED travelling highlight',(-8,20,-5.53),(-7.7,20.8,-5.46),'white','led_scan')
     c('canopy LED lightbar',(-8.5,35,-5.82),(8.5,35.34,-5.69),'cyan','lighting')
     c('waist LED lightbar',(-8.6,18.2,-5.52),(8.6,18.52,-5.41),'cyan','lighting')
     for x in [-7.6,7.2]:
@@ -240,10 +262,10 @@ def pump():
             x=side*(10.5+j*3.1)
             z=-2.9+j*3.8
             g=('left' if side<0 else 'right')+'_nozzle_'+str(j+1)
-            m.group(g,'nozzles',origin=(x,20,z))
+            m.group(g,'nozzles',origin=(x,17.5,z-1.1))
             color=['green','blue','gold','red'][(0 if side<0 else 2)+j]
-            c('nozzle dock',(x-.9,17.4,z-.9),(x+.9,23.4,z+.65),'dark',g)
-            c('fuel grade color badge',(x-.82,22.1,z-1.03),(x+.82,23.1,z-.91),color,g)
+            c('nozzle dock',(x-.9,17.4,z-.9),(x+.9,23.4,z+.65),'dark','cabinet')
+            c('fuel grade color badge',(x-.82,22.1,z-1.03),(x+.82,23.1,z-.91),color,'cabinet')
             c('nozzle body',(x-.65,19.8,z-1.65),(x+.65,21.6,z-.8),color,g)
             c('handle grip',(x-.65,17.6,z-1.5),(x-.18,20.25,z-.84),color,g)
             c('trigger guard',(x+.5,17.6,z-1.5),(x+.82,20.4,z-.84),'metal',g)
@@ -260,7 +282,23 @@ def pump():
             points.extend([(x+side*3.2,15,z-1.1),(x+side*2.9,24.5,z-1.1),(side*8.6,26,z-1.1)])
             for k,(p,q) in enumerate(zip(points,points[1:])):
                 m.rod(g+' flexible hose %02d'%k,p,q,.42,'rubber','hoses')
-            c('hose connector',(x-.34,16.8,z-1.44),(x+.34,17.6,z-.76),'metal',g)
+            c('hose connector',(x-.34,16.8,z-1.44),(x+.34,17.6,z-.76),'metal','hoses')
+    m.animations.append(dict(name='idle', length=2.4, loop='loop', tracks={
+        'status_indicator': {'scale': [(0,[1,1,1]),(.85,[1,1,1]),
+            (1,[.02,.02,.02]),(1.2,[.02,.02,.02]),(1.35,[1,1,1]),(2.4,[1,1,1])]},
+        'led_scan': {'position': [(0,[0,0,0]),(1.2,[0,10,0]),(2.4,[0,0,0])]}}))
+    nozzle_tracks = {}
+    for i, bone in enumerate(['left_nozzle_1','left_nozzle_2','right_nozzle_1','right_nozzle_2']):
+        start = i*1.5
+        # Pivot at the hose connection: the hose endpoint and dock remain fixed.
+        keys = [(0,[0,0,0])]
+        if start: keys.append((start,[0,0,0]))
+        keys += eased_keys(start,start+.5,[0,0,0],[-32,0,0])[1:]
+        keys.append((start+.85,[-32,0,0]))
+        keys += eased_keys(start+.85,start+1.35,[-32,0,0],[0,0,0])[1:]
+        keys.append((6,[0,0,0]))
+        nozzle_tracks[bone] = {'rotation': keys}
+    m.animations.append(dict(name='nozzle_demo',length=6,loop='loop',tracks=nozzle_tracks))
     return m
 
 
@@ -362,7 +400,48 @@ def case():
         c('hinge fixed leaf',(x,5.5,8.02),(x+2,7,8.28),'metal','hardware')
         c('hinge barrel',(x-.2,6.7,7.7),(x+2.2,7.35,8.55),'steel','hardware')
         c('hinge moving leaf',(x,7.2,7.7),(x+2,8.5,8.25),'metal','lid_hinge')
+    # Rest pose is open (105 degrees); animation rotations are offsets from it.
+    m.animations.extend([
+        dict(name='open',length=1.4,loop='hold',tracks={
+            'lid_hinge':{'rotation':eased_keys(0,1.4,[-105,0,0],[0,0,0])}}),
+        dict(name='close',length=1.2,loop='hold',tracks={
+            'lid_hinge':{'rotation':eased_keys(0,1.2,[0,0,0],[-105,0,0])}}),
+        dict(name='open_close',length=6,loop='loop',tracks={
+            'lid_hinge':{'rotation':[(0,[0,0,0])] +
+                eased_keys(1.5,2.9,[0,0,0],[-105,0,0]) +
+                eased_keys(3.5,5,[-105,0,0],[0,0,0]) + [(6,[0,0,0])]}})
+    ])
     return m
+
+
+def eased_keys(start,end,a,b,steps=12):
+    """Sample a cosine ease for identical smooth motion in both output formats."""
+    return [(round(start+(end-start)*i/steps,6),
+             [round(x+(y-x)*(1-math.cos(math.pi*i/steps))/2,6) for x,y in zip(a,b)])
+            for i in range(steps+1)]
+
+
+def sample_track(keys,time):
+    if time <= keys[0][0]: return np.array(keys[0][1],dtype=float)
+    for (t0,v0),(t1,v1) in zip(keys,keys[1:]):
+        if time <= t1:
+            k=(time-t0)/(t1-t0)
+            return np.array(v0)*(1-k)+np.array(v1)*k
+    return np.array(keys[-1][1],dtype=float)
+
+
+def animation_pose(m,names,time):
+    pose={}
+    for a in m.animations:
+        if a['name'] not in names: continue
+        t=time % a['length'] if a['loop']=='loop' else min(time,a['length'])
+        for bone,channels in a['tracks'].items():
+            target=pose.setdefault(bone,{})
+            for channel,keys in channels.items():
+                value=sample_track(keys,t)
+                if channel=='scale':target[channel]=target.get(channel,np.ones(3))*value
+                else:target[channel]=target.get(channel,np.zeros(3))+value
+    return pose
 
 
 def rotation(v):
@@ -373,7 +452,7 @@ def rotation(v):
     return rz@ry@rx
 
 
-def world_vertices(m,c):
+def world_vertices(m,c,pose=None):
     x,y,z=c['a']; X,Y,Z=c['b']
     v=np.array([[x,y,z],[X,y,z],[X,Y,z],[x,Y,z],[x,y,Z],[X,y,Z],[X,Y,Z],[x,Y,Z]])
     def apply(v,origin,angles):
@@ -382,12 +461,16 @@ def world_vertices(m,c):
     g=c['group']
     while g:
         b=m.groups[g]
-        v=apply(v,b['origin'],b['rotation'])
+        track=(pose or {}).get(g,{})
+        origin=np.array(b['origin'])
+        v=(v-origin)*track.get('scale',np.ones(3))+origin
+        v=apply(v,origin,np.array(b['rotation'])+track.get('rotation',np.zeros(3)))
+        v=v+track.get('position',np.zeros(3))
         g=b['parent']
     return v
 
 
-def render(m,folder):
+def render(m,folder,pose=None):
     # Software textured orthographic rasterizer: previews are the actual deliverable geometry.
     w,h=1100,1120
     pixels=np.zeros((h,w,3),dtype=np.uint8)
@@ -401,9 +484,10 @@ def render(m,folder):
     right=np.cross(eye,[0,1,0]); right/=np.linalg.norm(right)
     up=np.cross(right,eye)
     basis=np.stack([right,up,eye],axis=1)
-    vv=[world_vertices(m,c) for c in m.cubes]
+    vv=[world_vertices(m,c,pose) for c in m.cubes]
     proj=[v@basis for v in vv]
-    allp=np.concatenate(proj)
+    # Keep the camera fixed at rest-pose bounds throughout animated previews.
+    allp=np.concatenate([world_vertices(m,c)@basis for c in m.cubes])
     lo,hi=allp[:,:2].min(0),allp[:,:2].max(0)
     scale=min((w-155)/(hi[0]-lo[0]),(h-250)/(hi[1]-lo[1]))
     center=(lo+hi)/2
@@ -451,8 +535,26 @@ def render(m,folder):
     subtitle='4 NOZZLES   /   TOUCHSCREEN   /   NFC   /   LED' if m.name.startswith('nova') else 'HINGED LID   /   FOAM INSERT   /   2 WEAPON PROPS   /   4 MAGAZINES'
     d.text((50,h-65),subtitle,font=font(16),fill='#b3c4c4')
     d.text((50,h-38),'Actual textured model preview - no generated concept art',font=font(13),fill='#718f9a')
-    image.save(folder/'preview.png')
+    if pose is None: image.save(folder/'preview.png')
     return image
+
+
+def animated_preview(m,folder):
+    names=['idle','nozzle_demo'] if m.name.startswith('nova') else ['open_close']
+    frames=[]
+    for i in range(48):
+        image=render(m,folder,animation_pose(m,names,i/8))
+        frames.append(image.resize((550,560),Image.Resampling.LANCZOS))
+    # GIF timing is quantized to 10 ms: alternate 120/130 ms to retain exactly 6 s.
+    preview = folder/'animation_preview.gif'
+    frames[0].save(preview,save_all=True,append_images=frames[1:],
+                   duration=[120 if i%2==0 else 130 for i in range(len(frames))],loop=0,disposal=2)
+    with Image.open(preview) as gif:
+        total = 0
+        for i in range(gif.n_frames):
+            gif.seek(i)
+            total += gif.info['duration']
+        assert total == 6000, f'Unexpected GIF duration: {total}'
 
 
 def validate(m,folder):
@@ -485,6 +587,7 @@ def main():
     images=[]
     for m in [pump(),case()]:
         folder=m.export();images.append(render(m,folder));validate(m,folder)
+        animated_preview(m,folder)
     sheet=Image.new('RGB',(2200,1120))
     for i,img in enumerate(images):sheet.paste(img,(1100*i,0))
     sheet.save(OUT/'PREVIEW.jpg',quality=93)

@@ -2769,9 +2769,95 @@
       }
     },
     {
-      "name": "canopy LED lightbar",
+      "name": "LED travelling highlight",
       "type": "cube",
       "uuid": "51ecc785-1b17-5dca-91b7-b79c921bdf4e",
+      "box_uv": false,
+      "rescale": false,
+      "locked": false,
+      "render_order": "default",
+      "allow_mirror_modeling": true,
+      "from": [
+        -8,
+        20,
+        -5.53
+      ],
+      "to": [
+        -7.7,
+        20.8,
+        -5.46
+      ],
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "texture": 0
+        }
+      }
+    },
+    {
+      "name": "canopy LED lightbar",
+      "type": "cube",
+      "uuid": "867ea977-3b2e-53b8-ab0d-d43287a6d315",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -2857,7 +2943,7 @@
     {
       "name": "waist LED lightbar",
       "type": "cube",
-      "uuid": "867ea977-3b2e-53b8-ab0d-d43287a6d315",
+      "uuid": "de7930e5-32bc-5240-9945-afe33f74aab9",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -2943,7 +3029,7 @@
     {
       "name": "cabinet fastener",
       "type": "cube",
-      "uuid": "de7930e5-32bc-5240-9945-afe33f74aab9",
+      "uuid": "8059a3e8-fe47-5492-853b-24f03b25c8a9",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3029,7 +3115,7 @@
     {
       "name": "cabinet fastener",
       "type": "cube",
-      "uuid": "8059a3e8-fe47-5492-853b-24f03b25c8a9",
+      "uuid": "f48d74bd-c7dc-5922-b72c-acf54f2b12e4",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3115,7 +3201,7 @@
     {
       "name": "cabinet fastener",
       "type": "cube",
-      "uuid": "f48d74bd-c7dc-5922-b72c-acf54f2b12e4",
+      "uuid": "724459f1-aec7-58d6-9bca-f44d8ed4ef54",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3201,7 +3287,7 @@
     {
       "name": "cabinet fastener",
       "type": "cube",
-      "uuid": "724459f1-aec7-58d6-9bca-f44d8ed4ef54",
+      "uuid": "57a7ac10-2ffd-5d40-aa09-702c875ac8d7",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3287,7 +3373,7 @@
     {
       "name": "rear access panel",
       "type": "cube",
-      "uuid": "57a7ac10-2ffd-5d40-aa09-702c875ac8d7",
+      "uuid": "e0a5b683-e9b6-5d2d-9613-3afc4cfecef5",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3373,7 +3459,7 @@
     {
       "name": "rear cooling fin 0",
       "type": "cube",
-      "uuid": "e0a5b683-e9b6-5d2d-9613-3afc4cfecef5",
+      "uuid": "b5b7e1a2-fd3a-5083-a61c-42dc77741887",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3459,7 +3545,7 @@
     {
       "name": "rear cooling fin 1",
       "type": "cube",
-      "uuid": "b5b7e1a2-fd3a-5083-a61c-42dc77741887",
+      "uuid": "7ab7f96c-b6fc-5a4f-89ce-1a6f9acf9cd3",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3545,7 +3631,7 @@
     {
       "name": "rear cooling fin 2",
       "type": "cube",
-      "uuid": "7ab7f96c-b6fc-5a4f-89ce-1a6f9acf9cd3",
+      "uuid": "82270fd6-da52-5cef-91fe-e04f84b32985",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3631,7 +3717,7 @@
     {
       "name": "rear cooling fin 3",
       "type": "cube",
-      "uuid": "82270fd6-da52-5cef-91fe-e04f84b32985",
+      "uuid": "9d80c203-ca13-5961-90ea-e44192c931f5",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3717,7 +3803,7 @@
     {
       "name": "rear cooling fin 4",
       "type": "cube",
-      "uuid": "9d80c203-ca13-5961-90ea-e44192c931f5",
+      "uuid": "18860443-c155-5a0d-9571-fc57edff6dbc",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3803,7 +3889,7 @@
     {
       "name": "rear cooling fin 5",
       "type": "cube",
-      "uuid": "18860443-c155-5a0d-9571-fc57edff6dbc",
+      "uuid": "ca2798e6-4945-53cc-9c01-1fe235b2fe0e",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3889,7 +3975,7 @@
     {
       "name": "rear cooling fin 6",
       "type": "cube",
-      "uuid": "ca2798e6-4945-53cc-9c01-1fe235b2fe0e",
+      "uuid": "046dd871-a32f-55b4-b4b9-a760b3aa134a",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -3975,7 +4061,7 @@
     {
       "name": "rear cooling fin 7",
       "type": "cube",
-      "uuid": "046dd871-a32f-55b4-b4b9-a760b3aa134a",
+      "uuid": "521a40fa-844a-58e5-be6b-a1c17f86e33a",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4061,7 +4147,7 @@
     {
       "name": "nozzle dock",
       "type": "cube",
-      "uuid": "521a40fa-844a-58e5-be6b-a1c17f86e33a",
+      "uuid": "8b669c68-02b3-575a-9a89-6a7c56326895",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4147,7 +4233,7 @@
     {
       "name": "fuel grade color badge",
       "type": "cube",
-      "uuid": "8b669c68-02b3-575a-9a89-6a7c56326895",
+      "uuid": "c3fcd211-4dd3-5d6c-b8b9-8fb16e0e97ca",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4233,7 +4319,7 @@
     {
       "name": "nozzle body",
       "type": "cube",
-      "uuid": "c3fcd211-4dd3-5d6c-b8b9-8fb16e0e97ca",
+      "uuid": "6ed66d35-6e0f-5913-a6b2-d49d2eece3de",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4319,7 +4405,7 @@
     {
       "name": "handle grip",
       "type": "cube",
-      "uuid": "6ed66d35-6e0f-5913-a6b2-d49d2eece3de",
+      "uuid": "2f37b116-db30-5327-8471-f6c4e5f7f19f",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4405,7 +4491,7 @@
     {
       "name": "trigger guard",
       "type": "cube",
-      "uuid": "2f37b116-db30-5327-8471-f6c4e5f7f19f",
+      "uuid": "3ea428dc-e46f-5b8e-9703-53de02e865b9",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4491,7 +4577,7 @@
     {
       "name": "trigger guard base",
       "type": "cube",
-      "uuid": "3ea428dc-e46f-5b8e-9703-53de02e865b9",
+      "uuid": "a83507f7-17dc-50be-b703-0fd3cfe02531",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4577,7 +4663,7 @@
     {
       "name": "trigger",
       "type": "cube",
-      "uuid": "a83507f7-17dc-50be-b703-0fd3cfe02531",
+      "uuid": "91ada178-2477-513a-9ab4-42b28a56327d",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4663,7 +4749,7 @@
     {
       "name": "metal spout",
       "type": "cube",
-      "uuid": "91ada178-2477-513a-9ab4-42b28a56327d",
+      "uuid": "b3f39203-d694-5ed3-9aab-d8ef78d82884",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4749,7 +4835,7 @@
     {
       "name": "spout outlet",
       "type": "cube",
-      "uuid": "b3f39203-d694-5ed3-9aab-d8ef78d82884",
+      "uuid": "24833657-9ecb-55a6-b3a4-4024e3e5da6e",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4835,7 +4921,7 @@
     {
       "name": "left_nozzle_1 flexible hose 00",
       "type": "cube",
-      "uuid": "24833657-9ecb-55a6-b3a4-4024e3e5da6e",
+      "uuid": "93f330ef-ff2f-51f9-a54d-c3cc3e7abe43",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -4921,7 +5007,7 @@
     {
       "name": "left_nozzle_1 flexible hose 01",
       "type": "cube",
-      "uuid": "93f330ef-ff2f-51f9-a54d-c3cc3e7abe43",
+      "uuid": "03d20683-17d0-5c76-8915-0f5485611111",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5007,7 +5093,7 @@
     {
       "name": "left_nozzle_1 flexible hose 02",
       "type": "cube",
-      "uuid": "03d20683-17d0-5c76-8915-0f5485611111",
+      "uuid": "0037c342-c8b2-5703-9db7-c1d3e668edc0",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5093,7 +5179,7 @@
     {
       "name": "left_nozzle_1 flexible hose 03",
       "type": "cube",
-      "uuid": "0037c342-c8b2-5703-9db7-c1d3e668edc0",
+      "uuid": "ecde9c94-a69c-5ddd-8fb8-8d2800e6a832",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5179,7 +5265,7 @@
     {
       "name": "left_nozzle_1 flexible hose 04",
       "type": "cube",
-      "uuid": "ecde9c94-a69c-5ddd-8fb8-8d2800e6a832",
+      "uuid": "d542ec14-6282-5727-8b0f-c619f850d7e4",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5265,7 +5351,7 @@
     {
       "name": "left_nozzle_1 flexible hose 05",
       "type": "cube",
-      "uuid": "d542ec14-6282-5727-8b0f-c619f850d7e4",
+      "uuid": "b96cf8e5-4a43-5046-a83e-c4769b3d8da7",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5351,7 +5437,7 @@
     {
       "name": "left_nozzle_1 flexible hose 06",
       "type": "cube",
-      "uuid": "b96cf8e5-4a43-5046-a83e-c4769b3d8da7",
+      "uuid": "e18375e2-ba4c-5fa6-8ac4-f8e6d84501aa",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5437,7 +5523,7 @@
     {
       "name": "left_nozzle_1 flexible hose 07",
       "type": "cube",
-      "uuid": "e18375e2-ba4c-5fa6-8ac4-f8e6d84501aa",
+      "uuid": "6e1e12a6-96be-59a7-b8c7-0f3438778c86",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5523,7 +5609,7 @@
     {
       "name": "left_nozzle_1 flexible hose 08",
       "type": "cube",
-      "uuid": "6e1e12a6-96be-59a7-b8c7-0f3438778c86",
+      "uuid": "3e5c441f-a0b9-570e-8007-8880483523ab",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5609,7 +5695,7 @@
     {
       "name": "left_nozzle_1 flexible hose 09",
       "type": "cube",
-      "uuid": "3e5c441f-a0b9-570e-8007-8880483523ab",
+      "uuid": "a3adf5f2-5318-53d1-9fe8-5d684f13d79a",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5695,7 +5781,7 @@
     {
       "name": "left_nozzle_1 flexible hose 10",
       "type": "cube",
-      "uuid": "a3adf5f2-5318-53d1-9fe8-5d684f13d79a",
+      "uuid": "bf7ce5e7-6182-51aa-8a32-b83b1548395f",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5781,7 +5867,7 @@
     {
       "name": "left_nozzle_1 flexible hose 11",
       "type": "cube",
-      "uuid": "bf7ce5e7-6182-51aa-8a32-b83b1548395f",
+      "uuid": "ca67247c-6399-541e-8af8-729390ece9cc",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5867,7 +5953,7 @@
     {
       "name": "left_nozzle_1 flexible hose 12",
       "type": "cube",
-      "uuid": "ca67247c-6399-541e-8af8-729390ece9cc",
+      "uuid": "17cb7d66-ca5b-530b-80ed-9f3824d9f43e",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -5953,7 +6039,7 @@
     {
       "name": "left_nozzle_1 flexible hose 13",
       "type": "cube",
-      "uuid": "17cb7d66-ca5b-530b-80ed-9f3824d9f43e",
+      "uuid": "acf7c1e9-bbe0-5666-b71c-05cff10fa721",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6039,7 +6125,7 @@
     {
       "name": "left_nozzle_1 flexible hose 14",
       "type": "cube",
-      "uuid": "acf7c1e9-bbe0-5666-b71c-05cff10fa721",
+      "uuid": "2b85db2e-966e-540c-9e11-08b16388211c",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6125,7 +6211,7 @@
     {
       "name": "left_nozzle_1 flexible hose 15",
       "type": "cube",
-      "uuid": "2b85db2e-966e-540c-9e11-08b16388211c",
+      "uuid": "9c9176c9-8911-5d76-a010-db575be2bcd0",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6211,7 +6297,7 @@
     {
       "name": "left_nozzle_1 flexible hose 16",
       "type": "cube",
-      "uuid": "9c9176c9-8911-5d76-a010-db575be2bcd0",
+      "uuid": "a3dc8afa-a140-5abc-8cbe-62ee8d564df8",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6297,7 +6383,7 @@
     {
       "name": "hose connector",
       "type": "cube",
-      "uuid": "a3dc8afa-a140-5abc-8cbe-62ee8d564df8",
+      "uuid": "a78cf610-6ee9-5a2c-a9b6-18c534001365",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6383,7 +6469,7 @@
     {
       "name": "nozzle dock",
       "type": "cube",
-      "uuid": "a78cf610-6ee9-5a2c-a9b6-18c534001365",
+      "uuid": "23ee6ab6-929d-5290-9feb-39a97e3129fb",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6469,7 +6555,7 @@
     {
       "name": "fuel grade color badge",
       "type": "cube",
-      "uuid": "23ee6ab6-929d-5290-9feb-39a97e3129fb",
+      "uuid": "dc3bc693-8738-59af-8090-644a350e7173",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6555,7 +6641,7 @@
     {
       "name": "nozzle body",
       "type": "cube",
-      "uuid": "dc3bc693-8738-59af-8090-644a350e7173",
+      "uuid": "d57bd6cd-9226-5b9b-85b4-948f6cc0e021",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6641,7 +6727,7 @@
     {
       "name": "handle grip",
       "type": "cube",
-      "uuid": "d57bd6cd-9226-5b9b-85b4-948f6cc0e021",
+      "uuid": "3b4d575a-da3c-5e9c-b12b-6449c90786c1",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6727,7 +6813,7 @@
     {
       "name": "trigger guard",
       "type": "cube",
-      "uuid": "3b4d575a-da3c-5e9c-b12b-6449c90786c1",
+      "uuid": "2393edff-cd7d-5868-9751-99874af8f0c7",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6813,7 +6899,7 @@
     {
       "name": "trigger guard base",
       "type": "cube",
-      "uuid": "2393edff-cd7d-5868-9751-99874af8f0c7",
+      "uuid": "5e3cadd0-2fe9-5b8f-9e70-1ce2a25cc832",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6899,7 +6985,7 @@
     {
       "name": "trigger",
       "type": "cube",
-      "uuid": "5e3cadd0-2fe9-5b8f-9e70-1ce2a25cc832",
+      "uuid": "d984b090-29f6-5aa9-a67c-99aaeb24b600",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -6985,7 +7071,7 @@
     {
       "name": "metal spout",
       "type": "cube",
-      "uuid": "d984b090-29f6-5aa9-a67c-99aaeb24b600",
+      "uuid": "8a82aa28-15d5-58e9-bfb3-0aabdb00d35f",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7071,7 +7157,7 @@
     {
       "name": "spout outlet",
       "type": "cube",
-      "uuid": "8a82aa28-15d5-58e9-bfb3-0aabdb00d35f",
+      "uuid": "516ea726-4774-5ce1-a9bd-ac5cc4811b3c",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7157,7 +7243,7 @@
     {
       "name": "left_nozzle_2 flexible hose 00",
       "type": "cube",
-      "uuid": "516ea726-4774-5ce1-a9bd-ac5cc4811b3c",
+      "uuid": "e35f4d8a-23ce-5fe1-9a8e-ec954cb1e7c5",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7243,7 +7329,7 @@
     {
       "name": "left_nozzle_2 flexible hose 01",
       "type": "cube",
-      "uuid": "e35f4d8a-23ce-5fe1-9a8e-ec954cb1e7c5",
+      "uuid": "c2024b01-d1d4-567b-b145-8b9621fa3e11",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7329,7 +7415,7 @@
     {
       "name": "left_nozzle_2 flexible hose 02",
       "type": "cube",
-      "uuid": "c2024b01-d1d4-567b-b145-8b9621fa3e11",
+      "uuid": "6cc41ab3-eb81-56ae-a4fb-c8b132a6b8f7",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7415,7 +7501,7 @@
     {
       "name": "left_nozzle_2 flexible hose 03",
       "type": "cube",
-      "uuid": "6cc41ab3-eb81-56ae-a4fb-c8b132a6b8f7",
+      "uuid": "f2f1c772-6369-55dd-9db2-e022e9f249c2",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7501,7 +7587,7 @@
     {
       "name": "left_nozzle_2 flexible hose 04",
       "type": "cube",
-      "uuid": "f2f1c772-6369-55dd-9db2-e022e9f249c2",
+      "uuid": "22120a26-b80a-5b10-aa97-0b083e4d0aab",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7587,7 +7673,7 @@
     {
       "name": "left_nozzle_2 flexible hose 05",
       "type": "cube",
-      "uuid": "22120a26-b80a-5b10-aa97-0b083e4d0aab",
+      "uuid": "5665c22f-9a84-5642-802f-20f52fa785e0",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7673,7 +7759,7 @@
     {
       "name": "left_nozzle_2 flexible hose 06",
       "type": "cube",
-      "uuid": "5665c22f-9a84-5642-802f-20f52fa785e0",
+      "uuid": "a5c44614-5ae2-56e1-a457-9821c4c6997d",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7759,7 +7845,7 @@
     {
       "name": "left_nozzle_2 flexible hose 07",
       "type": "cube",
-      "uuid": "a5c44614-5ae2-56e1-a457-9821c4c6997d",
+      "uuid": "eeec6726-a6ad-5233-ae3d-02a6ac802831",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7845,7 +7931,7 @@
     {
       "name": "left_nozzle_2 flexible hose 08",
       "type": "cube",
-      "uuid": "eeec6726-a6ad-5233-ae3d-02a6ac802831",
+      "uuid": "e9e594b9-159f-5780-8977-468d03e21b9b",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -7931,7 +8017,7 @@
     {
       "name": "left_nozzle_2 flexible hose 09",
       "type": "cube",
-      "uuid": "e9e594b9-159f-5780-8977-468d03e21b9b",
+      "uuid": "012ae9cb-a91d-5201-999b-49ce8a490e63",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8017,7 +8103,7 @@
     {
       "name": "left_nozzle_2 flexible hose 10",
       "type": "cube",
-      "uuid": "012ae9cb-a91d-5201-999b-49ce8a490e63",
+      "uuid": "ee8ec94b-26f0-57cf-956c-e4b7948571ff",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8103,7 +8189,7 @@
     {
       "name": "left_nozzle_2 flexible hose 11",
       "type": "cube",
-      "uuid": "ee8ec94b-26f0-57cf-956c-e4b7948571ff",
+      "uuid": "82b81b5e-a71d-5016-b165-1dc1039c37fb",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8189,7 +8275,7 @@
     {
       "name": "left_nozzle_2 flexible hose 12",
       "type": "cube",
-      "uuid": "82b81b5e-a71d-5016-b165-1dc1039c37fb",
+      "uuid": "e6f2afc5-529d-58d4-abab-a7c4553aea22",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8275,7 +8361,7 @@
     {
       "name": "left_nozzle_2 flexible hose 13",
       "type": "cube",
-      "uuid": "e6f2afc5-529d-58d4-abab-a7c4553aea22",
+      "uuid": "ca6af01e-f130-5e2a-8b72-0b222d8c985f",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8361,7 +8447,7 @@
     {
       "name": "left_nozzle_2 flexible hose 14",
       "type": "cube",
-      "uuid": "ca6af01e-f130-5e2a-8b72-0b222d8c985f",
+      "uuid": "46f128c5-dd5b-59f6-ad85-be4daa69e513",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8447,7 +8533,7 @@
     {
       "name": "left_nozzle_2 flexible hose 15",
       "type": "cube",
-      "uuid": "46f128c5-dd5b-59f6-ad85-be4daa69e513",
+      "uuid": "5d636613-c10a-50ca-8f7a-d14a50819add",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8533,7 +8619,7 @@
     {
       "name": "left_nozzle_2 flexible hose 16",
       "type": "cube",
-      "uuid": "5d636613-c10a-50ca-8f7a-d14a50819add",
+      "uuid": "422e8c9c-0c2d-5241-afae-9ee19163d049",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8619,7 +8705,7 @@
     {
       "name": "hose connector",
       "type": "cube",
-      "uuid": "422e8c9c-0c2d-5241-afae-9ee19163d049",
+      "uuid": "38f95cd9-d7fe-5769-912b-05257cd030ac",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8705,7 +8791,7 @@
     {
       "name": "nozzle dock",
       "type": "cube",
-      "uuid": "38f95cd9-d7fe-5769-912b-05257cd030ac",
+      "uuid": "b8b8cbcd-ae04-5a84-a1e6-093bdf1c9ea6",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8791,7 +8877,7 @@
     {
       "name": "fuel grade color badge",
       "type": "cube",
-      "uuid": "b8b8cbcd-ae04-5a84-a1e6-093bdf1c9ea6",
+      "uuid": "be59658f-38e5-5d63-98fa-008d5ad9383c",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8877,7 +8963,7 @@
     {
       "name": "nozzle body",
       "type": "cube",
-      "uuid": "be59658f-38e5-5d63-98fa-008d5ad9383c",
+      "uuid": "4c73b234-2e33-5413-ac14-77f917391156",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -8963,7 +9049,7 @@
     {
       "name": "handle grip",
       "type": "cube",
-      "uuid": "4c73b234-2e33-5413-ac14-77f917391156",
+      "uuid": "0e71e226-6f9f-5dd6-8024-0304730bd27a",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9049,7 +9135,7 @@
     {
       "name": "trigger guard",
       "type": "cube",
-      "uuid": "0e71e226-6f9f-5dd6-8024-0304730bd27a",
+      "uuid": "252bfa0c-efca-5659-b798-698d98e96c58",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9135,7 +9221,7 @@
     {
       "name": "trigger guard base",
       "type": "cube",
-      "uuid": "252bfa0c-efca-5659-b798-698d98e96c58",
+      "uuid": "d5aeab90-6f20-5786-a315-4c882f19ecac",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9221,7 +9307,7 @@
     {
       "name": "trigger",
       "type": "cube",
-      "uuid": "d5aeab90-6f20-5786-a315-4c882f19ecac",
+      "uuid": "b8133dad-abc4-5696-8e42-dbec8e0d0081",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9307,7 +9393,7 @@
     {
       "name": "metal spout",
       "type": "cube",
-      "uuid": "b8133dad-abc4-5696-8e42-dbec8e0d0081",
+      "uuid": "bf058b45-2e0f-5c5e-bcb7-56b5da2c5031",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9393,7 +9479,7 @@
     {
       "name": "spout outlet",
       "type": "cube",
-      "uuid": "bf058b45-2e0f-5c5e-bcb7-56b5da2c5031",
+      "uuid": "28e0f691-dd3c-5d17-9e5d-b31ce4bbd1e5",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9479,7 +9565,7 @@
     {
       "name": "right_nozzle_1 flexible hose 00",
       "type": "cube",
-      "uuid": "28e0f691-dd3c-5d17-9e5d-b31ce4bbd1e5",
+      "uuid": "3f7e2e8d-913f-59f4-9480-6ff709edeac7",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9565,7 +9651,7 @@
     {
       "name": "right_nozzle_1 flexible hose 01",
       "type": "cube",
-      "uuid": "3f7e2e8d-913f-59f4-9480-6ff709edeac7",
+      "uuid": "ccbbc39f-2e02-5e18-83b3-993b5206d274",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9651,7 +9737,7 @@
     {
       "name": "right_nozzle_1 flexible hose 02",
       "type": "cube",
-      "uuid": "ccbbc39f-2e02-5e18-83b3-993b5206d274",
+      "uuid": "ea8f46a7-ea88-581a-8e27-b028cc05a78a",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9737,7 +9823,7 @@
     {
       "name": "right_nozzle_1 flexible hose 03",
       "type": "cube",
-      "uuid": "ea8f46a7-ea88-581a-8e27-b028cc05a78a",
+      "uuid": "1c822f4a-37c4-5a41-ba1f-f9aa25504f68",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9823,7 +9909,7 @@
     {
       "name": "right_nozzle_1 flexible hose 04",
       "type": "cube",
-      "uuid": "1c822f4a-37c4-5a41-ba1f-f9aa25504f68",
+      "uuid": "a4971d65-85a4-5e28-84a9-ba2844481136",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9909,7 +9995,7 @@
     {
       "name": "right_nozzle_1 flexible hose 05",
       "type": "cube",
-      "uuid": "a4971d65-85a4-5e28-84a9-ba2844481136",
+      "uuid": "fe62e83f-ebaa-54e1-8f72-b50e461efe6a",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -9995,7 +10081,7 @@
     {
       "name": "right_nozzle_1 flexible hose 06",
       "type": "cube",
-      "uuid": "fe62e83f-ebaa-54e1-8f72-b50e461efe6a",
+      "uuid": "75e45f99-e038-5495-bdc3-b27684f20048",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10081,7 +10167,7 @@
     {
       "name": "right_nozzle_1 flexible hose 07",
       "type": "cube",
-      "uuid": "75e45f99-e038-5495-bdc3-b27684f20048",
+      "uuid": "21cd81ed-708e-5f54-969b-bc5f3a8e91c1",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10167,7 +10253,7 @@
     {
       "name": "right_nozzle_1 flexible hose 08",
       "type": "cube",
-      "uuid": "21cd81ed-708e-5f54-969b-bc5f3a8e91c1",
+      "uuid": "0f0781fc-fc1c-5c2a-b21e-b0310543c21f",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10253,7 +10339,7 @@
     {
       "name": "right_nozzle_1 flexible hose 09",
       "type": "cube",
-      "uuid": "0f0781fc-fc1c-5c2a-b21e-b0310543c21f",
+      "uuid": "2a82079a-2dda-5083-82e9-4fbc702536c0",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10339,7 +10425,7 @@
     {
       "name": "right_nozzle_1 flexible hose 10",
       "type": "cube",
-      "uuid": "2a82079a-2dda-5083-82e9-4fbc702536c0",
+      "uuid": "92938e51-eb1c-56a6-a747-5082cc591f5d",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10425,7 +10511,7 @@
     {
       "name": "right_nozzle_1 flexible hose 11",
       "type": "cube",
-      "uuid": "92938e51-eb1c-56a6-a747-5082cc591f5d",
+      "uuid": "e8848dc9-7635-5206-ad62-923bfd8170ce",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10511,7 +10597,7 @@
     {
       "name": "right_nozzle_1 flexible hose 12",
       "type": "cube",
-      "uuid": "e8848dc9-7635-5206-ad62-923bfd8170ce",
+      "uuid": "41b0e1c3-0bac-5281-8d88-8b83c2696883",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10597,7 +10683,7 @@
     {
       "name": "right_nozzle_1 flexible hose 13",
       "type": "cube",
-      "uuid": "41b0e1c3-0bac-5281-8d88-8b83c2696883",
+      "uuid": "580dafca-3da2-5cc6-be14-73875e9c0c5f",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10683,7 +10769,7 @@
     {
       "name": "right_nozzle_1 flexible hose 14",
       "type": "cube",
-      "uuid": "580dafca-3da2-5cc6-be14-73875e9c0c5f",
+      "uuid": "d0bf0408-dc55-5144-a811-93de4a462279",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10769,7 +10855,7 @@
     {
       "name": "right_nozzle_1 flexible hose 15",
       "type": "cube",
-      "uuid": "d0bf0408-dc55-5144-a811-93de4a462279",
+      "uuid": "3ee6c56b-8ced-566f-8a9b-f5427d896896",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10855,7 +10941,7 @@
     {
       "name": "right_nozzle_1 flexible hose 16",
       "type": "cube",
-      "uuid": "3ee6c56b-8ced-566f-8a9b-f5427d896896",
+      "uuid": "73431869-0a54-536b-b107-404ed632b12d",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -10941,7 +11027,7 @@
     {
       "name": "hose connector",
       "type": "cube",
-      "uuid": "73431869-0a54-536b-b107-404ed632b12d",
+      "uuid": "33714771-1129-5ca7-ae97-7654d7117208",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11027,7 +11113,7 @@
     {
       "name": "nozzle dock",
       "type": "cube",
-      "uuid": "33714771-1129-5ca7-ae97-7654d7117208",
+      "uuid": "a92dd507-ba28-5613-b270-b2d599d11250",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11113,7 +11199,7 @@
     {
       "name": "fuel grade color badge",
       "type": "cube",
-      "uuid": "a92dd507-ba28-5613-b270-b2d599d11250",
+      "uuid": "1d9b0eb1-b3d5-569d-95af-1e026e446c9f",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11199,7 +11285,7 @@
     {
       "name": "nozzle body",
       "type": "cube",
-      "uuid": "1d9b0eb1-b3d5-569d-95af-1e026e446c9f",
+      "uuid": "49787185-8d0a-548d-b8c2-c75d7e37cd4d",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11285,7 +11371,7 @@
     {
       "name": "handle grip",
       "type": "cube",
-      "uuid": "49787185-8d0a-548d-b8c2-c75d7e37cd4d",
+      "uuid": "700e0894-ca0a-5eda-879a-fb5018e50f87",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11371,7 +11457,7 @@
     {
       "name": "trigger guard",
       "type": "cube",
-      "uuid": "700e0894-ca0a-5eda-879a-fb5018e50f87",
+      "uuid": "36017750-238d-560c-85e7-a6a0cc943ea0",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11457,7 +11543,7 @@
     {
       "name": "trigger guard base",
       "type": "cube",
-      "uuid": "36017750-238d-560c-85e7-a6a0cc943ea0",
+      "uuid": "1e615998-0b0e-58aa-b173-6a09520effb4",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11543,7 +11629,7 @@
     {
       "name": "trigger",
       "type": "cube",
-      "uuid": "1e615998-0b0e-58aa-b173-6a09520effb4",
+      "uuid": "6929c630-3f0e-5151-9ad0-02c7563a1bcf",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11629,7 +11715,7 @@
     {
       "name": "metal spout",
       "type": "cube",
-      "uuid": "6929c630-3f0e-5151-9ad0-02c7563a1bcf",
+      "uuid": "c63adf09-bc13-5fa3-bb2c-f80380b7c030",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11715,7 +11801,7 @@
     {
       "name": "spout outlet",
       "type": "cube",
-      "uuid": "c63adf09-bc13-5fa3-bb2c-f80380b7c030",
+      "uuid": "bcc0b6a4-5102-59c9-8b34-8efcafbdd607",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11801,7 +11887,7 @@
     {
       "name": "right_nozzle_2 flexible hose 00",
       "type": "cube",
-      "uuid": "bcc0b6a4-5102-59c9-8b34-8efcafbdd607",
+      "uuid": "9a9a892f-81f6-54d7-bd9a-f728b17cbf4e",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11887,7 +11973,7 @@
     {
       "name": "right_nozzle_2 flexible hose 01",
       "type": "cube",
-      "uuid": "9a9a892f-81f6-54d7-bd9a-f728b17cbf4e",
+      "uuid": "2e54e120-0ba0-5ed7-bca7-f7f54034d3e4",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -11973,7 +12059,7 @@
     {
       "name": "right_nozzle_2 flexible hose 02",
       "type": "cube",
-      "uuid": "2e54e120-0ba0-5ed7-bca7-f7f54034d3e4",
+      "uuid": "b55f7586-221b-538e-911b-cf154ee2f8bc",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12059,7 +12145,7 @@
     {
       "name": "right_nozzle_2 flexible hose 03",
       "type": "cube",
-      "uuid": "b55f7586-221b-538e-911b-cf154ee2f8bc",
+      "uuid": "eeca46b3-9dbb-5048-8d2a-475d8acad0e7",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12145,7 +12231,7 @@
     {
       "name": "right_nozzle_2 flexible hose 04",
       "type": "cube",
-      "uuid": "eeca46b3-9dbb-5048-8d2a-475d8acad0e7",
+      "uuid": "5dfd689f-64a3-5484-a84f-abc9c12ccf7e",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12231,7 +12317,7 @@
     {
       "name": "right_nozzle_2 flexible hose 05",
       "type": "cube",
-      "uuid": "5dfd689f-64a3-5484-a84f-abc9c12ccf7e",
+      "uuid": "e7d6100f-184b-5bb1-b58b-a1a32881d6b4",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12317,7 +12403,7 @@
     {
       "name": "right_nozzle_2 flexible hose 06",
       "type": "cube",
-      "uuid": "e7d6100f-184b-5bb1-b58b-a1a32881d6b4",
+      "uuid": "1e53199f-893d-56f3-9a14-3664e703c537",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12403,7 +12489,7 @@
     {
       "name": "right_nozzle_2 flexible hose 07",
       "type": "cube",
-      "uuid": "1e53199f-893d-56f3-9a14-3664e703c537",
+      "uuid": "a70dc6ce-4d25-5ca7-917c-4195d4aa8577",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12489,7 +12575,7 @@
     {
       "name": "right_nozzle_2 flexible hose 08",
       "type": "cube",
-      "uuid": "a70dc6ce-4d25-5ca7-917c-4195d4aa8577",
+      "uuid": "919a4c42-9861-597f-a836-3492e5b4448c",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12575,7 +12661,7 @@
     {
       "name": "right_nozzle_2 flexible hose 09",
       "type": "cube",
-      "uuid": "919a4c42-9861-597f-a836-3492e5b4448c",
+      "uuid": "ae9e9f78-bc98-5edc-b994-0ebb00129f0d",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12661,7 +12747,7 @@
     {
       "name": "right_nozzle_2 flexible hose 10",
       "type": "cube",
-      "uuid": "ae9e9f78-bc98-5edc-b994-0ebb00129f0d",
+      "uuid": "95abef17-ec1d-5109-b7a1-575cba24fb95",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12747,7 +12833,7 @@
     {
       "name": "right_nozzle_2 flexible hose 11",
       "type": "cube",
-      "uuid": "95abef17-ec1d-5109-b7a1-575cba24fb95",
+      "uuid": "024cba67-65e7-5984-b055-fae1dca619e1",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12833,7 +12919,7 @@
     {
       "name": "right_nozzle_2 flexible hose 12",
       "type": "cube",
-      "uuid": "024cba67-65e7-5984-b055-fae1dca619e1",
+      "uuid": "c59e9245-0593-5022-a0ec-8643ea7b6ce6",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -12919,7 +13005,7 @@
     {
       "name": "right_nozzle_2 flexible hose 13",
       "type": "cube",
-      "uuid": "c59e9245-0593-5022-a0ec-8643ea7b6ce6",
+      "uuid": "c1857de8-5352-5081-b13b-55a8177645cc",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -13005,7 +13091,7 @@
     {
       "name": "right_nozzle_2 flexible hose 14",
       "type": "cube",
-      "uuid": "c1857de8-5352-5081-b13b-55a8177645cc",
+      "uuid": "913d9bbd-5d2f-549f-bc56-3add8c78a76c",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -13091,7 +13177,7 @@
     {
       "name": "right_nozzle_2 flexible hose 15",
       "type": "cube",
-      "uuid": "913d9bbd-5d2f-549f-bc56-3add8c78a76c",
+      "uuid": "491accaf-bfca-5a46-9283-ee3c5c9e26af",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -13177,7 +13263,7 @@
     {
       "name": "right_nozzle_2 flexible hose 16",
       "type": "cube",
-      "uuid": "491accaf-bfca-5a46-9283-ee3c5c9e26af",
+      "uuid": "e616c2cd-dfd3-5bae-8151-2fc15a07c061",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -13263,7 +13349,7 @@
     {
       "name": "hose connector",
       "type": "cube",
-      "uuid": "e616c2cd-dfd3-5bae-8151-2fc15a07c061",
+      "uuid": "a246fc38-a996-51e2-9a52-14b689c120b0",
       "box_uv": false,
       "rescale": false,
       "locked": false,
@@ -13388,7 +13474,15 @@
             "b343882b-7958-50b7-aa85-86f5bb2806c7",
             "effba296-328f-591e-9027-d582d6168e0e",
             "7f05573c-efdc-59dd-8083-e26fdb990982",
-            "64769d65-4884-51fc-aba3-80efecc762e0"
+            "64769d65-4884-51fc-aba3-80efecc762e0",
+            "8b669c68-02b3-575a-9a89-6a7c56326895",
+            "c3fcd211-4dd3-5d6c-b8b9-8fb16e0e97ca",
+            "23ee6ab6-929d-5290-9feb-39a97e3129fb",
+            "dc3bc693-8738-59af-8090-644a350e7173",
+            "b8b8cbcd-ae04-5a84-a1e6-093bdf1c9ea6",
+            "be59658f-38e5-5d63-98fa-008d5ad9383c",
+            "a92dd507-ba28-5613-b270-b2d599d11250",
+            "1d9b0eb1-b3d5-569d-95af-1e026e446c9f"
           ]
         },
         {
@@ -13439,11 +13533,50 @@
           "isOpen": false,
           "visibility": true,
           "children": [
-            "c840b788-828f-542c-8b76-7dc8986bebc5",
             "ad1ceebf-476e-597c-a720-a919a00ad4a8",
             "107464c6-0649-59e4-b0a5-304ce91c8a96",
-            "51ecc785-1b17-5dca-91b7-b79c921bdf4e",
-            "867ea977-3b2e-53b8-ab0d-d43287a6d315"
+            "867ea977-3b2e-53b8-ab0d-d43287a6d315",
+            "de7930e5-32bc-5240-9945-afe33f74aab9",
+            {
+              "name": "status_indicator",
+              "origin": [
+                6.7,
+                21.5,
+                -5.66
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "uuid": "ec96a372-b5ec-5014-8f4c-4fa93c34189c",
+              "export": true,
+              "isOpen": false,
+              "visibility": true,
+              "children": [
+                "c840b788-828f-542c-8b76-7dc8986bebc5"
+              ]
+            },
+            {
+              "name": "led_scan",
+              "origin": [
+                -7.85,
+                20.4,
+                -5.495
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "uuid": "f6a877d2-b168-553d-8222-4ddc0320f741",
+              "export": true,
+              "isOpen": false,
+              "visibility": true,
+              "children": [
+                "51ecc785-1b17-5dca-91b7-b79c921bdf4e"
+              ]
+            }
           ]
         },
         {
@@ -13473,7 +13606,6 @@
             "0de35af7-8dd0-55b0-83df-4527b6d2ee8e",
             "44a31783-1b24-5a8d-9287-abd6e942fa28",
             "7b80034b-f3ea-59b8-be87-970bbf9e54fc",
-            "de7930e5-32bc-5240-9945-afe33f74aab9",
             "8059a3e8-fe47-5492-853b-24f03b25c8a9",
             "f48d74bd-c7dc-5922-b72c-acf54f2b12e4",
             "724459f1-aec7-58d6-9bca-f44d8ed4ef54",
@@ -13485,7 +13617,8 @@
             "9d80c203-ca13-5961-90ea-e44192c931f5",
             "18860443-c155-5a0d-9571-fc57edff6dbc",
             "ca2798e6-4945-53cc-9c01-1fe235b2fe0e",
-            "046dd871-a32f-55b4-b4b9-a760b3aa134a"
+            "046dd871-a32f-55b4-b4b9-a760b3aa134a",
+            "521a40fa-844a-58e5-be6b-a1c17f86e33a"
           ]
         },
         {
@@ -13505,7 +13638,6 @@
           "isOpen": false,
           "visibility": true,
           "children": [
-            "24833657-9ecb-55a6-b3a4-4024e3e5da6e",
             "93f330ef-ff2f-51f9-a54d-c3cc3e7abe43",
             "03d20683-17d0-5c76-8915-0f5485611111",
             "0037c342-c8b2-5703-9db7-c1d3e668edc0",
@@ -13522,7 +13654,8 @@
             "acf7c1e9-bbe0-5666-b71c-05cff10fa721",
             "2b85db2e-966e-540c-9e11-08b16388211c",
             "9c9176c9-8911-5d76-a010-db575be2bcd0",
-            "516ea726-4774-5ce1-a9bd-ac5cc4811b3c",
+            "a3dc8afa-a140-5abc-8cbe-62ee8d564df8",
+            "a78cf610-6ee9-5a2c-a9b6-18c534001365",
             "e35f4d8a-23ce-5fe1-9a8e-ec954cb1e7c5",
             "c2024b01-d1d4-567b-b145-8b9621fa3e11",
             "6cc41ab3-eb81-56ae-a4fb-c8b132a6b8f7",
@@ -13539,7 +13672,8 @@
             "ca6af01e-f130-5e2a-8b72-0b222d8c985f",
             "46f128c5-dd5b-59f6-ad85-be4daa69e513",
             "5d636613-c10a-50ca-8f7a-d14a50819add",
-            "28e0f691-dd3c-5d17-9e5d-b31ce4bbd1e5",
+            "422e8c9c-0c2d-5241-afae-9ee19163d049",
+            "38f95cd9-d7fe-5769-912b-05257cd030ac",
             "3f7e2e8d-913f-59f4-9480-6ff709edeac7",
             "ccbbc39f-2e02-5e18-83b3-993b5206d274",
             "ea8f46a7-ea88-581a-8e27-b028cc05a78a",
@@ -13556,7 +13690,8 @@
             "580dafca-3da2-5cc6-be14-73875e9c0c5f",
             "d0bf0408-dc55-5144-a811-93de4a462279",
             "3ee6c56b-8ced-566f-8a9b-f5427d896896",
-            "bcc0b6a4-5102-59c9-8b34-8efcafbdd607",
+            "73431869-0a54-536b-b107-404ed632b12d",
+            "33714771-1129-5ca7-ae97-7654d7117208",
             "9a9a892f-81f6-54d7-bd9a-f728b17cbf4e",
             "2e54e120-0ba0-5ed7-bca7-f7f54034d3e4",
             "b55f7586-221b-538e-911b-cf154ee2f8bc",
@@ -13572,7 +13707,9 @@
             "c59e9245-0593-5022-a0ec-8643ea7b6ce6",
             "c1857de8-5352-5081-b13b-55a8177645cc",
             "913d9bbd-5d2f-549f-bc56-3add8c78a76c",
-            "491accaf-bfca-5a46-9283-ee3c5c9e26af"
+            "491accaf-bfca-5a46-9283-ee3c5c9e26af",
+            "e616c2cd-dfd3-5bae-8151-2fc15a07c061",
+            "a246fc38-a996-51e2-9a52-14b689c120b0"
           ]
         },
         {
@@ -13596,8 +13733,8 @@
               "name": "left_nozzle_1",
               "origin": [
                 -10.5,
-                20,
-                -2.9
+                17.5,
+                -4.0
               ],
               "rotation": [
                 0,
@@ -13609,24 +13746,21 @@
               "isOpen": false,
               "visibility": true,
               "children": [
-                "521a40fa-844a-58e5-be6b-a1c17f86e33a",
-                "8b669c68-02b3-575a-9a89-6a7c56326895",
-                "c3fcd211-4dd3-5d6c-b8b9-8fb16e0e97ca",
                 "6ed66d35-6e0f-5913-a6b2-d49d2eece3de",
                 "2f37b116-db30-5327-8471-f6c4e5f7f19f",
                 "3ea428dc-e46f-5b8e-9703-53de02e865b9",
                 "a83507f7-17dc-50be-b703-0fd3cfe02531",
                 "91ada178-2477-513a-9ab4-42b28a56327d",
                 "b3f39203-d694-5ed3-9aab-d8ef78d82884",
-                "a3dc8afa-a140-5abc-8cbe-62ee8d564df8"
+                "24833657-9ecb-55a6-b3a4-4024e3e5da6e"
               ]
             },
             {
               "name": "left_nozzle_2",
               "origin": [
                 -13.6,
-                20,
-                0.8999999999999999
+                17.5,
+                -0.20000000000000018
               ],
               "rotation": [
                 0,
@@ -13638,24 +13772,21 @@
               "isOpen": false,
               "visibility": true,
               "children": [
-                "a78cf610-6ee9-5a2c-a9b6-18c534001365",
-                "23ee6ab6-929d-5290-9feb-39a97e3129fb",
-                "dc3bc693-8738-59af-8090-644a350e7173",
                 "d57bd6cd-9226-5b9b-85b4-948f6cc0e021",
                 "3b4d575a-da3c-5e9c-b12b-6449c90786c1",
                 "2393edff-cd7d-5868-9751-99874af8f0c7",
                 "5e3cadd0-2fe9-5b8f-9e70-1ce2a25cc832",
                 "d984b090-29f6-5aa9-a67c-99aaeb24b600",
                 "8a82aa28-15d5-58e9-bfb3-0aabdb00d35f",
-                "422e8c9c-0c2d-5241-afae-9ee19163d049"
+                "516ea726-4774-5ce1-a9bd-ac5cc4811b3c"
               ]
             },
             {
               "name": "right_nozzle_1",
               "origin": [
                 10.5,
-                20,
-                -2.9
+                17.5,
+                -4.0
               ],
               "rotation": [
                 0,
@@ -13667,24 +13798,21 @@
               "isOpen": false,
               "visibility": true,
               "children": [
-                "38f95cd9-d7fe-5769-912b-05257cd030ac",
-                "b8b8cbcd-ae04-5a84-a1e6-093bdf1c9ea6",
-                "be59658f-38e5-5d63-98fa-008d5ad9383c",
                 "4c73b234-2e33-5413-ac14-77f917391156",
                 "0e71e226-6f9f-5dd6-8024-0304730bd27a",
                 "252bfa0c-efca-5659-b798-698d98e96c58",
                 "d5aeab90-6f20-5786-a315-4c882f19ecac",
                 "b8133dad-abc4-5696-8e42-dbec8e0d0081",
                 "bf058b45-2e0f-5c5e-bcb7-56b5da2c5031",
-                "73431869-0a54-536b-b107-404ed632b12d"
+                "28e0f691-dd3c-5d17-9e5d-b31ce4bbd1e5"
               ]
             },
             {
               "name": "right_nozzle_2",
               "origin": [
                 13.6,
-                20,
-                0.8999999999999999
+                17.5,
+                -0.20000000000000018
               ],
               "rotation": [
                 0,
@@ -13696,16 +13824,13 @@
               "isOpen": false,
               "visibility": true,
               "children": [
-                "33714771-1129-5ca7-ae97-7654d7117208",
-                "a92dd507-ba28-5613-b270-b2d599d11250",
-                "1d9b0eb1-b3d5-569d-95af-1e026e446c9f",
                 "49787185-8d0a-548d-b8c2-c75d7e37cd4d",
                 "700e0894-ca0a-5eda-879a-fb5018e50f87",
                 "36017750-238d-560c-85e7-a6a0cc943ea0",
                 "1e615998-0b0e-58aa-b173-6a09520effb4",
                 "6929c630-3f0e-5151-9ad0-02c7563a1bcf",
                 "c63adf09-bc13-5fa3-bb2c-f80380b7c030",
-                "e616c2cd-dfd3-5bae-8151-2fc15a07c061"
+                "bcc0b6a4-5102-59c9-8b34-8efcafbdd607"
               ]
             }
           ]
@@ -13728,6 +13853,1744 @@
       "internal": true,
       "saved": true,
       "source": "data:image/png;base64,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"
+    }
+  ],
+  "animations": [
+    {
+      "uuid": "d3ed86ee-1ec2-5cf7-b02a-2068cfedc5a4",
+      "name": "animation.nova_digital_pump.idle",
+      "loop": "loop",
+      "override": false,
+      "length": 2.4,
+      "snapping": 24,
+      "animators": {
+        "ec96a372-b5ec-5014-8f4c-4fa93c34189c": {
+          "name": "status_indicator",
+          "type": "bone",
+          "keyframes": [
+            {
+              "channel": "scale",
+              "data_points": [
+                {
+                  "x": "1",
+                  "y": "1",
+                  "z": "1"
+                }
+              ],
+              "uuid": "00dae9b3-e84d-565b-a932-b074605e56ee",
+              "time": 0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "scale",
+              "data_points": [
+                {
+                  "x": "1",
+                  "y": "1",
+                  "z": "1"
+                }
+              ],
+              "uuid": "9a6a795f-36d6-5409-8864-4dde1d692a76",
+              "time": 0.85,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "scale",
+              "data_points": [
+                {
+                  "x": "0.02",
+                  "y": "0.02",
+                  "z": "0.02"
+                }
+              ],
+              "uuid": "221f4e64-d444-5808-b1a6-1e8e04dc6665",
+              "time": 1,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "scale",
+              "data_points": [
+                {
+                  "x": "0.02",
+                  "y": "0.02",
+                  "z": "0.02"
+                }
+              ],
+              "uuid": "2ee8f707-81d8-570f-b877-b14b554b115e",
+              "time": 1.2,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "scale",
+              "data_points": [
+                {
+                  "x": "1",
+                  "y": "1",
+                  "z": "1"
+                }
+              ],
+              "uuid": "346602b4-4b06-5be3-8128-02cb568a3299",
+              "time": 1.35,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "scale",
+              "data_points": [
+                {
+                  "x": "1",
+                  "y": "1",
+                  "z": "1"
+                }
+              ],
+              "uuid": "df71f8d3-8c38-5ca3-a2d9-bedba8b1bfb7",
+              "time": 2.4,
+              "color": -1,
+              "interpolation": "linear"
+            }
+          ]
+        },
+        "f6a877d2-b168-553d-8222-4ddc0320f741": {
+          "name": "led_scan",
+          "type": "bone",
+          "keyframes": [
+            {
+              "channel": "position",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "387149f0-aeb1-5b82-a3a4-387fcefa4a76",
+              "time": 0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "position",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "10",
+                  "z": "0"
+                }
+              ],
+              "uuid": "0e32995b-4628-598f-8dd8-f765fb1885dc",
+              "time": 1.2,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "position",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "ce755cc6-ccdb-590a-b856-47213da99731",
+              "time": 2.4,
+              "color": -1,
+              "interpolation": "linear"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "uuid": "c1bfef50-373c-54e5-9efa-74d216ae0819",
+      "name": "animation.nova_digital_pump.nozzle_demo",
+      "loop": "loop",
+      "override": false,
+      "length": 6,
+      "snapping": 24,
+      "animators": {
+        "8d141c48-f368-5b8e-9775-1fb8796af15b": {
+          "name": "left_nozzle_1",
+          "type": "bone",
+          "keyframes": [
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "e4e8def0-2f3f-5aac-8b58-3d604f798085",
+              "time": 0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "932c7433-f829-577c-b966-c4955d64ef1f",
+              "time": 0.041667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "ccfc29ef-d276-5b7c-8cca-0979149fb79e",
+              "time": 0.083333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "5d282398-6d9c-5947-b438-02d32f16b04e",
+              "time": 0.125,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "422c65f2-dfa8-5344-9ed4-c78fd9dfb83f",
+              "time": 0.166667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "73c9596f-a678-5066-a512-4b03c44eca79",
+              "time": 0.208333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "3a1685da-89d7-5f99-8d61-98b26abaea68",
+              "time": 0.25,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "da5e6f7d-12f9-5200-9ceb-05a47afb783b",
+              "time": 0.291667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "a7fcfea8-a5f3-586f-8760-535616ccaa9a",
+              "time": 0.333333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "c9dfe1af-442e-5ed6-aa01-ded6b37b5c62",
+              "time": 0.375,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "dcb99ac5-1d43-5d9a-9b34-26a705f0d680",
+              "time": 0.416667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "55006504-3608-5ce6-be22-927e9538fada",
+              "time": 0.458333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "9af34c03-aadb-5376-9ab9-1adc9459f1e2",
+              "time": 0.5,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "09b92d56-f32a-59cd-b729-88e283ac93ce",
+              "time": 0.85,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "4e792a3f-300b-593c-b104-44700cb573ad",
+              "time": 0.891667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "78c5760e-eb7c-579b-b735-56f79351580c",
+              "time": 0.933333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b3474e1d-e9cf-5b77-aafa-ad1d2b4bb965",
+              "time": 0.975,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "91088c3b-2352-53af-951e-95d7dc494734",
+              "time": 1.016667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "163e5618-26f5-57a0-8fd2-dc4071f16044",
+              "time": 1.058333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "c5c94e76-d056-502f-ba78-1772ce47a08b",
+              "time": 1.1,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "2a48102b-d187-552c-b49f-5d42dda68008",
+              "time": 1.141667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "fd816180-0989-5182-8e79-93914ee62fe4",
+              "time": 1.183333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "84f8f024-ad04-5f52-9044-da92fb448e58",
+              "time": 1.225,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "8f8e41ff-c73c-5cb1-8a9e-6352ee21441a",
+              "time": 1.266667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "a8730998-598f-5b8f-9f35-8a641a7ae274",
+              "time": 1.308333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "de3db53f-1bf2-5677-9227-b1c148142e45",
+              "time": 1.35,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "c92881f0-a6ae-5d51-a579-3de3d8136bee",
+              "time": 6,
+              "color": -1,
+              "interpolation": "linear"
+            }
+          ]
+        },
+        "196cd307-dbb0-575b-9ae7-4644c171bff4": {
+          "name": "left_nozzle_2",
+          "type": "bone",
+          "keyframes": [
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "f93ac960-7fc3-514f-b41c-73eacad2ce89",
+              "time": 0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "637b6e2a-63e4-5646-8141-1a7434657631",
+              "time": 1.5,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "0d0a95fa-0db1-522d-bee6-e0c8f25b8f45",
+              "time": 1.541667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "05ae87cd-0bf9-5bba-a4f5-c1fde36eb436",
+              "time": 1.583333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "91874c42-7dc5-5551-8a57-dd75f706e61b",
+              "time": 1.625,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "027d3bf0-875f-52f0-a519-a91770023ffd",
+              "time": 1.666667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "ee610259-6aa6-576d-b720-75ae9f557f7a",
+              "time": 1.708333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b2e14a4c-05a1-586b-b17b-009bcaf485b2",
+              "time": 1.75,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "79d3fcb9-68ae-5501-a07d-d6bd221741c5",
+              "time": 1.791667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "92988b9c-e794-590b-9d84-5e8ced947f5b",
+              "time": 1.833333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "1454de3c-4423-54c6-b406-db25fcb45e3e",
+              "time": 1.875,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b1e2222b-7777-5ab5-8975-8b196428d2bd",
+              "time": 1.916667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "d99b9be8-f535-5667-b438-1566cb3a746a",
+              "time": 1.958333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "71f094ae-8806-5fdc-8406-54822091342f",
+              "time": 2.0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "7798f5a6-b9b6-53c8-9628-d2c62e4a1484",
+              "time": 2.35,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "fd29c0b5-9b81-5d88-920b-d4662c4ad0b7",
+              "time": 2.391667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "c73653b2-4c66-5623-96ea-74bc3347e481",
+              "time": 2.433333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b3c364d1-dd15-5dbc-a56b-034bcb2fc6f0",
+              "time": 2.475,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "bc05923e-2608-55a9-a419-22c2e4531751",
+              "time": 2.516667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "ec799922-f9f0-5c44-9489-878a1b052341",
+              "time": 2.558333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b4c2e1bf-cc36-53af-9912-a461428c2214",
+              "time": 2.6,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "f93c82d9-8f31-5c4e-8048-83985d3999a5",
+              "time": 2.641667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "3ae698c3-7da6-51f0-98fe-02a35dc7dc3d",
+              "time": 2.683333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "5b8ba3f9-decf-5488-9bb6-9865af14f88e",
+              "time": 2.725,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "e99c0fb5-c85f-5e66-b119-6cc966c10dea",
+              "time": 2.766667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "3d236e81-f04a-5e4c-8a31-a0e1177c8839",
+              "time": 2.808333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "54d3f8bf-51b4-5f2e-bb4e-2a6ecf40cf32",
+              "time": 2.85,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "e21ba33f-6dd2-5570-a8fa-26b27d28d0f2",
+              "time": 6,
+              "color": -1,
+              "interpolation": "linear"
+            }
+          ]
+        },
+        "ce7b78e8-19fc-5e80-93b5-5c707c7ff85b": {
+          "name": "right_nozzle_1",
+          "type": "bone",
+          "keyframes": [
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "77f575d6-a2a0-5271-9559-8d179315d76f",
+              "time": 0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "49226ca7-e6e7-5938-b934-ef42584eabc4",
+              "time": 3.0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "50c44b43-8d1b-5023-ba18-4c941cc8a190",
+              "time": 3.041667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "ec816771-2023-5175-836d-a7737ad24386",
+              "time": 3.083333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "d7b03a9f-c67c-5e41-a4cb-2ca12214b2d4",
+              "time": 3.125,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "6520c5fe-c67a-58ee-a3f1-e36a38678589",
+              "time": 3.166667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "5e50c830-07fd-5901-91bc-ec87aff5d2bb",
+              "time": 3.208333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "f450ad8a-46eb-55c7-86d1-f1a393665d2f",
+              "time": 3.25,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "e4cb1fcf-6d99-564e-8893-b07a13567b30",
+              "time": 3.291667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "e91e40a9-c274-51ce-8e76-97bb5f256933",
+              "time": 3.333333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "832e82dd-c95c-5405-a3b5-3fd59b453c83",
+              "time": 3.375,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "bc9b0ad3-84b3-5631-8886-6e701f510fc5",
+              "time": 3.416667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "31d23574-58f1-5361-afad-9b6f6729b11c",
+              "time": 3.458333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "742b935d-df17-5312-bee2-690f5dff7d34",
+              "time": 3.5,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "0c4df65f-b521-536e-8c94-c94374592cf5",
+              "time": 3.85,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "8641cb8c-207d-5516-9fc9-228cffe0e186",
+              "time": 3.891667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "26fc3a66-d1f3-509d-8f8b-430b88bc6957",
+              "time": 3.933333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "5afecc87-d46c-5582-b656-5de5c2eb3be1",
+              "time": 3.975,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "124fc1eb-bf20-5ff4-b139-aed8c76426fe",
+              "time": 4.016667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "a51ca315-5935-5101-b5bf-16f4a5e7c22b",
+              "time": 4.058333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "c86e9b42-d3d4-51f3-b926-da6e03f468fd",
+              "time": 4.1,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "e9552b70-a8d2-5e73-982e-d07a05189686",
+              "time": 4.141667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "4dc4c9bb-4eeb-5618-9f64-6bcf2cb6155f",
+              "time": 4.183333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "ab159cba-e171-5729-88e0-db653c32822d",
+              "time": 4.225,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "20ccb8b6-1c21-5ac4-b9f6-e07fd2b843ff",
+              "time": 4.266667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "fec822d1-ab76-5f38-aebe-b6b45e20be58",
+              "time": 4.308333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "d0befe32-70f4-5a80-b417-f6a00925f8f1",
+              "time": 4.35,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "f49263a8-3f4c-5576-b376-564cf90366de",
+              "time": 6,
+              "color": -1,
+              "interpolation": "linear"
+            }
+          ]
+        },
+        "81e1d55b-8b65-5140-baef-ff71bed20420": {
+          "name": "right_nozzle_2",
+          "type": "bone",
+          "keyframes": [
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "2a049dda-9e13-5034-b393-622920d01509",
+              "time": 0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "461eee88-fa58-502e-a57e-4f9dc97a1036",
+              "time": 4.5,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "f2e46d83-8852-524a-b5d1-c8b3d9fcbe1e",
+              "time": 4.541667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "6a8e016f-c739-5624-a4ce-815c8c12e639",
+              "time": 4.583333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "80932aae-54a0-530d-b87a-c205b69495f2",
+              "time": 4.625,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "ca3f4cfa-56a7-5dc6-8a64-5872b6827c8b",
+              "time": 4.666667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b00975db-e468-5c1c-bcbe-d10725f4a5d8",
+              "time": 4.708333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b876c460-cfb5-53b6-a4b8-27b6ae9d7435",
+              "time": 4.75,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "1c05b8db-83a5-5aa6-92c1-b7f20a4b7919",
+              "time": 4.791667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b5462380-e273-5662-899f-304667fd63c0",
+              "time": 4.833333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "24dc16fe-0dd6-5c86-b33f-c69838419102",
+              "time": 4.875,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "7651ded9-3d48-5a30-8733-13e7937ea93d",
+              "time": 4.916667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "2856cfbb-1878-5274-94a2-5b51ef53edf8",
+              "time": 4.958333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "517e9852-1637-591b-90a2-f5ad8cfc55fd",
+              "time": 5.0,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-32",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "bff47fc1-9115-534e-a66b-e2aac519e8d2",
+              "time": 5.35,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-31.454813",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "8fa32437-ea15-5c52-99bf-019491d86a34",
+              "time": 5.391667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-29.856406",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "c57d1790-f83e-5e49-9269-6d62fa123412",
+              "time": 5.433333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-27.313708",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "e7e2b899-9ba7-5bf9-a319-f868716dce7c",
+              "time": 5.475,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-24.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "285b8b78-801c-59fa-a6f5-e16a2d3e245b",
+              "time": 5.516667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-20.141105",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "52d37122-dcc5-5d61-92c1-39abb3ced177",
+              "time": 5.558333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-16.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "c991d71d-6363-5d50-afff-9c469ae7707d",
+              "time": 5.6,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-11.858895",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "10bd5197-a01e-5883-b643-1c78ead20f39",
+              "time": 5.641667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-8.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "f063b201-1f6f-5d6c-aa6f-c15972516233",
+              "time": 5.683333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-4.686292",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "ad1f208a-fbda-577d-b084-f26943da8c6f",
+              "time": 5.725,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-2.143594",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "474a4311-53b5-539e-9ebd-790b258ba5bc",
+              "time": 5.766667,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "-0.545187",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "3a41cf19-5da6-5c8b-835a-ba8dcfd8fc10",
+              "time": 5.808333,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0.0",
+                  "y": "0.0",
+                  "z": "0.0"
+                }
+              ],
+              "uuid": "b768a295-4315-51c5-8c65-09d6688082fc",
+              "time": 5.85,
+              "color": -1,
+              "interpolation": "linear"
+            },
+            {
+              "channel": "rotation",
+              "data_points": [
+                {
+                  "x": "0",
+                  "y": "0",
+                  "z": "0"
+                }
+              ],
+              "uuid": "0939e12c-f4c8-53f7-ab74-346f34154a92",
+              "time": 6,
+              "color": -1,
+              "interpolation": "linear"
+            }
+          ]
+        }
+      }
     }
   ]
 }
