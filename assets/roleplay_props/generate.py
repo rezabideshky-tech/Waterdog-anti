@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 OUT = Path(__file__).resolve().parent
 NS = uuid.UUID('ab70143d-f43d-45ef-8e66-240fe59e0984')
 FACES = ('north', 'south', 'east', 'west', 'up', 'down')
+BRAND = 'ARVAN GAMING'
 
 
 def uid(s):
@@ -51,6 +52,18 @@ class Atlas:
 
     def text(self, xy, text, size=14, fill='#ffffff'):
         self.d.text(xy, text, font=font(size), fill=fill)
+
+    def centered_text(self, box, text, size=26, fill='#ffffff', padding=8):
+        """Fit the entire brand inside its label without clipping or distorting it."""
+        x0, y0, x1, y1 = box
+        while size > 1:
+            f = font(size)
+            l, t, r, b = self.d.textbbox((0, 0), text, font=f)
+            if r-l <= x1-x0-2*padding and b-t <= y1-y0-2*padding:
+                break
+            size -= 1
+        assert r-l <= x1-x0-2*padding and b-t <= y1-y0-2*padding
+        self.d.text(((x0+x1-r+l)/2-l, (y0+y1-b+t)/2-t), text, font=f, fill=fill)
 
 
 class Model:
@@ -159,7 +172,7 @@ def palette():
 def pump():
     a=palette()
     d=a.panel('touch',[0,96,208,288],'#081f2b')
-    a.text((12,107),'NOVA / TOUCH',18,'#6bf4dd')
+    a.centered_text([4,100,204,133],BRAND,20,'#6bf4dd')
     d.line((12,134,194,134),fill='#284550',width=2)
     a.text((12,144),'SELECT FUEL',12,'#a2b8c5')
     for i,(name,col) in enumerate([('95  PREMIUM','#36b883'),('98  SUPER','#458fe0'),('D   DIESEL','#ebba58')]):
@@ -171,14 +184,14 @@ def pump():
     a.text((228,104),'TOTAL              LITRES',13,'#8bb2b4')
     a.text((227,125),'048.90     32.60',28,'#63f7db')
     a.panel('brand',[216,184,496,236],'#192b33')
-    a.text((233,191),'NOVA',32,'#eef8f7'); a.text((354,207),'ENERGY / 04',14,'#67edcf')
+    a.centered_text(a.regions['brand'],BRAND,29,'#eef8f7')
     a.panel('payment',[216,244,336,364],'#15242c')
     a.text((224,253),'PAY / NFC',16,'#f3f8f5')
     for r in [14,22,30]:
         d.arc((260-r,307-r,260+r,307+r),-55,55,fill='#69edd3',width=3)
     a.text((224,344),'CONTACTLESS',10,'#a9babe')
     a.panel('service',[344,244,504,324],'#c4d0ce')
-    a.text((356,253),'NOVA  //  04',17,'#26383e')
+    a.centered_text([348,246,500,276],BRAND,17,'#26383e',padding=5)
     a.text((356,279),'24H SELF SERVICE',11,'#33494e')
     a.text((356,299),'NO SMOKING',11,'#9e433b')
     a.panel('fuel',[0,304,208,350],'#12242b')
@@ -254,12 +267,9 @@ def pump():
 def case():
     a=palette()
     d=a.panel('case_label',[0,96,256,168],'#424f3d')
-    a.text((12,103),'FIELD / 07',28,'#e2d9ac')
-    a.text((12,140),'RP EQUIPMENT  -  SECURE STORAGE',11,'#c2caaa')
+    a.centered_text(a.regions['case_label'],BRAND,29,'#e2d9ac')
     a.panel('lid_label',[0,184,256,288],'#323f34')
-    a.text((16,197),'FIELD EQUIPMENT',24,'#d3dabb')
-    a.text((16,233),'LOADOUT  /  02',19,'#9da98a')
-    a.text((16,264),'INVENTORY VERIFIED',12,'#c5cdaa')
+    # Keep the original lid plate and padding, but leave the plate completely unlettered.
     a.panel('warning',[272,96,496,144],'#e2b75b')
     a.text((284,106),'CAUTION / RP PROP',20,'#323629')
     m=Model('field_open_ammo_case',a)
@@ -435,7 +445,7 @@ def render(m,folder):
                 pixels[ymin:ymax+1,xmin:xmax+1][mask]=rgb[mask];zb[mask]=dep[mask]
     image=Image.fromarray(pixels)
     d=ImageDraw.Draw(image)
-    d.text((48,28),'NOVA / DIGITAL PUMP' if m.name.startswith('nova') else 'FIELD / OPEN EQUIPMENT CASE',font=font(30),fill='#e8f4ee')
+    d.text((48,28),BRAND+' / DIGITAL PUMP' if m.name.startswith('nova') else BRAND+' / OPEN EQUIPMENT CASE',font=font(30),fill='#e8f4ee')
     d.text((50,70),'ROLEPLAY PROPS     /     BLOCKBENCH EDITABLE',font=font(15),fill='#64cbbb')
     d.line((50,h-83,w-50,h-83),fill='#3e575c',width=1)
     subtitle='4 NOZZLES   /   TOUCHSCREEN   /   NFC   /   LED' if m.name.startswith('nova') else 'HINGED LID   /   FOAM INSERT   /   2 WEAPON PROPS   /   4 MAGAZINES'
