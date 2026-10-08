@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Arvan Gaming | Bedwars Islands",
+    "description": "Solo / Doubles / Triples / Squads animated lobby NPCs",
+    "uuid": "e71ba59e-a98b-5332-8f12-8091760de87b",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "545849c7-991a-5784-8a07-ebafe382a1c3",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

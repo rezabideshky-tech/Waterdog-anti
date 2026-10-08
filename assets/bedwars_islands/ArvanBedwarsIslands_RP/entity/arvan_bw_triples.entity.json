@@ -1,0 +1,28 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "arvan:bw_triples_island",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/arvan_bw_triples"
+      },
+      "geometry": {
+        "default": "geometry.arvan_bw_triples"
+      },
+      "animations": {
+        "idle": "animation.arvan_bw_triples.lobby_idle"
+      },
+      "scripts": {
+        "animate": [
+          "idle"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.arvan_bw_islands"
+      ]
+    }
+  }
+}

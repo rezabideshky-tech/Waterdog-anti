@@ -1,0 +1,4 @@
+# Merge into your EXISTING resource_packs/resource_packs.yml, keeping all existing entries.
+force_resources: true
+resource_stack:
+  - ArvanBedwarsIslands_RP.zip

@@ -1,0 +1,27 @@
+# NPCs are decorative until the routes below are connected to YOUR Bedwars plugin/server.
+# action: none | command | transfer
+# command executes as the clicking player. Do not add a leading slash.
+# {player} and {mode} are supported placeholders.
+# Do not enable transfer without supplying your actual server address.
+spawn-height-offset: 0.4
+modes:
+  solo:
+    action: none
+    command: ""
+    address: ""
+    port: 19132
+  doubles:
+    action: none
+    command: ""
+    address: ""
+    port: 19132
+  triples:
+    action: none
+    command: ""
+    address: ""
+    port: 19132
+  squads:
+    action: none
+    command: ""
+    address: ""
+    port: 19132
