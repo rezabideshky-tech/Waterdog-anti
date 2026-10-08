@@ -1,0 +1,441 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_leaderboard.idle": {
+   "loop": true,
+   "bones": {
+    "pumpkin": {
+     "rotation": [
+      0,
+      0,
+      "math.sin(query.anim_time * 90) * 1.5"
+     ]
+    },
+    "skull": {
+     "rotation": [
+      "math.sin(query.anim_time * 180) * 3",
+      0,
+      0
+     ]
+    },
+    "flame_a": {
+     "scale": [
+      "1 + math.sin(query.anim_time * 1080) * 0.22",
+      "1 + math.sin(query.anim_time * 1080) * 0.22",
+      "1 + math.sin(query.anim_time * 1080) * 0.22"
+     ],
+     "position": [
+      0,
+      "math.sin(query.anim_time * 540) * 0.4",
+      0
+     ]
+    },
+    "flame_b": {
+     "scale": [
+      "1 + math.sin(query.anim_time * 1080 + 140) * 0.22",
+      "1 + math.sin(query.anim_time * 1080 + 140) * 0.22",
+      "1 + math.sin(query.anim_time * 1080 + 140) * 0.22"
+     ],
+     "position": [
+      0,
+      "math.sin(query.anim_time * 540 + 140) * 0.4",
+      0
+     ]
+    },
+    "flame_c": {
+     "scale": [
+      "1 + math.sin(query.anim_time * 1080 + 260) * 0.22",
+      "1 + math.sin(query.anim_time * 1080 + 260) * 0.22",
+      "1 + math.sin(query.anim_time * 1080 + 260) * 0.22"
+     ],
+     "position": [
+      0,
+      "math.sin(query.anim_time * 540 + 260) * 0.4",
+      0
+     ]
+    },
+    "web_a": {
+     "rotation": [
+      0,
+      0,
+      "math.sin(query.anim_time * 90) * 3"
+     ]
+    },
+    "web_b": {
+     "rotation": [
+      0,
+      0,
+      "math.sin(query.anim_time * 90 + 180) * 3"
+     ]
+    },
+    "mist": {
+     "rotation": [
+      0,
+      "query.anim_time * 90",
+      0
+     ],
+     "scale": [
+      "1 + math.sin(query.anim_time * 90) * 0.03",
+      1,
+      "1 + math.sin(query.anim_time * 90) * 0.03"
+     ]
+    },
+    "dust_orbit_0": {
+     "rotation": [
+      0,
+      "query.anim_time * -40",
+      0
+     ]
+    },
+    "dust_orbit_1": {
+     "rotation": [
+      0,
+      "query.anim_time * 30",
+      0
+     ]
+    },
+    "dust_orbit_2": {
+     "rotation": [
+      0,
+      "query.anim_time * -55",
+      0
+     ]
+    },
+    "rune_ring_low": {
+     "rotation": [
+      0,
+      "query.anim_time * 30",
+      0
+     ],
+     "scale": [
+      "1 + math.sin(query.anim_time * 180) * 0.02",
+      1,
+      "1 + math.sin(query.anim_time * 180) * 0.02"
+     ]
+    },
+    "rune_ring_high": {
+     "rotation": [
+      0,
+      "query.anim_time * -30",
+      0
+     ],
+     "scale": [
+      "1 + math.sin(query.anim_time * 180 + 90) * 0.02",
+      1,
+      "1 + math.sin(query.anim_time * 180 + 90) * 0.02"
+     ]
+    },
+    "spirit_orbit": {
+     "rotation": [
+      0,
+      "query.anim_time * -60",
+      0
+     ]
+    },
+    "spirit_a": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 180) * 1.4",
+      0
+     ],
+     "rotation": [
+      0,
+      0,
+      "math.sin(query.anim_time * 90) * 5"
+     ]
+    },
+    "spirit_b": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 180 + 180) * 1.4",
+      0
+     ],
+     "rotation": [
+      0,
+      0,
+      "math.sin(query.anim_time * 90 + 90) * 5"
+     ]
+    },
+    "top_ring": {
+     "rotation": [
+      0,
+      "query.anim_time * 90",
+      0
+     ]
+    },
+    "embers": {
+     "rotation": [
+      0,
+      "query.anim_time * -180",
+      0
+     ]
+    },
+    "em_a": {
+     "position": [
+      0,
+      "math.abs(math.sin(query.anim_time * 180)) * 5",
+      0
+     ]
+    },
+    "em_b": {
+     "position": [
+      0,
+      "math.abs(math.sin(query.anim_time * 180 + 90)) * 6",
+      0
+     ]
+    },
+    "em_c": {
+     "position": [
+      0,
+      "math.abs(math.sin(query.anim_time * 180 + 200)) * 4",
+      0
+     ]
+    },
+    "lantern": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 180) * 2",
+      0
+     ],
+     "rotation": [
+      "math.sin(query.anim_time * 90) * 3",
+      "query.anim_time * 90",
+      0
+     ]
+    },
+    "bat_orbit": {
+     "rotation": [
+      0,
+      "query.anim_time * -180",
+      0
+     ]
+    },
+    "bat": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 270) * 1.4",
+      0
+     ]
+    },
+    "bat_wing_l": {
+     "rotation": [
+      0,
+      0,
+      "20 + math.sin(query.anim_time * 1080) * 26"
+     ]
+    },
+    "bat_wing_r": {
+     "rotation": [
+      0,
+      0,
+      "-20 - math.sin(query.anim_time * 1080) * 26"
+     ]
+    },
+    "dust_0_0": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 0) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 20",
+      0
+     ],
+     "scale": [
+      "1.0 + math.sin(query.anim_time * 240 + 0) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 0) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 0) * 0.15"
+     ]
+    },
+    "dust_0_1": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 90) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 20",
+      0
+     ],
+     "scale": [
+      "1.0 + math.sin(query.anim_time * 240 + 90) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 90) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 90) * 0.15"
+     ]
+    },
+    "dust_0_2": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 180) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 20",
+      0
+     ],
+     "scale": [
+      "1.0 + math.sin(query.anim_time * 240 + 180) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 180) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 180) * 0.15"
+     ]
+    },
+    "dust_0_3": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 270) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 20",
+      0
+     ],
+     "scale": [
+      "1.0 + math.sin(query.anim_time * 240 + 270) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 270) * 0.15",
+      "1.0 + math.sin(query.anim_time * 240 + 270) * 0.15"
+     ]
+    },
+    "dust_1_0": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 45) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 30",
+      0
+     ],
+     "scale": [
+      "0.975 + math.sin(query.anim_time * 240 + 45) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 45) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 45) * 0.15"
+     ]
+    },
+    "dust_1_1": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 135) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 30",
+      0
+     ],
+     "scale": [
+      "0.975 + math.sin(query.anim_time * 240 + 135) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 135) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 135) * 0.15"
+     ]
+    },
+    "dust_1_2": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 225) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 30",
+      0
+     ],
+     "scale": [
+      "0.975 + math.sin(query.anim_time * 240 + 225) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 225) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 225) * 0.15"
+     ]
+    },
+    "dust_1_3": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 315) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 30",
+      0
+     ],
+     "scale": [
+      "0.975 + math.sin(query.anim_time * 240 + 315) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 315) * 0.15",
+      "0.975 + math.sin(query.anim_time * 240 + 315) * 0.15"
+     ]
+    },
+    "dust_2_0": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 90) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 40",
+      0
+     ],
+     "scale": [
+      "0.95 + math.sin(query.anim_time * 240 + 90) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 90) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 90) * 0.15"
+     ]
+    },
+    "dust_2_1": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 180) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 40",
+      0
+     ],
+     "scale": [
+      "0.95 + math.sin(query.anim_time * 240 + 180) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 180) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 180) * 0.15"
+     ]
+    },
+    "dust_2_2": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 270) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 40",
+      0
+     ],
+     "scale": [
+      "0.95 + math.sin(query.anim_time * 240 + 270) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 270) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 270) * 0.15"
+     ]
+    },
+    "dust_2_3": {
+     "position": [
+      0,
+      "math.sin(query.anim_time * 120 + 360) * 3",
+      0
+     ],
+     "rotation": [
+      0,
+      "query.anim_time * 40",
+      0
+     ],
+     "scale": [
+      "0.95 + math.sin(query.anim_time * 240 + 360) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 360) * 0.15",
+      "0.95 + math.sin(query.anim_time * 240 + 360) * 0.15"
+     ]
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,13 @@
+# BedWarsLobby Config
+spawn-protection-radius: 5
+
+# دکور هالووینی لیدربوردها (انتیتی‌های Customies: پایه‌ی سنگ‌قبری + کدو + خفاش + حلقه‌ی رونیک)
+# با /bwhalloween on|off هم قابل تغییره
+halloween_pedestals: true
+
+# متنی که توی آیتم "Server Info" نمایش داده می‌شه (& برای رنگ - مثل &6، &l و...)
+server-info:
+  - "&6&lCyrusMC BedWars"
+  - "&7Welcome! Have fun and play fair."
+  - " "
+  - "&7Discord: &bMc.CmGaming.IR"

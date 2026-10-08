@@ -1,0 +1,35 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "\u00a76\u00a7lArvan\u00a7fGaming \u00a7eHalloween Leaderboards",
+    "description": "\u00a76BedWars \u00a77leaderboard pedestals \u00a78| \u00a7aJack-o'-lantern, bat, runes, spirits",
+    "uuid": "231b835e-0ff9-529c-a159-5f28481682ee",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "3e5092bd-9bb0-5397-bacf-e8397e37645f",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "ArvanGaming"
+    ],
+    "license": "proprietary"
+  }
+}

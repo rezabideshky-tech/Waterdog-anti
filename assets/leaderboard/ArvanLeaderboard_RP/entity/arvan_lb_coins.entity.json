@@ -1,0 +1,29 @@
+{
+ "format_version": "1.10.0",
+ "minecraft:client_entity": {
+  "description": {
+   "identifier": "arvan:lb_coins",
+   "materials": {
+    "default": "entity_alphatest"
+   },
+   "textures": {
+    "default": "textures/entity/arvan_leaderboard_coins"
+   },
+   "geometry": {
+    "default": "geometry.arvan_leaderboard"
+   },
+   "animations": {
+    "idle": "animation.arvan_leaderboard.idle"
+   },
+   "scripts": {
+    "animate": [
+     "idle"
+    ],
+    "scale": "1.0"
+   },
+   "render_controllers": [
+    "controller.render.arvan_leaderboard"
+   ]
+  }
+ }
+}
