@@ -1,0 +1,44 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; but it can also be edited manually. Godot 4.7 project.
+
+config_version=5
+
+[application]
+
+config/name="Sarbalaei"
+config/description="Drive a Persian-built pickup up Alborz hills, carry your load and keep your fuel. Free, offline, Persian first."
+config/version="0.1.0"
+run/main_scene="res://scenes/splash.tscn"
+config/features=PackedStringArray("4.7")
+config/icon="res://assets/art/icon.png"
+
+[autoload]
+
+Save="*res://scripts/save.gd"
+Strings="*res://scripts/strings.gd"
+App="*res://scripts/app.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/resizable=true
+window/handheld/orientation=0
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.56, 0.82, 0.94, 1)
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
