@@ -1,7 +1,5 @@
 name: Aegis Orbit - Android debug APK
 
-# Builds the APK for games/aegis-orbit with the
-# croconut/godot-multi-builder action linked in the marketplace.
 on:
   workflow_dispatch:
   push:
@@ -11,35 +9,105 @@ on:
       - ".github/workflows/aegis-orbit-apk.yml"
 
 permissions:
-  contents: read
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.1"
+  PROJECT: games/aegis-orbit
 
 jobs:
-  apk:
+  # Attempt 1: the marketplace action linked earlier. Kept for comparison; it does not
+  # block the job below.
+  marketplace-action:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-
-      - name: Build with godot-multi-builder
-        id: builds
+      - name: Build with croconut/godot-multi-builder
         uses: croconut/godot-multi-builder@v1
         with:
           names: "Android"
           path-to-game: "games/aegis-orbit"
           debug-mode: "true"
 
-      - name: Show what was produced
-        run: |
-          ls -la games/aegis-orbit/builds || true
-          file games/aegis-orbit/builds/builds.zip || true
+  # Attempt 2: the official Godot 4.7.1 engine and export templates, same export preset.
+  official-godot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Keep the APK
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Android SDK packages (build-tools 34, platform 34)
         run: |
-          cp games/aegis-orbit/builds/builds.zip AegisOrbit-debug.apk
-          unzip -l AegisOrbit-debug.apk | head -5 || true
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-34"
+
+      - name: Download Godot ${{ env.GODOT_VERSION }} and export templates
+        run: |
+          set -e
+          B=https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable
+          curl -fsSL -o godot.zip "$B/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -fsSL -o templates.tpz "$B/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q godot.zip && chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+          mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 "$RUNNER_TEMP/godot"
+          mkdir -p "$RUNNER_TEMP/tpl" && unzip -q templates.tpz -d "$RUNNER_TEMP/tpl"
+          T="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          mkdir -p "$T" && cp -r "$RUNNER_TEMP/tpl/templates/." "$T/"
+          ls "$T" | head -30
+
+      - name: Point Godot at the Android SDK and JDK (headless editor settings)
+        run: |
+          mkdir -p "$HOME/.config/godot"
+          JDK="$JAVA_HOME"
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOT
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/java_sdk_path = "$JDK"
+          EOT
+          cat "$HOME/.config/godot/editor_settings-4.tres"
+
+      - name: Import resources and export the Android debug APK
+        run: |
+          set -e
+          cd "$PROJECT"
+          "$RUNNER_TEMP/godot" --headless --import . || true
+          "$RUNNER_TEMP/godot" --headless --path . --export-debug "Android" "$GITHUB_WORKSPACE/AegisOrbit-debug.apk"
+          ls -la "$GITHUB_WORKSPACE/AegisOrbit-debug.apk"
+
+      - name: Check the APK contents
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          unzip -l AegisOrbit-debug.apk | tail -3
+          unzip -l AegisOrbit-debug.apk | grep -E "AndroidManifest|classes.dex|\.pck" || true
+          # test code and tools must not be in the release
+          if unzip -l AegisOrbit-debug.apk | grep -E "addons/gut|/tests/|/tools/"; then
+            echo "dev files leaked into the APK" && exit 1
+          fi
+          echo "no dev files in APK"
 
       - uses: actions/upload-artifact@v4
         with:
           name: AegisOrbit-debug-apk
           path: AegisOrbit-debug.apk
           if-no-files-found: error
+
+      - name: Publish a GitHub Release with the APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="aegis-orbit-apk-${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" "$GITHUB_WORKSPACE/AegisOrbit-debug.apk" \
+            --target "$GITHUB_SHA" --prerelease \
+            --title "Aegis Orbit - Android debug APK (run ${GITHUB_RUN_NUMBER})" \
+            --notes "Debug-signed build from commit ${GITHUB_SHA}. Not for store publishing. Built with Godot ${GODOT_VERSION} in CI."
+          echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
+          echo "### APK: https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/AegisOrbit-debug.apk" >> "$GITHUB_STEP_SUMMARY"
