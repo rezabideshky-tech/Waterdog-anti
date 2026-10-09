@@ -1,0 +1,40 @@
+name: Aegis Orbit - Android debug APK
+
+# Manual trigger only. Builds the APK for games/aegis-orbit with the
+# croconut/godot-multi-builder action linked in the marketplace.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build with godot-multi-builder
+        id: builds
+        uses: croconut/godot-multi-builder@v1
+        with:
+          names: "Android"
+          path-to-game: "games/aegis-orbit"
+          debug-mode: "true"
+
+      - name: Show what was produced
+        run: |
+          ls -la games/aegis-orbit/builds || true
+          file games/aegis-orbit/builds/builds.zip || true
+
+      - name: Keep the APK
+        run: |
+          cp games/aegis-orbit/builds/builds.zip AegisOrbit-debug.apk
+          unzip -l AegisOrbit-debug.apk | head -5 || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AegisOrbit-debug-apk
+          path: AegisOrbit-debug.apk
+          if-no-files-found: error
