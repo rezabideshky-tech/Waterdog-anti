@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; but it can also be edited manually. Godot 4.7 project.
+
+config_version=5
+
+[application]
+
+config/name="Aegis Orbit"
+config/description="Hold the shield, stop the rocks, protect the planet. A Godot 4 arcade game in English and Persian."
+config/version="1.0.0"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7")
+config/icon="res://assets/art/icon.png"
+
+[autoload]
+
+Save="*res://scripts/save.gd"
+I18n="*res://scripts/i18n.gd"
+Assets="*res://scripts/assets.gd"
+Audio="*res://scripts/audio.gd"
+
+[display]
+
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/size/resizable=true
+window/handheld/orientation=1
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.03, 0.04, 0.12, 1)

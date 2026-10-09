@@ -1,0 +1,11 @@
+# Godot editor cache and build outputs
+.godot/
+*.import
+builds/
+releases/
+*.apk
+*.aab
+*.keystore
+*.jks
+tools/node_modules/
+tools/godot-engine/
