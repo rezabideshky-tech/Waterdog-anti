@@ -1,0 +1,125 @@
+name: Sarbalaei - tests and Android debug APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [arena/be4e2228-waterdog-anti]
+    paths:
+      - "games/sarbalaei/**"
+      - ".github/workflows/sarbalaei-apk.yml"
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.1"
+  PROJECT: games/sarbalaei
+  APK_NAME: Sarbalaei-debug.apk
+
+jobs:
+  # Unit and scene tests with the real Godot engine (GUT). Separate from the APK job,
+  # so a failing test shows up without blocking the APK.
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Godot ${{ env.GODOT_VERSION }}
+        run: |
+          set -e
+          B=https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable
+          curl -fsSL -o godot.zip "$B/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q godot.zip && chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+          mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 "$RUNNER_TEMP/godot"
+
+      - name: Build the class cache and run GUT
+        run: |
+          set -e
+          cd "$PROJECT"
+          "$RUNNER_TEMP/godot" --headless --import . || true
+          "$RUNNER_TEMP/godot" --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
+
+  # Official Godot 4.7.1 engine and export templates, Android debug export.
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Android SDK packages (build-tools 34, platform 34)
+        run: |
+          set -eux
+          SDKMGR="$(command -v sdkmanager || true)"
+          if [ -z "$SDKMGR" ]; then
+            SDKMGR="$(ls "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | head -1)"
+          fi
+          # a finite stream of 'y' (an endless 'yes' gets SIGPIPE, which pipefail turns into a failure)
+          python3 -c "print('y\n' * 200, end='')" | "$SDKMGR" --licenses > /dev/null
+          "$SDKMGR" "platform-tools" "build-tools;34.0.0" "platforms;android-34" > /dev/null
+          ls "$ANDROID_HOME/build-tools"
+
+      - name: Download Godot ${{ env.GODOT_VERSION }} and export templates
+        run: |
+          set -e
+          B=https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable
+          curl -fsSL -o godot.zip "$B/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -fsSL -o templates.tpz "$B/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q godot.zip && chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+          mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 "$RUNNER_TEMP/godot"
+          mkdir -p "$RUNNER_TEMP/tpl" && unzip -q templates.tpz -d "$RUNNER_TEMP/tpl"
+          T="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          mkdir -p "$T" && cp -r "$RUNNER_TEMP/tpl/templates/." "$T/"
+
+      - name: Point Godot at the Android SDK and JDK (headless editor settings)
+        run: |
+          mkdir -p "$HOME/.config/godot"
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOT
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/java_sdk_path = "$JAVA_HOME"
+          EOT
+
+      - name: Import resources and export the Android debug APK
+        run: |
+          set -e
+          cd "$PROJECT"
+          "$RUNNER_TEMP/godot" --headless --import . || true
+          "$RUNNER_TEMP/godot" --headless --path . --export-debug "Android" "$GITHUB_WORKSPACE/$APK_NAME"
+          ls -la "$GITHUB_WORKSPACE/$APK_NAME"
+
+      - name: Check the APK contents
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          unzip -l "$APK_NAME" | tail -3
+          unzip -l "$APK_NAME" | grep -E "AndroidManifest|classes.dex|\.pck" || true
+          # test code and tools must not be in the release
+          if unzip -l "$APK_NAME" | grep -E "addons/gut|/tests/|/tools/"; then
+            echo "dev files leaked into the APK" && exit 1
+          fi
+          echo "no dev files in APK"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Sarbalaei-debug-apk
+          path: ${{ env.APK_NAME }}
+          if-no-files-found: error
+
+      - name: Publish a GitHub Release with the APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="sarbalaei-apk-${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" "$GITHUB_WORKSPACE/$APK_NAME" \
+            --target "$GITHUB_SHA" --prerelease \
+            --title "Sarbalaei - Android debug APK (run ${GITHUB_RUN_NUMBER})" \
+            --notes "Debug-signed build from commit ${GITHUB_SHA}. Not for store publishing. Built with Godot ${GODOT_VERSION} in CI."
+          echo "### APK: https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${APK_NAME}" >> "$GITHUB_STEP_SUMMARY"
