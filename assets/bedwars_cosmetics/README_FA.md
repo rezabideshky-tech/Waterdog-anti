@@ -5,20 +5,24 @@
 - **۱۵ کلاه**، **۲۲ بک‌بلینگ (۱۲ طرح + ۱۰ بال)** و **۱۵ کیپ**.
 - برای هر آیتم: فایل قابل‌ویرایش Blockbench، تکسچر PNG، هندسه و انیمیشن Bedrock.
 - Resource Pack مستقل با UUIDهای جدید و نسخهٔ `2.0.0`.
-- سورس اصلاح‌شده و چهار PHAR آمادهٔ نصب؛ هر سرور فقط جفت مربوط به خودش را نصب می‌کند.
+- چهار ZIP حاوی سورس کامل پلاگین‌ها؛ هیچ فایل PHAR داخل خروجی جدید نیست. هر سرور فقط جفت مربوط به خودش را نصب می‌کند.
 - تصاویر `previews/` رندر مدل‌های همین بسته‌اند، نه اسکرین‌شات داخل بازی.
+
+## دریافت پلاگین‌ها به‌تنهایی
+
+`Arvan_Bedwars_Plugins_Source.zip` فقط شامل چهار ZIP سورس و این راهنماست؛ مدل‌ها و Resource Pack در بستهٔ کامل هستند. در بستهٔ پلاگین‌ها، برای لابی `BedWarsCore-lobby.zip` + `BedWarsLobby.zip` و برای گیم `BedWarsCore-game.zip` + `BedWarsGame.zip` را انتخاب کنید. هر دو ZIP Core پس از استخراج پوشه‌ای به نام `BedWarsCore` می‌سازند؛ آن‌ها را روی یک سرور با هم استخراج نکنید.
 
 ## نصب روی سرور موجود
 
-1. سرورهای لابی و گیم را خاموش کنید. از PHARهای فعلی، `plugin_data`، دیتابیس، تنظیمات و resource packها بکاپ بگیرید.
-2. در سرور **لابی**، فقط فایل‌های `deploy/lobby/plugins/` را جایگزین کنید:
-   - `BedWarsCore.phar` — نسخهٔ مخصوص لابی
-   - `BedWarsLobby.phar`
-3. در **هر سرور گیم**، فقط فایل‌های `deploy/game/plugins/` را جایگزین کنید:
-   - `BedWarsCore.phar` — نسخهٔ مخصوص گیم
-   - `BedWarsGame.phar`
+1. سرورهای لابی و گیم را خاموش کنید. از فایل‌های پلاگین فعلی، `plugin_data`، دیتابیس، تنظیمات و resource packها بکاپ بگیرید.
+2. در سرور **لابی**، ZIPهای `deploy/lobby/plugins/` را استخراج و پوشه‌های حاصل را در `plugins/` جایگزین کنید:
+   - `BedWarsCore.zip` — نسخهٔ مخصوص لابی
+   - `BedWarsLobby.zip`
+3. در **هر سرور گیم**، ZIPهای `deploy/game/plugins/` را استخراج و پوشه‌های حاصل را در `plugins/` جایگزین کنید:
+   - `BedWarsCore.zip` — نسخهٔ مخصوص گیم
+   - `BedWarsGame.zip`
 4. فایل `shared/resource_packs/ArvanCosmeticsV2.zip` را در پوشهٔ **`resource_packs/` تمام این سرورها** بگذارید. آن را در `plugin_data` نگذارید.
-5. **Customies سازگار با API 5** باید نصب و فعال باشد. DEVirion، virionها، دیتابیس و سایر وابستگی‌های Bedwars قبلی را نگه دارید؛ این ZIP توزیع کامل یک سرور تازه نیست.
+5. برای اجرای سورس پوشه‌ای، **DevTools یا folder plugin loader سازگار با PocketMine API 5** لازم است؛ PocketMine فایل ZIP را مستقیماً اجرا نمی‌کند. داخل `plugins/BedWarsCore/` باید `plugin.yml` و `src/` باشند، نه یک پوشهٔ اضافی. **Customies سازگار با API 5** باید نصب و فعال باشد. DEVirion، virionها، دیتابیس و سایر وابستگی‌های Bedwars قبلی را نگه دارید؛ این ZIP توزیع کامل یک سرور تازه نیست.
 6. سرورها را کامل روشن کنید؛ از hot reload استفاده نکنید. پیام `Cosmetics V2 ready: 15 hats / 22 backblings / 15 capes` را در کنسول بررسی کنید.
 7. کلاینت باید پک اجباری را بپذیرد. سرویس پک را به stack موجود اضافه می‌کند، نه اینکه پک‌های دیگر را پاک کند. در تنظیمات دستی هم می‌توانید نام `ArvanCosmeticsV2.zip` را به `resource_stack` موجود اضافه کنید؛ **کل فایل تنظیمات را جایگزین نکنید**.
 
@@ -70,11 +74,11 @@
 - Content Log کلاینت: بدون خطای geometry، Molang، particle و texture.
 - تعداد بازیکن واقعی، ترافیک و TPS سرور شما.
 
-اگر لازم شد برگردید، PHARها و stack قبلی را از بکاپ برگردانید؛ نگاشت مالکیت destructive نیست. برای بازگشت کاملاً یکسان از بکاپ دیتابیس هم استفاده کنید، چون انتخاب‌های جدید ممکن است ذخیره شده باشند.
+اگر لازم شد برگردید، فایل‌های پلاگین و stack قبلی را از بکاپ برگردانید؛ نگاشت مالکیت destructive نیست. برای بازگشت کاملاً یکسان از بکاپ دیتابیس هم استفاده کنید، چون انتخاب‌های جدید ممکن است ذخیره شده باشند.
 
 ## ویرایش و ساخت مجدد
 
-سورس و مدل‌ها در `editable/` قرار دارند. پیش‌نیاز ابزار تولید: Python + Pillow + NumPy؛ برای ساخت PHAR، PHP با extension Phar.
+سورس و مدل‌ها در `editable/` قرار دارند. پیش‌نیاز ابزار تولید: Python + Pillow + NumPy؛ برای تست PHP، مفسر PHP لازم است. ابزار اختیاری ساخت PHAR مربوط به قالب قبلی است و برای خروجی ZIP لازم نیست.
 
 ```sh
 python tools/generate_models.py
@@ -83,7 +87,7 @@ python tools/package.py --pack-only
 python tests/test_assets.py
 php tests/test_shop.php
 php tests/test_runtime.php
-php -d phar.readonly=0 tools/build_phars.php
+python tools/package.py
 ```
 
 `patch_plugins.py` از baseline اصلی بازسازی می‌کند؛ قبل از اجرای آن تغییرات دستی خودتان در سورس پلاگین‌ها را بکاپ بگیرید. برای قیمت‌ها، `tools/catalog.py` مرجع تولید و `resources/resource_cosmetics.json` هر دو Core مرجع اجرای سرور است؛ پس از تغییر، هر دو سمت را یکسان بازسازی کنید. UUIDها باید میان manifest و کاتالوگ یکسان بمانند.

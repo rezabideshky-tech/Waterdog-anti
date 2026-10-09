@@ -14,13 +14,33 @@ def pack_resources():
  shutil.copyfile(ROOT/'ArvanCosmeticsV2.zip',ROOT/'ArvanCosmeticsV2.mcpack')
  print('Resource ZIP/MCPACK rebuilt, including all category icons.')
 
+def pack_plugins():
+ folder=ROOT/'plugin_zips';folder.mkdir(exist_ok=True)
+ for name in ['BedWarsCore-lobby','BedWarsCore-game','BedWarsLobby','BedWarsGame']:
+  source=ROOT/'plugins'/name
+  plugin_name='BedWarsCore' if name.startswith('BedWarsCore-') else name
+  files={str(Path(plugin_name)/p.relative_to(source)):p for p in source.rglob('*') if p.is_file()}
+  target=folder/(name+'.zip')
+  with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+   for entry,p in sorted(files.items()):z.write(p,entry)
+  with zipfile.ZipFile(target) as z:
+   assert z.testzip() is None
+   assert set(z.namelist())==set(files)
+   assert plugin_name+'/plugin.yml' in z.namelist()
+   assert not any(n.lower().endswith('.phar') for n in z.namelist())
+   for entry,p in files.items():assert z.read(entry)==p.read_bytes()
+  print('PASS: source ZIP matches plugin files:',target.name)
+ with zipfile.ZipFile(ROOT/'Arvan_Bedwars_Plugins_Source.zip','w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for p in sorted(folder.glob('*.zip')):z.write(p,p.name)
+  z.write(ROOT/'README_FA.md','README_FA.md')
+
 def bundle():
  target=ROOT/'Arvan_Bedwars_Cosmetics_V2_Full.zip';entries={}
  for name in ['README_FA.md','CATALOG.md','TEST_REPORT.md','PATCH_REPORT.json','migration_aliases.json','catalog.json']:
   entries[name]=ROOT/name
  for kind,core,app in [('lobby','BedWarsCore-lobby','BedWarsLobby'),('game','BedWarsCore-game','BedWarsGame')]:
-  entries[f'deploy/{kind}/plugins/BedWarsCore.phar']=ROOT/'compiled'/(core+'.phar')
-  entries[f'deploy/{kind}/plugins/{app}.phar']=ROOT/'compiled'/(app+'.phar')
+  entries[f'deploy/{kind}/plugins/BedWarsCore.zip']=ROOT/'plugin_zips'/(core+'.zip')
+  entries[f'deploy/{kind}/plugins/{app}.zip']=ROOT/'plugin_zips'/(app+'.zip')
  entries['shared/resource_packs/ArvanCosmeticsV2.zip']=ROOT/'ArvanCosmeticsV2.zip'
  entries['shared/ArvanCosmeticsV2.mcpack']=ROOT/'ArvanCosmeticsV2.mcpack'
  for folder in ['previews','models','plugins','integration','tools','tests','ArvanCosmeticsV2_RP']:
@@ -40,12 +60,15 @@ def bundle():
   assert len(z.namelist())==len(entries)+1
   for name,p in entries.items():assert z.read(name)==p.read_bytes(),name
   for kind in ['lobby','game']:
-   assert z.read(f'deploy/{kind}/plugins/BedWarsCore.phar')==(ROOT/'compiled'/f'BedWarsCore-{kind}.phar').read_bytes()
- outputs=['Arvan_Bedwars_Cosmetics_V2_Full.zip','ArvanCosmeticsV2.zip','ArvanCosmeticsV2.mcpack']
+   assert z.read(f'deploy/{kind}/plugins/BedWarsCore.zip')==(ROOT/'plugin_zips'/f'BedWarsCore-{kind}.zip').read_bytes()
+  assert not any(n.lower().endswith('.phar') for n in z.namelist())
+ outputs=['Arvan_Bedwars_Cosmetics_V2_Full.zip','Arvan_Bedwars_Plugins_Source.zip','ArvanCosmeticsV2.zip','ArvanCosmeticsV2.mcpack'] + ['plugin_zips/'+p.name for p in sorted((ROOT/'plugin_zips').glob('*.zip'))]
  (ROOT/'DOWNLOAD_SHA256SUMS.txt').write_text('\n'.join(hashlib.sha256((ROOT/name).read_bytes()).hexdigest()+'  '+name for name in outputs)+'\n')
  print(f'PASS: {target.name}: {len(entries)+1} verified entries; {target.stat().st_size/1024/1024:.2f} MiB')
 
 if __name__=='__main__':
  parser=argparse.ArgumentParser();parser.add_argument('--pack-only',action='store_true');args=parser.parse_args()
  pack_resources()
- if not args.pack_only:bundle()
+ if not args.pack_only:
+  pack_plugins()
+  bundle()
