@@ -1,9 +1,14 @@
 name: Aegis Orbit - Android debug APK
 
-# Manual trigger only. Builds the APK for games/aegis-orbit with the
+# Builds the APK for games/aegis-orbit with the
 # croconut/godot-multi-builder action linked in the marketplace.
 on:
   workflow_dispatch:
+  push:
+    branches: [arena/be4e2228-waterdog-anti]
+    paths:
+      - "games/aegis-orbit/**"
+      - ".github/workflows/aegis-orbit-apk.yml"
 
 permissions:
   contents: read
