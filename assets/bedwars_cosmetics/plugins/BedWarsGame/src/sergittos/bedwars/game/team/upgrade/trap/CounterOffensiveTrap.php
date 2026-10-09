@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+
+namespace sergittos\bedwars\game\team\upgrade\trap;
+
+
+use pocketmine\entity\effect\EffectInstance;
+use pocketmine\entity\effect\VanillaEffects;
+use sergittos\bedwars\game\team\Team;
+use sergittos\bedwars\session\Session;
+
+class CounterOffensiveTrap extends Trap {
+
+    public function __construct() {
+        parent::__construct("Counter-Offensive Trap");
+    }
+
+    public function trigger(Session $session, Team $team): void {
+        foreach($team->getMembers() as $member) {
+            $member->addEffect(new EffectInstance(VanillaEffects::SPEED(), 20 * 15, 1, true));
+            $member->addEffect(new EffectInstance(VanillaEffects::JUMP_BOOST(), 20 * 15, 1, true));
+        }
+    }
+
+}

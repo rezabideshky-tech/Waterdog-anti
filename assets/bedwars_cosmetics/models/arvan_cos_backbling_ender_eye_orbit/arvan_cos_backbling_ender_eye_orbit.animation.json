@@ -1,0 +1,25 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_backbling_ender_eye_orbit.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "ender_eye_orbit_orbit": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              -360,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

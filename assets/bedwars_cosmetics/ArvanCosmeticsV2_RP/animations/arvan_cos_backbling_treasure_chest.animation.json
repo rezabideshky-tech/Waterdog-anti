@@ -1,0 +1,40 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_backbling_treasure_chest.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "treasure_chest_lid": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              55,
+              0,
+              0
+            ],
+            "2": [
+              55,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

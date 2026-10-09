@@ -1,0 +1,43 @@
+name: BedWarsLobby
+version: 2.0.0
+main: sergittos\bedwars\lobby\BedWarsLobby
+api: ["5.0.0"]
+description: "BedWars Lobby - lobby server plugin"
+author: BedWarsTeam
+
+depend:
+  - BedWarsCore
+
+softdepend:
+  - Customies
+
+load: POSTWORLD
+
+# دستورات اینجا عمداً تعریف نشدن — همه‌شون (LobbyCommand, LeaderboardCommand,
+# BwHologramCommand, SetLobbyCommand, SpawnStatsHologramCommand, LbSpawnCommand,
+# SpawnJoinEntityCommand, ChallengesCommand, ChallengesAdminCommand,
+# BattlePassCommand, BattlePassAdminCommand) کلاس Command مستقل هستن که اسم/usage/alias/permission
+# خودشون رو توی constructor ست می‌کنن و دستی توی onEnable() رجیستر می‌شن.
+# تعریف دوباره‌شون اینجا باعث تداخل رجیستریشن می‌شه و دستور با پیشوند bedwars: ثبت میشه
+# (مثلاً bedwars:battlepass به‌جای battlepass) — همین باگ قبلاً اینجا بود، حذف شد.
+
+permissions:
+  bedwars.play:
+    default: true
+  bedwars.clan.use:
+    description: "Use the clan system"
+    default: true
+  bedwars.clan.approve:
+    description: "Review clan creation requests"
+    default: op
+  challenges.use:
+    default: op
+  challenges.admin:
+    default: op
+  battlepass.use:
+    default: true
+  battlepass.admin:
+    default: op
+
+
+ 

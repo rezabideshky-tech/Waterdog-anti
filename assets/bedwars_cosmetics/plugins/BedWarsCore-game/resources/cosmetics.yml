@@ -1,0 +1,233 @@
+# Cosmetics Config
+# ─────────────────────────────────────────────
+# texture: مسیر texture در resource pack
+#   مثال: textures/cosmetics/capes/rainbow_cape
+# particle_id: ID پارتیکل MCPE
+# sound_id: ID صدا
+
+# ════════════════════════════
+# PARTICLES
+# ════════════════════════════
+particle:
+  flames:
+    name: "Flames"
+    description: "Fiery particles surround you"
+    rarity: "uncommon"
+    permission: ""
+    price: 0
+    particle_id: "minecraft:basic_flame_particle"
+
+  hearts:
+    name: "Hearts"
+    description: "Hearts float around you"
+    rarity: "uncommon"
+    permission: ""
+    price: 0
+    particle_id: "minecraft:heart_particle"
+
+  rainbow:
+    name: "Rainbow"
+    description: "Rainbow particles follow your every step"
+    rarity: "rare"
+    permission: "bedwars.cosmetic.particle.rainbow"
+    price: 0
+    particle_id: "minecraft:villager_happy"
+
+  totem:
+    name: "Totem"
+    description: "Totem of Undying particles"
+    rarity: "epic"
+    permission: "bedwars.cosmetic.particle.totem"
+    price: 0
+    particle_id: "minecraft:totem_particle"
+
+  galaxy:
+    name: "Galaxy"
+    description: "Stellar particles orbit around you"
+    rarity: "legendary"
+    permission: "bedwars.cosmetic.particle.galaxy"
+    price: 0
+    particle_id: "minecraft:sparkler_emitter"
+
+# ════════════════════════════
+# CAPES (texture در resourcepack)
+# ════════════════════════════
+cape:
+  simple_white:
+    name: "White Cape"
+    description: "A clean white cape"
+    rarity: "common"
+    permission: ""
+    price: 0
+    texture: "textures/cosmetics/capes/white_cape"
+
+  rainbow_cape:
+    name: "Rainbow Cape"
+    description: "Colorful flowing cape"
+    rarity: "rare"
+    permission: "bedwars.cosmetic.cape.rainbow_cape"
+    price: 0
+    texture: "textures/cosmetics/capes/rainbow_cape"
+
+  flame_cape:
+    name: "Flame Cape"
+    description: "A fiery animated cape"
+    rarity: "epic"
+    permission: "bedwars.cosmetic.cape.flame_cape"
+    price: 0
+    texture: "textures/cosmetics/capes/flame_cape"
+
+  galaxy_cape:
+    name: "Galaxy Cape"
+    description: "Cosmic cape with stars"
+    rarity: "legendary"
+    permission: "bedwars.cosmetic.cape.galaxy_cape"
+    price: 0
+    texture: "textures/cosmetics/capes/galaxy_cape"
+
+# ════════════════════════════
+# WINGS (texture در resourcepack)
+# ════════════════════════════
+wing:
+  angel:
+    name: "Angel Wings"
+    description: "Pure white angel wings"
+    rarity: "rare"
+    permission: "bedwars.cosmetic.wing.angel"
+    price: 0
+    texture: "textures/cosmetics/wings/angel_wings"
+
+  dragon:
+    name: "Dragon Wings"
+    description: "Dark dragon wings"
+    rarity: "epic"
+    permission: "bedwars.cosmetic.wing.dragon"
+    price: 0
+    texture: "textures/cosmetics/wings/dragon_wings"
+
+  butterfly:
+    name: "Butterfly Wings"
+    description: "Colorful butterfly wings"
+    rarity: "legendary"
+    permission: "bedwars.cosmetic.wing.butterfly"
+    price: 0
+    texture: "textures/cosmetics/wings/butterfly_wings"
+
+# ════════════════════════════
+# HATS (texture در resourcepack)
+# ════════════════════════════
+hat:
+  crown:
+    name: "Crown"
+    description: "A royal golden crown"
+    rarity: "rare"
+    permission: "bedwars.cosmetic.hat.crown"
+    price: 0
+    texture: "textures/cosmetics/hats/crown"
+
+  witch_hat:
+    name: "Witch Hat"
+    description: "A spooky witch hat"
+    rarity: "uncommon"
+    permission: ""
+    price: 0
+    texture: "textures/cosmetics/hats/witch_hat"
+
+  santa_hat:
+    name: "Santa Hat"
+    description: "Ho ho ho!"
+    rarity: "uncommon"
+    permission: ""
+    price: 0
+    texture: "textures/cosmetics/hats/santa_hat"
+
+  halo:
+    name: "Halo"
+    description: "An angelic glowing halo"
+    rarity: "legendary"
+    permission: "bedwars.cosmetic.hat.halo"
+    price: 0
+    texture: "textures/cosmetics/hats/halo"
+
+# ════════════════════════════
+# KILL EFFECTS
+# ════════════════════════════
+kill_effect:
+  flames:
+    name: "Flames"
+    description: "Enemies burst into flames on death"
+    rarity: "uncommon"
+    permission: ""
+    price: 0
+
+  explosion:
+    name: "Explosion"
+    description: "Enemies explode on death"
+    rarity: "rare"
+    permission: "bedwars.cosmetic.kill_effect.explosion"
+    price: 0
+
+  hearts:
+    name: "Shower of Hearts"
+    description: "Hearts rain on enemy death"
+    rarity: "epic"
+    permission: "bedwars.cosmetic.kill_effect.hearts"
+    price: 0
+
+  totem:
+    name: "Totem"
+    description: "Totem effect on enemy death"
+    rarity: "legendary"
+    permission: "bedwars.cosmetic.kill_effect.totem"
+    price: 0
+
+  lava:
+    name: "Lava Drip"
+    description: "Lava splashes on enemy death"
+    rarity: "rare"
+    permission: "bedwars.cosmetic.kill_effect.lava"
+    price: 0
+
+# ════════════════════════════
+# KILL SOUNDS
+# ════════════════════════════
+kill_sound:
+  classic:
+    name: "Classic"
+    description: "Classic XP collect sound"
+    rarity: "common"
+    permission: ""
+    price: 0
+    sound_id: "random.orb"
+
+  anvil:
+    name: "Anvil Drop"
+    description: "Heavy anvil sound on kill"
+    rarity: "uncommon"
+    permission: ""
+    price: 0
+    sound_id: "random.anvil_break"
+
+  pop:
+    name: "Pop"
+    description: "Satisfying pop sound"
+    rarity: "uncommon"
+    permission: ""
+    price: 0
+    sound_id: "random.pop"
+
+  thunder:
+    name: "Thunder"
+    description: "Thunder strike on kill"
+    rarity: "epic"
+    permission: "bedwars.cosmetic.kill_sound.thunder"
+    price: 0
+    sound_id: "ambient.weather.thunder"
+
+  goat:
+    name: "Screaming Goat"
+    description: "A goat screams for your kill"
+    rarity: "legendary"
+    permission: "bedwars.cosmetic.kill_sound.goat"
+    price: 0
+    sound_id: "mob.goat.screaming.ambient"

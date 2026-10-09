@@ -1,0 +1,479 @@
+{
+ "format_version": "1.10.0",
+ "minecraft:client_entity": {
+  "description": {
+   "identifier": "arvan:cosmetic_overlay_v2",
+   "materials": {
+    "default": "entity_alphablend"
+   },
+   "textures": {
+    "empty": "textures/entity/arvan_cos_empty",
+    "hat_bed_crown": "textures/entity/arvan_cos_hat_bed_crown",
+    "hat_emerald_helmet": "textures/entity/arvan_cos_hat_emerald_helmet",
+    "hat_pumpkin_head": "textures/entity/arvan_cos_hat_pumpkin_head",
+    "hat_cyber_visor": "textures/entity/arvan_cos_hat_cyber_visor",
+    "hat_samurai_kabuto": "textures/entity/arvan_cos_hat_samurai_kabuto",
+    "hat_pirate_captain": "textures/entity/arvan_cos_hat_pirate_captain",
+    "hat_viking_horns": "textures/entity/arvan_cos_hat_viking_horns",
+    "hat_wizard_star": "textures/entity/arvan_cos_hat_wizard_star",
+    "hat_ninja_headband": "textures/entity/arvan_cos_hat_ninja_headband",
+    "hat_space_helmet": "textures/entity/arvan_cos_hat_space_helmet",
+    "hat_cat_ears": "textures/entity/arvan_cos_hat_cat_ears",
+    "hat_dragon_skull": "textures/entity/arvan_cos_hat_dragon_skull",
+    "hat_ice_crown": "textures/entity/arvan_cos_hat_ice_crown",
+    "hat_pixel_sunglasses": "textures/entity/arvan_cos_hat_pixel_sunglasses",
+    "hat_golden_laurel": "textures/entity/arvan_cos_hat_golden_laurel",
+    "backbling_jetpack": "textures/entity/arvan_cos_backbling_jetpack",
+    "backbling_space_rocket": "textures/entity/arvan_cos_backbling_space_rocket",
+    "backbling_treasure_chest": "textures/entity/arvan_cos_backbling_treasure_chest",
+    "backbling_guardian_drone": "textures/entity/arvan_cos_backbling_guardian_drone",
+    "backbling_pumpkin_spirit": "textures/entity/arvan_cos_backbling_pumpkin_spirit",
+    "backbling_mini_castle": "textures/entity/arvan_cos_backbling_mini_castle",
+    "backbling_samurai_katana": "textures/entity/arvan_cos_backbling_samurai_katana",
+    "backbling_cloud_pet": "textures/entity/arvan_cos_backbling_cloud_pet",
+    "backbling_phoenix_feathers": "textures/entity/arvan_cos_backbling_phoenix_feathers",
+    "backbling_skull_crown_halo": "textures/entity/arvan_cos_backbling_skull_crown_halo",
+    "backbling_arcade_cabinet": "textures/entity/arvan_cos_backbling_arcade_cabinet",
+    "backbling_ender_eye_orbit": "textures/entity/arvan_cos_backbling_ender_eye_orbit",
+    "backbling_phoenix_ascend": "textures/entity/arvan_cos_backbling_phoenix_ascend",
+    "backbling_celestial_constellation": "textures/entity/arvan_cos_backbling_celestial_constellation",
+    "backbling_crystal_prism": "textures/entity/arvan_cos_backbling_crystal_prism",
+    "backbling_storm_raven": "textures/entity/arvan_cos_backbling_storm_raven",
+    "backbling_frozen_wyvern": "textures/entity/arvan_cos_backbling_frozen_wyvern",
+    "backbling_mecha_falcon": "textures/entity/arvan_cos_backbling_mecha_falcon",
+    "backbling_sakura_crane": "textures/entity/arvan_cos_backbling_sakura_crane",
+    "backbling_void_seraph": "textures/entity/arvan_cos_backbling_void_seraph",
+    "backbling_emerald_guardian": "textures/entity/arvan_cos_backbling_emerald_guardian",
+    "backbling_neon_synthwave": "textures/entity/arvan_cos_backbling_neon_synthwave",
+    "cape_bed_wars_bed": "textures/entity/arvan_cos_cape_bed_wars_bed",
+    "cape_emerald_shield": "textures/entity/arvan_cos_cape_emerald_shield",
+    "cape_void_walker": "textures/entity/arvan_cos_cape_void_walker",
+    "cape_lava_flow": "textures/entity/arvan_cos_cape_lava_flow",
+    "cape_frozen_kingdom": "textures/entity/arvan_cos_cape_frozen_kingdom",
+    "cape_golden_emperor": "textures/entity/arvan_cos_cape_golden_emperor",
+    "cape_pirate_flag": "textures/entity/arvan_cos_cape_pirate_flag",
+    "cape_cyber_glitch": "textures/entity/arvan_cos_cape_cyber_glitch",
+    "cape_sakura_storm": "textures/entity/arvan_cos_cape_sakura_storm",
+    "cape_thunder_god": "textures/entity/arvan_cos_cape_thunder_god",
+    "cape_pixel_heart": "textures/entity/arvan_cos_cape_pixel_heart",
+    "cape_wither_storm": "textures/entity/arvan_cos_cape_wither_storm",
+    "cape_toxic_waste": "textures/entity/arvan_cos_cape_toxic_waste",
+    "cape_royal_banner": "textures/entity/arvan_cos_cape_royal_banner",
+    "cape_aurora_borealis": "textures/entity/arvan_cos_cape_aurora_borealis",
+    "bed_crown_team_0": "textures/entity/arvan_cos_hat_bed_crown_team_0",
+    "bed_crown_team_1": "textures/entity/arvan_cos_hat_bed_crown_team_1",
+    "bed_crown_team_2": "textures/entity/arvan_cos_hat_bed_crown_team_2",
+    "bed_crown_team_3": "textures/entity/arvan_cos_hat_bed_crown_team_3",
+    "bed_crown_team_4": "textures/entity/arvan_cos_hat_bed_crown_team_4",
+    "bed_crown_team_5": "textures/entity/arvan_cos_hat_bed_crown_team_5",
+    "bed_crown_team_6": "textures/entity/arvan_cos_hat_bed_crown_team_6",
+    "bed_crown_team_7": "textures/entity/arvan_cos_hat_bed_crown_team_7",
+    "bed_crown_team_8": "textures/entity/arvan_cos_hat_bed_crown_team_8",
+    "bed_crown_team_9": "textures/entity/arvan_cos_hat_bed_crown_team_9",
+    "bed_crown_team_10": "textures/entity/arvan_cos_hat_bed_crown_team_10",
+    "bed_crown_team_11": "textures/entity/arvan_cos_hat_bed_crown_team_11",
+    "bed_crown_team_12": "textures/entity/arvan_cos_hat_bed_crown_team_12",
+    "bed_crown_team_13": "textures/entity/arvan_cos_hat_bed_crown_team_13",
+    "bed_crown_team_14": "textures/entity/arvan_cos_hat_bed_crown_team_14",
+    "bed_crown_team_15": "textures/entity/arvan_cos_hat_bed_crown_team_15",
+    "phoenix_ascend_frame_0": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_0",
+    "phoenix_ascend_frame_1": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_1",
+    "phoenix_ascend_frame_2": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_2",
+    "phoenix_ascend_frame_3": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_3",
+    "phoenix_ascend_frame_4": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_4",
+    "phoenix_ascend_frame_5": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_5",
+    "phoenix_ascend_frame_6": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_6",
+    "phoenix_ascend_frame_7": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_7",
+    "phoenix_ascend_frame_8": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_8",
+    "phoenix_ascend_frame_9": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_9",
+    "phoenix_ascend_frame_10": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_10",
+    "phoenix_ascend_frame_11": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_11",
+    "phoenix_ascend_frame_12": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_12",
+    "phoenix_ascend_frame_13": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_13",
+    "phoenix_ascend_frame_14": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_14",
+    "phoenix_ascend_frame_15": "textures/entity/arvan_cos_backbling_phoenix_ascend_frame_15",
+    "crystal_prism_frame_0": "textures/entity/arvan_cos_backbling_crystal_prism_frame_0",
+    "crystal_prism_frame_1": "textures/entity/arvan_cos_backbling_crystal_prism_frame_1",
+    "crystal_prism_frame_2": "textures/entity/arvan_cos_backbling_crystal_prism_frame_2",
+    "crystal_prism_frame_3": "textures/entity/arvan_cos_backbling_crystal_prism_frame_3",
+    "crystal_prism_frame_4": "textures/entity/arvan_cos_backbling_crystal_prism_frame_4",
+    "crystal_prism_frame_5": "textures/entity/arvan_cos_backbling_crystal_prism_frame_5",
+    "crystal_prism_frame_6": "textures/entity/arvan_cos_backbling_crystal_prism_frame_6",
+    "crystal_prism_frame_7": "textures/entity/arvan_cos_backbling_crystal_prism_frame_7",
+    "crystal_prism_frame_8": "textures/entity/arvan_cos_backbling_crystal_prism_frame_8",
+    "crystal_prism_frame_9": "textures/entity/arvan_cos_backbling_crystal_prism_frame_9",
+    "crystal_prism_frame_10": "textures/entity/arvan_cos_backbling_crystal_prism_frame_10",
+    "crystal_prism_frame_11": "textures/entity/arvan_cos_backbling_crystal_prism_frame_11",
+    "crystal_prism_frame_12": "textures/entity/arvan_cos_backbling_crystal_prism_frame_12",
+    "crystal_prism_frame_13": "textures/entity/arvan_cos_backbling_crystal_prism_frame_13",
+    "crystal_prism_frame_14": "textures/entity/arvan_cos_backbling_crystal_prism_frame_14",
+    "crystal_prism_frame_15": "textures/entity/arvan_cos_backbling_crystal_prism_frame_15",
+    "neon_synthwave_frame_0": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_0",
+    "neon_synthwave_frame_1": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_1",
+    "neon_synthwave_frame_2": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_2",
+    "neon_synthwave_frame_3": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_3",
+    "neon_synthwave_frame_4": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_4",
+    "neon_synthwave_frame_5": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_5",
+    "neon_synthwave_frame_6": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_6",
+    "neon_synthwave_frame_7": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_7",
+    "neon_synthwave_frame_8": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_8",
+    "neon_synthwave_frame_9": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_9",
+    "neon_synthwave_frame_10": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_10",
+    "neon_synthwave_frame_11": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_11",
+    "neon_synthwave_frame_12": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_12",
+    "neon_synthwave_frame_13": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_13",
+    "neon_synthwave_frame_14": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_14",
+    "neon_synthwave_frame_15": "textures/entity/arvan_cos_backbling_neon_synthwave_frame_15",
+    "lava_flow_frame_0": "textures/entity/arvan_cos_cape_lava_flow_frame_0",
+    "lava_flow_frame_1": "textures/entity/arvan_cos_cape_lava_flow_frame_1",
+    "lava_flow_frame_2": "textures/entity/arvan_cos_cape_lava_flow_frame_2",
+    "lava_flow_frame_3": "textures/entity/arvan_cos_cape_lava_flow_frame_3",
+    "lava_flow_frame_4": "textures/entity/arvan_cos_cape_lava_flow_frame_4",
+    "lava_flow_frame_5": "textures/entity/arvan_cos_cape_lava_flow_frame_5",
+    "lava_flow_frame_6": "textures/entity/arvan_cos_cape_lava_flow_frame_6",
+    "lava_flow_frame_7": "textures/entity/arvan_cos_cape_lava_flow_frame_7",
+    "lava_flow_frame_8": "textures/entity/arvan_cos_cape_lava_flow_frame_8",
+    "lava_flow_frame_9": "textures/entity/arvan_cos_cape_lava_flow_frame_9",
+    "lava_flow_frame_10": "textures/entity/arvan_cos_cape_lava_flow_frame_10",
+    "lava_flow_frame_11": "textures/entity/arvan_cos_cape_lava_flow_frame_11",
+    "lava_flow_frame_12": "textures/entity/arvan_cos_cape_lava_flow_frame_12",
+    "lava_flow_frame_13": "textures/entity/arvan_cos_cape_lava_flow_frame_13",
+    "lava_flow_frame_14": "textures/entity/arvan_cos_cape_lava_flow_frame_14",
+    "lava_flow_frame_15": "textures/entity/arvan_cos_cape_lava_flow_frame_15",
+    "cyber_glitch_frame_0": "textures/entity/arvan_cos_cape_cyber_glitch_frame_0",
+    "cyber_glitch_frame_1": "textures/entity/arvan_cos_cape_cyber_glitch_frame_1",
+    "cyber_glitch_frame_2": "textures/entity/arvan_cos_cape_cyber_glitch_frame_2",
+    "cyber_glitch_frame_3": "textures/entity/arvan_cos_cape_cyber_glitch_frame_3",
+    "cyber_glitch_frame_4": "textures/entity/arvan_cos_cape_cyber_glitch_frame_4",
+    "cyber_glitch_frame_5": "textures/entity/arvan_cos_cape_cyber_glitch_frame_5",
+    "cyber_glitch_frame_6": "textures/entity/arvan_cos_cape_cyber_glitch_frame_6",
+    "cyber_glitch_frame_7": "textures/entity/arvan_cos_cape_cyber_glitch_frame_7",
+    "cyber_glitch_frame_8": "textures/entity/arvan_cos_cape_cyber_glitch_frame_8",
+    "cyber_glitch_frame_9": "textures/entity/arvan_cos_cape_cyber_glitch_frame_9",
+    "cyber_glitch_frame_10": "textures/entity/arvan_cos_cape_cyber_glitch_frame_10",
+    "cyber_glitch_frame_11": "textures/entity/arvan_cos_cape_cyber_glitch_frame_11",
+    "cyber_glitch_frame_12": "textures/entity/arvan_cos_cape_cyber_glitch_frame_12",
+    "cyber_glitch_frame_13": "textures/entity/arvan_cos_cape_cyber_glitch_frame_13",
+    "cyber_glitch_frame_14": "textures/entity/arvan_cos_cape_cyber_glitch_frame_14",
+    "cyber_glitch_frame_15": "textures/entity/arvan_cos_cape_cyber_glitch_frame_15",
+    "royal_banner_team_0": "textures/entity/arvan_cos_cape_royal_banner_team_0",
+    "royal_banner_team_1": "textures/entity/arvan_cos_cape_royal_banner_team_1",
+    "royal_banner_team_2": "textures/entity/arvan_cos_cape_royal_banner_team_2",
+    "royal_banner_team_3": "textures/entity/arvan_cos_cape_royal_banner_team_3",
+    "royal_banner_team_4": "textures/entity/arvan_cos_cape_royal_banner_team_4",
+    "royal_banner_team_5": "textures/entity/arvan_cos_cape_royal_banner_team_5",
+    "royal_banner_team_6": "textures/entity/arvan_cos_cape_royal_banner_team_6",
+    "royal_banner_team_7": "textures/entity/arvan_cos_cape_royal_banner_team_7",
+    "royal_banner_team_8": "textures/entity/arvan_cos_cape_royal_banner_team_8",
+    "royal_banner_team_9": "textures/entity/arvan_cos_cape_royal_banner_team_9",
+    "royal_banner_team_10": "textures/entity/arvan_cos_cape_royal_banner_team_10",
+    "royal_banner_team_11": "textures/entity/arvan_cos_cape_royal_banner_team_11",
+    "royal_banner_team_12": "textures/entity/arvan_cos_cape_royal_banner_team_12",
+    "royal_banner_team_13": "textures/entity/arvan_cos_cape_royal_banner_team_13",
+    "royal_banner_team_14": "textures/entity/arvan_cos_cape_royal_banner_team_14",
+    "royal_banner_team_15": "textures/entity/arvan_cos_cape_royal_banner_team_15",
+    "aurora_borealis_frame_0": "textures/entity/arvan_cos_cape_aurora_borealis_frame_0",
+    "aurora_borealis_frame_1": "textures/entity/arvan_cos_cape_aurora_borealis_frame_1",
+    "aurora_borealis_frame_2": "textures/entity/arvan_cos_cape_aurora_borealis_frame_2",
+    "aurora_borealis_frame_3": "textures/entity/arvan_cos_cape_aurora_borealis_frame_3",
+    "aurora_borealis_frame_4": "textures/entity/arvan_cos_cape_aurora_borealis_frame_4",
+    "aurora_borealis_frame_5": "textures/entity/arvan_cos_cape_aurora_borealis_frame_5",
+    "aurora_borealis_frame_6": "textures/entity/arvan_cos_cape_aurora_borealis_frame_6",
+    "aurora_borealis_frame_7": "textures/entity/arvan_cos_cape_aurora_borealis_frame_7",
+    "aurora_borealis_frame_8": "textures/entity/arvan_cos_cape_aurora_borealis_frame_8",
+    "aurora_borealis_frame_9": "textures/entity/arvan_cos_cape_aurora_borealis_frame_9",
+    "aurora_borealis_frame_10": "textures/entity/arvan_cos_cape_aurora_borealis_frame_10",
+    "aurora_borealis_frame_11": "textures/entity/arvan_cos_cape_aurora_borealis_frame_11",
+    "aurora_borealis_frame_12": "textures/entity/arvan_cos_cape_aurora_borealis_frame_12",
+    "aurora_borealis_frame_13": "textures/entity/arvan_cos_cape_aurora_borealis_frame_13",
+    "aurora_borealis_frame_14": "textures/entity/arvan_cos_cape_aurora_borealis_frame_14",
+    "aurora_borealis_frame_15": "textures/entity/arvan_cos_cape_aurora_borealis_frame_15"
+   },
+   "geometry": {
+    "empty": "geometry.arvan_cos_empty",
+    "hat_bed_crown": "geometry.arvan_cos_hat_bed_crown",
+    "hat_emerald_helmet": "geometry.arvan_cos_hat_emerald_helmet",
+    "hat_pumpkin_head": "geometry.arvan_cos_hat_pumpkin_head",
+    "hat_cyber_visor": "geometry.arvan_cos_hat_cyber_visor",
+    "hat_samurai_kabuto": "geometry.arvan_cos_hat_samurai_kabuto",
+    "hat_pirate_captain": "geometry.arvan_cos_hat_pirate_captain",
+    "hat_viking_horns": "geometry.arvan_cos_hat_viking_horns",
+    "hat_wizard_star": "geometry.arvan_cos_hat_wizard_star",
+    "hat_ninja_headband": "geometry.arvan_cos_hat_ninja_headband",
+    "hat_space_helmet": "geometry.arvan_cos_hat_space_helmet",
+    "hat_cat_ears": "geometry.arvan_cos_hat_cat_ears",
+    "hat_dragon_skull": "geometry.arvan_cos_hat_dragon_skull",
+    "hat_ice_crown": "geometry.arvan_cos_hat_ice_crown",
+    "hat_pixel_sunglasses": "geometry.arvan_cos_hat_pixel_sunglasses",
+    "hat_golden_laurel": "geometry.arvan_cos_hat_golden_laurel",
+    "backbling_jetpack": "geometry.arvan_cos_backbling_jetpack",
+    "backbling_space_rocket": "geometry.arvan_cos_backbling_space_rocket",
+    "backbling_treasure_chest": "geometry.arvan_cos_backbling_treasure_chest",
+    "backbling_guardian_drone": "geometry.arvan_cos_backbling_guardian_drone",
+    "backbling_pumpkin_spirit": "geometry.arvan_cos_backbling_pumpkin_spirit",
+    "backbling_mini_castle": "geometry.arvan_cos_backbling_mini_castle",
+    "backbling_samurai_katana": "geometry.arvan_cos_backbling_samurai_katana",
+    "backbling_cloud_pet": "geometry.arvan_cos_backbling_cloud_pet",
+    "backbling_phoenix_feathers": "geometry.arvan_cos_backbling_phoenix_feathers",
+    "backbling_skull_crown_halo": "geometry.arvan_cos_backbling_skull_crown_halo",
+    "backbling_arcade_cabinet": "geometry.arvan_cos_backbling_arcade_cabinet",
+    "backbling_ender_eye_orbit": "geometry.arvan_cos_backbling_ender_eye_orbit",
+    "backbling_phoenix_ascend": "geometry.arvan_cos_backbling_phoenix_ascend",
+    "backbling_celestial_constellation": "geometry.arvan_cos_backbling_celestial_constellation",
+    "backbling_crystal_prism": "geometry.arvan_cos_backbling_crystal_prism",
+    "backbling_storm_raven": "geometry.arvan_cos_backbling_storm_raven",
+    "backbling_frozen_wyvern": "geometry.arvan_cos_backbling_frozen_wyvern",
+    "backbling_mecha_falcon": "geometry.arvan_cos_backbling_mecha_falcon",
+    "backbling_sakura_crane": "geometry.arvan_cos_backbling_sakura_crane",
+    "backbling_void_seraph": "geometry.arvan_cos_backbling_void_seraph",
+    "backbling_emerald_guardian": "geometry.arvan_cos_backbling_emerald_guardian",
+    "backbling_neon_synthwave": "geometry.arvan_cos_backbling_neon_synthwave",
+    "cape_bed_wars_bed": "geometry.arvan_cos_cape_bed_wars_bed",
+    "cape_emerald_shield": "geometry.arvan_cos_cape_emerald_shield",
+    "cape_void_walker": "geometry.arvan_cos_cape_void_walker",
+    "cape_lava_flow": "geometry.arvan_cos_cape_lava_flow",
+    "cape_frozen_kingdom": "geometry.arvan_cos_cape_frozen_kingdom",
+    "cape_golden_emperor": "geometry.arvan_cos_cape_golden_emperor",
+    "cape_pirate_flag": "geometry.arvan_cos_cape_pirate_flag",
+    "cape_cyber_glitch": "geometry.arvan_cos_cape_cyber_glitch",
+    "cape_sakura_storm": "geometry.arvan_cos_cape_sakura_storm",
+    "cape_thunder_god": "geometry.arvan_cos_cape_thunder_god",
+    "cape_pixel_heart": "geometry.arvan_cos_cape_pixel_heart",
+    "cape_wither_storm": "geometry.arvan_cos_cape_wither_storm",
+    "cape_toxic_waste": "geometry.arvan_cos_cape_toxic_waste",
+    "cape_royal_banner": "geometry.arvan_cos_cape_royal_banner",
+    "cape_aurora_borealis": "geometry.arvan_cos_cape_aurora_borealis"
+   },
+   "animations": {
+    "hat_bed_crown": "animation.arvan_cos_hat_bed_crown.idle",
+    "hat_emerald_helmet": "animation.arvan_cos_hat_emerald_helmet.idle",
+    "hat_pumpkin_head": "animation.arvan_cos_hat_pumpkin_head.idle",
+    "hat_cyber_visor": "animation.arvan_cos_hat_cyber_visor.idle",
+    "hat_samurai_kabuto": "animation.arvan_cos_hat_samurai_kabuto.idle",
+    "hat_pirate_captain": "animation.arvan_cos_hat_pirate_captain.idle",
+    "hat_viking_horns": "animation.arvan_cos_hat_viking_horns.idle",
+    "hat_wizard_star": "animation.arvan_cos_hat_wizard_star.idle",
+    "hat_ninja_headband": "animation.arvan_cos_hat_ninja_headband.idle",
+    "hat_space_helmet": "animation.arvan_cos_hat_space_helmet.idle",
+    "hat_cat_ears": "animation.arvan_cos_hat_cat_ears.idle",
+    "hat_dragon_skull": "animation.arvan_cos_hat_dragon_skull.idle",
+    "hat_ice_crown": "animation.arvan_cos_hat_ice_crown.idle",
+    "hat_pixel_sunglasses": "animation.arvan_cos_hat_pixel_sunglasses.idle",
+    "hat_golden_laurel": "animation.arvan_cos_hat_golden_laurel.idle",
+    "backbling_jetpack": "animation.arvan_cos_backbling_jetpack.idle",
+    "backbling_space_rocket": "animation.arvan_cos_backbling_space_rocket.idle",
+    "backbling_treasure_chest": "animation.arvan_cos_backbling_treasure_chest.idle",
+    "backbling_guardian_drone": "animation.arvan_cos_backbling_guardian_drone.idle",
+    "backbling_pumpkin_spirit": "animation.arvan_cos_backbling_pumpkin_spirit.idle",
+    "backbling_mini_castle": "animation.arvan_cos_backbling_mini_castle.idle",
+    "backbling_samurai_katana": "animation.arvan_cos_backbling_samurai_katana.idle",
+    "backbling_cloud_pet": "animation.arvan_cos_backbling_cloud_pet.idle",
+    "backbling_phoenix_feathers": "animation.arvan_cos_backbling_phoenix_feathers.idle",
+    "backbling_skull_crown_halo": "animation.arvan_cos_backbling_skull_crown_halo.idle",
+    "backbling_arcade_cabinet": "animation.arvan_cos_backbling_arcade_cabinet.idle",
+    "backbling_ender_eye_orbit": "animation.arvan_cos_backbling_ender_eye_orbit.idle",
+    "backbling_phoenix_ascend": "animation.arvan_cos_backbling_phoenix_ascend.idle",
+    "backbling_celestial_constellation": "animation.arvan_cos_backbling_celestial_constellation.idle",
+    "backbling_crystal_prism": "animation.arvan_cos_backbling_crystal_prism.idle",
+    "backbling_storm_raven": "animation.arvan_cos_backbling_storm_raven.idle",
+    "backbling_frozen_wyvern": "animation.arvan_cos_backbling_frozen_wyvern.idle",
+    "backbling_mecha_falcon": "animation.arvan_cos_backbling_mecha_falcon.idle",
+    "backbling_sakura_crane": "animation.arvan_cos_backbling_sakura_crane.idle",
+    "backbling_void_seraph": "animation.arvan_cos_backbling_void_seraph.idle",
+    "backbling_emerald_guardian": "animation.arvan_cos_backbling_emerald_guardian.idle",
+    "backbling_neon_synthwave": "animation.arvan_cos_backbling_neon_synthwave.idle",
+    "cape_bed_wars_bed": "animation.arvan_cos_cape_bed_wars_bed.idle",
+    "cape_emerald_shield": "animation.arvan_cos_cape_emerald_shield.idle",
+    "cape_void_walker": "animation.arvan_cos_cape_void_walker.idle",
+    "cape_lava_flow": "animation.arvan_cos_cape_lava_flow.idle",
+    "cape_frozen_kingdom": "animation.arvan_cos_cape_frozen_kingdom.idle",
+    "cape_golden_emperor": "animation.arvan_cos_cape_golden_emperor.idle",
+    "cape_pirate_flag": "animation.arvan_cos_cape_pirate_flag.idle",
+    "cape_cyber_glitch": "animation.arvan_cos_cape_cyber_glitch.idle",
+    "cape_sakura_storm": "animation.arvan_cos_cape_sakura_storm.idle",
+    "cape_thunder_god": "animation.arvan_cos_cape_thunder_god.idle",
+    "cape_pixel_heart": "animation.arvan_cos_cape_pixel_heart.idle",
+    "cape_wither_storm": "animation.arvan_cos_cape_wither_storm.idle",
+    "cape_toxic_waste": "animation.arvan_cos_cape_toxic_waste.idle",
+    "cape_royal_banner": "animation.arvan_cos_cape_royal_banner.idle",
+    "cape_aurora_borealis": "animation.arvan_cos_cape_aurora_borealis.idle",
+    "pose": "animation.arvan_cos.pose"
+   },
+   "scripts": {
+    "scale": "0.9375",
+    "animate": [
+     "pose",
+     {
+      "hat_bed_crown": "math.mod(query.variant,16) == 1"
+     },
+     {
+      "hat_emerald_helmet": "math.mod(query.variant,16) == 2"
+     },
+     {
+      "hat_pumpkin_head": "math.mod(query.variant,16) == 3"
+     },
+     {
+      "hat_cyber_visor": "math.mod(query.variant,16) == 4"
+     },
+     {
+      "hat_samurai_kabuto": "math.mod(query.variant,16) == 5"
+     },
+     {
+      "hat_pirate_captain": "math.mod(query.variant,16) == 6"
+     },
+     {
+      "hat_viking_horns": "math.mod(query.variant,16) == 7"
+     },
+     {
+      "hat_wizard_star": "math.mod(query.variant,16) == 8"
+     },
+     {
+      "hat_ninja_headband": "math.mod(query.variant,16) == 9"
+     },
+     {
+      "hat_space_helmet": "math.mod(query.variant,16) == 10"
+     },
+     {
+      "hat_cat_ears": "math.mod(query.variant,16) == 11"
+     },
+     {
+      "hat_dragon_skull": "math.mod(query.variant,16) == 12"
+     },
+     {
+      "hat_ice_crown": "math.mod(query.variant,16) == 13"
+     },
+     {
+      "hat_pixel_sunglasses": "math.mod(query.variant,16) == 14"
+     },
+     {
+      "hat_golden_laurel": "math.mod(query.variant,16) == 15"
+     },
+     {
+      "backbling_jetpack": "math.mod(math.floor(query.variant / 16),23) == 1"
+     },
+     {
+      "backbling_space_rocket": "math.mod(math.floor(query.variant / 16),23) == 2"
+     },
+     {
+      "backbling_treasure_chest": "math.mod(math.floor(query.variant / 16),23) == 3"
+     },
+     {
+      "backbling_guardian_drone": "math.mod(math.floor(query.variant / 16),23) == 4"
+     },
+     {
+      "backbling_pumpkin_spirit": "math.mod(math.floor(query.variant / 16),23) == 5"
+     },
+     {
+      "backbling_mini_castle": "math.mod(math.floor(query.variant / 16),23) == 6"
+     },
+     {
+      "backbling_samurai_katana": "math.mod(math.floor(query.variant / 16),23) == 7"
+     },
+     {
+      "backbling_cloud_pet": "math.mod(math.floor(query.variant / 16),23) == 8"
+     },
+     {
+      "backbling_phoenix_feathers": "math.mod(math.floor(query.variant / 16),23) == 9"
+     },
+     {
+      "backbling_skull_crown_halo": "math.mod(math.floor(query.variant / 16),23) == 10"
+     },
+     {
+      "backbling_arcade_cabinet": "math.mod(math.floor(query.variant / 16),23) == 11"
+     },
+     {
+      "backbling_ender_eye_orbit": "math.mod(math.floor(query.variant / 16),23) == 12"
+     },
+     {
+      "backbling_phoenix_ascend": "math.mod(math.floor(query.variant / 16),23) == 13"
+     },
+     {
+      "backbling_celestial_constellation": "math.mod(math.floor(query.variant / 16),23) == 14"
+     },
+     {
+      "backbling_crystal_prism": "math.mod(math.floor(query.variant / 16),23) == 15"
+     },
+     {
+      "backbling_storm_raven": "math.mod(math.floor(query.variant / 16),23) == 16"
+     },
+     {
+      "backbling_frozen_wyvern": "math.mod(math.floor(query.variant / 16),23) == 17"
+     },
+     {
+      "backbling_mecha_falcon": "math.mod(math.floor(query.variant / 16),23) == 18"
+     },
+     {
+      "backbling_sakura_crane": "math.mod(math.floor(query.variant / 16),23) == 19"
+     },
+     {
+      "backbling_void_seraph": "math.mod(math.floor(query.variant / 16),23) == 20"
+     },
+     {
+      "backbling_emerald_guardian": "math.mod(math.floor(query.variant / 16),23) == 21"
+     },
+     {
+      "backbling_neon_synthwave": "math.mod(math.floor(query.variant / 16),23) == 22"
+     },
+     {
+      "cape_bed_wars_bed": "math.floor(query.variant / 368) == 1"
+     },
+     {
+      "cape_emerald_shield": "math.floor(query.variant / 368) == 2"
+     },
+     {
+      "cape_void_walker": "math.floor(query.variant / 368) == 3"
+     },
+     {
+      "cape_lava_flow": "math.floor(query.variant / 368) == 4"
+     },
+     {
+      "cape_frozen_kingdom": "math.floor(query.variant / 368) == 5"
+     },
+     {
+      "cape_golden_emperor": "math.floor(query.variant / 368) == 6"
+     },
+     {
+      "cape_pirate_flag": "math.floor(query.variant / 368) == 7"
+     },
+     {
+      "cape_cyber_glitch": "math.floor(query.variant / 368) == 8"
+     },
+     {
+      "cape_sakura_storm": "math.floor(query.variant / 368) == 9"
+     },
+     {
+      "cape_thunder_god": "math.floor(query.variant / 368) == 10"
+     },
+     {
+      "cape_pixel_heart": "math.floor(query.variant / 368) == 11"
+     },
+     {
+      "cape_wither_storm": "math.floor(query.variant / 368) == 12"
+     },
+     {
+      "cape_toxic_waste": "math.floor(query.variant / 368) == 13"
+     },
+     {
+      "cape_royal_banner": "math.floor(query.variant / 368) == 14"
+     },
+     {
+      "cape_aurora_borealis": "math.floor(query.variant / 368) == 15"
+     }
+    ]
+   },
+   "particle_effects": {
+    "ember": "arvan:cos_ember",
+    "star": "arvan:cos_star",
+    "snow": "arvan:cos_snow",
+    "petal": "arvan:cos_petal",
+    "rain": "arvan:cos_rain",
+    "smoke": "arvan:cos_smoke"
+   },
+   "render_controllers": [
+    "controller.render.arvan_cos_hat",
+    "controller.render.arvan_cos_backbling",
+    "controller.render.arvan_cos_cape"
+   ]
+  }
+ }
+}

@@ -1,0 +1,17 @@
+name: BedWarsGame
+version: 2.1.0
+main: sergittos\bedwars\game\BedWarsGame
+api: ["5.0.0"]
+description: "BedWars Game - arena/match server plugin (Solo/Double/Triple/Squad). Includes a built-in victory orbit cinematic camera - no longer requires a separate camera plugin."
+author: BedWarsTeam
+
+depend:
+  - BedWarsCore
+
+softdepend:
+  - Customies
+
+load: POSTWORLD
+
+# پرمیشن bedwars.setup عمداً اینجا تعریف نشده - از قبل توی BedWarsCore/plugin.yml
+# تعریف شده (Core روی هر ۵ سرور نصبه و همیشه قبل از Game لود می‌شه)

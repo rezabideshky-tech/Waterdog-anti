@@ -1,0 +1,702 @@
+{
+  "baseline": "bedwars_v7_fixed(3).zip",
+  "baseline_sha256": "9d822c4ec5a73d27c09762d8431cb247a01fa93856645ed0372e6d6e9694f2d7",
+  "changes": [
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/HatCatalog.php",
+      "status": "removed",
+      "before": "31eeb6e272a6dfa3b914a0498905b5ee5b6f367220b8d133786b57fb20959a55"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/HatWearService.php",
+      "status": "removed",
+      "before": "de3e87963ba8d0be763e04518b99360f987dc0978f221a06c3cf5438c8cf1408"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/WearableSkinService.php",
+      "status": "modified",
+      "before": "754f1d70e18fb5c4d8b99e6e6fb536611bb9e7ab2d6a540a9ccaaf4bd82be9fd",
+      "after": "9fe73420f029f8eaab50eeb5b6f3eaf81ba8f7e2a966ef64550828e7ae24f363"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/WearableAssets.php",
+      "status": "removed",
+      "before": "965cdf7bcfa761a37623c070e8689f410df6b05da8e68abe9ec77dcb2e1a5117"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/WearableRenderService.php",
+      "status": "modified",
+      "before": "86ce9e9eae2d4b6ddaacecce0123cd70263a8dd89172345d83cd33e6e1c5d15f",
+      "after": "957ce029d77a22613704137c705b7047d6b1922e0d4cbce33d2821f5f781e6c7"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/registry/CosmeticsRegistry.php",
+      "status": "modified",
+      "before": "a733976b1a4c5ee11b9811e0b38f7ee835f00ab8afbcfb2819667120434288a6",
+      "after": "9faa57df9268857d1b5be0553e07903c57118d807827cc6c390bfe8b2c62e2b3"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/registry/CosmeticRarity.php",
+      "status": "modified",
+      "before": "72251c07bed96ffd1b9dece82680c4236ab7fab8dc7f192dff66101f8e64601a",
+      "after": "79177d198464d3790434c73c420d46fb493af04489fea6bca1145a5a1745d8d8"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/registry/CosmeticCategory.php",
+      "status": "modified",
+      "before": "f409c8740f15a09177bb5e2634a04dc975d7154c78e097cf3e8359c0a2f4ffbd",
+      "after": "cdb8f7f8687b1ba6c33439d0b8fa02d76d6032df73a3f9f49855b3a7105886f9"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/data/PlayerCosmeticsManager.php",
+      "status": "modified",
+      "before": "d84f5feba5b39ae49dc063438cef56974c5facd92fbac77c9e1a562b667cf179",
+      "after": "f2f31a8644427abf2e2b15e951f30e4df882f5b0e13b2a9e0cc9ef80f003c02d"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/session/settings/GameSettings.php",
+      "status": "modified",
+      "before": "3216252c625782a0355fd36e514b885770b6ec0261fb7e3a5df8c39da7201634",
+      "after": "9a1abdeed02201eb5902368b5f96021c1898dc1108813c90a34d206a8a9d21d3"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/BedWarsCore.php",
+      "status": "modified",
+      "before": "704b240e225e79c88277bdcf66dc4300da8d0558ae9b0e76c7660e149eed4391",
+      "after": "a34b34ff718a663b8dd18a963b7529d448ed0ceccef3a1565324a4c7b418b1c7"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/fire.png",
+      "status": "removed",
+      "before": "ae677f7d98ac70a533713518416df4452fe5700365c09cf45d0d156ea9396551"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/aceee.png",
+      "status": "removed",
+      "before": "25fc6a9e8a19e18940b782e8702f4178034471193008c01062447393e71bee32"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/red_creeper.png",
+      "status": "removed",
+      "before": "953cac8b779fe41383e675ee2b86071a71658f2180f56fbce8aa315ea70e2ed6"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/day_dream.png",
+      "status": "removed",
+      "before": "f7bfca1d4d150d5b4f4a235ae4cead52460724e9deb408b3f81b4368b6240433"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/enderman.png",
+      "status": "removed",
+      "before": "e7dfea16dc83c97df01a12fabbd1216359c0cd0ea42f9999b6e97c584963e980"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/turtle.png",
+      "status": "removed",
+      "before": "af0745ec7f33ea6e2f4215a5261bad6858e85d616cff0851f73313fe70d29c67"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/pickaxe.png",
+      "status": "removed",
+      "before": "a2e8d97ec79100e90a75d369d1b3ba81273c4f82bc1b737e934eed4a854be1b6"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/iron_golem.png",
+      "status": "removed",
+      "before": "b0cc08840700447322d953a02b965f1d65a13a603bf64b17c803c21446fe1635"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/demon.png",
+      "status": "removed",
+      "before": "fb8cd0c907ee1efbe3187ffbd330f079ecdf36e0248946b4eaa676584fd28c0f"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/eva.png",
+      "status": "removed",
+      "before": "02c2f04dc3238e9211820cdda85e61d193c5230a08d2ec97ee3dfa2f7a7170cb"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/snake.png",
+      "status": "removed",
+      "before": "63a42151bed59017da71ed85e6eca13dd99820b891541bb39501bef6596f739f"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/orangest.png",
+      "status": "removed",
+      "before": "43e1d5bd1a2f7a09c309c76f4530a664781782784387ae0e97c54037d84ad88f"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/blue_creeper.png",
+      "status": "removed",
+      "before": "25d6aaa032082d65b0a30698fb113a62b8b476362d9f75cead5b07cf20097631"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/capes/firework.png",
+      "status": "removed",
+      "before": "a3a05acbc37a1c3f6899451af34fc4f0189f570b336e14cf5bf27b76c45d87a9"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/enderdragon.png",
+      "status": "removed",
+      "before": "c6d7f046c6bc74c4bb11589c2dc8e8bda36ceaf6ee155be457093285933472fe"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/fairy.png",
+      "status": "removed",
+      "before": "685a7fcff6d35f23fa7aec1bad3b5536317faed508b21ddc07bb90264dc7fffc"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/devil.json",
+      "status": "removed",
+      "before": "ed126843af5e7616b7e0f8e1afe3afb216af4312281f8dcd9e63a1b3343f06cb"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/davinci.png",
+      "status": "removed",
+      "before": "0a47ab4df08cbdae218a11070c5607ebb45931c57a0810c989cdae3f835c52e4"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/fairy.json",
+      "status": "removed",
+      "before": "d2ee07b1a5878f00edf2662675b810f6c37123027db35f43d183c8d798499efe"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/angelkiller.png",
+      "status": "removed",
+      "before": "d7c145129598f08e05bb097843a7542439923003bd67597ffb426404a76d1c5c"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/cuddle_bear.png",
+      "status": "removed",
+      "before": "c38951d2a7de75c3cfd737f84afc40320f135567c747d5fd98fc8bdf06679253"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/monarchbutterfly.png",
+      "status": "removed",
+      "before": "cad495acb84d10d25ce1d174914d7ef60bc5de2e68237d763be6319ba5a74e3a"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/angelwhite.json",
+      "status": "removed",
+      "before": "095d9dff1b423cbb41e6b6a8d263dbca074d15e8e8bb777e732932240a9a8a93"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/robotic.json",
+      "status": "removed",
+      "before": "4c390d3afb95cf931b2a722eb0dc28409c068a85d8d25eb902cd65ad409a8e04"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/monarchbutterfly.json",
+      "status": "removed",
+      "before": "97873f27764c0b6e766ad8fcfa65d68c380e8848719d0df4463bd0ea4ad8db67"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/soaring_heart.png",
+      "status": "removed",
+      "before": "be30f5f55e69e77d8fea1fa6b809473712f48c46e8cb612f56a0fc61e6247d06"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/robotic.png",
+      "status": "removed",
+      "before": "318a711e09694fe6cbc505e8f577b4916bd799bdc82286fd1f30508a32af5b2b"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/axolotl_plush.json",
+      "status": "removed",
+      "before": "ebceb577da346b1a36136d5bb0474008354c998330de26a89c2fe30b0bf7b05a"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/soaring_heart.json",
+      "status": "removed",
+      "before": "8132953a97161618f1ed8f3d585d5a016392fa353fb89bc557d791eca5813563"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/blazingelectro.json",
+      "status": "removed",
+      "before": "a3bc1cbfac2f1f9502ae367af0761375ed8b2ae60ddcb6e8d0261dbc8b17fbff"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/cuddle_bear.json",
+      "status": "removed",
+      "before": "74449fe9946452248919c9a6aaefef7f7e46a8674bc1c473be3479a85d8df9b1"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/enderdragon.json",
+      "status": "removed",
+      "before": "0fcd2937808ff22f0cf1777238178ecbcac32d0c8fdc6c119de5786b6e24d084"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/poisondragon.png",
+      "status": "removed",
+      "before": "f1649cec79ab4c86c5b2ef13b53f700e4728a56cb722311fd7b1ab6452309e9f"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/angelkiller.json",
+      "status": "removed",
+      "before": "ae3063f6f47b337c29b4e2c5784f5f6d3742eb4eb4814eeb1a27200aa5c66589"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/davinci.json",
+      "status": "removed",
+      "before": "898804e50b0da27b78b86babc48028d137e84dfecc82bfe4bddd1c33c6b932f0"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/poisondragon.json",
+      "status": "removed",
+      "before": "7a08b7f6b2b3c16c544cc3587c774d2716f11eab2624e10ad1f66953714d93fe"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/axolotl_plush.png",
+      "status": "removed",
+      "before": "70a5dadce0c946c126fae72ff96b0c1c62117ce758dd5a9be55fa6dc1e8f34ff"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/diamond.json",
+      "status": "removed",
+      "before": "caf1224d74f0df31a5ad99d75f3190a9d0fa7c6a7099a100a9e00e69f0874a22"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/kraken_tentacles.json",
+      "status": "removed",
+      "before": "330c978795a68db43574d4f1071ee4f6feebddbe561c387324046952ee661f56"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/angelwhite.png",
+      "status": "removed",
+      "before": "871ca1e1664487fe047133f222fd88fcc0e2d42db208c5adb4768d22eb6e1ff5"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/kraken_tentacles.png",
+      "status": "removed",
+      "before": "f4a6380a8bbbff2982abf5f56fa11174303b6b7ced2e70a90479e4f1b7587e20"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/devil.png",
+      "status": "removed",
+      "before": "ecd6fd188f1dfff99d964fc5b1b60543f776ceec0cc43700edcaa7ba6613018b"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/firedragon.png",
+      "status": "removed",
+      "before": "3ce8d22e58ade8a591706ca753fc10d7f1eda8a6c2560ed3ef83109ae4e13570"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/blazingelectro.png",
+      "status": "removed",
+      "before": "e81b420152e212c48307eeac6cfd771fa23242f3fb451ca4da7f6a40af13d1a0"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/firedragon.json",
+      "status": "removed",
+      "before": "89846e8fcd834334baafea82489224ad596ea5f375a4b6fab74fd6bbca82cc53"
+    },
+    {
+      "path": "BedWarsCore-game/resources/wearables/wings/diamond.png",
+      "status": "removed",
+      "before": "7d4bc9d5e3933445c32a9e6304e3401ec987b9aea55d489bbb5fef649b0877b6"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/HatCatalog.php",
+      "status": "removed",
+      "before": "31eeb6e272a6dfa3b914a0498905b5ee5b6f367220b8d133786b57fb20959a55"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/HatWearService.php",
+      "status": "removed",
+      "before": "de3e87963ba8d0be763e04518b99360f987dc0978f221a06c3cf5438c8cf1408"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/WearableSkinService.php",
+      "status": "modified",
+      "before": "754f1d70e18fb5c4d8b99e6e6fb536611bb9e7ab2d6a540a9ccaaf4bd82be9fd",
+      "after": "9fe73420f029f8eaab50eeb5b6f3eaf81ba8f7e2a966ef64550828e7ae24f363"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/WearableAssets.php",
+      "status": "removed",
+      "before": "965cdf7bcfa761a37623c070e8689f410df6b05da8e68abe9ec77dcb2e1a5117"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/WearableRenderService.php",
+      "status": "modified",
+      "before": "86ce9e9eae2d4b6ddaacecce0123cd70263a8dd89172345d83cd33e6e1c5d15f",
+      "after": "957ce029d77a22613704137c705b7047d6b1922e0d4cbce33d2821f5f781e6c7"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/registry/CosmeticsRegistry.php",
+      "status": "modified",
+      "before": "a733976b1a4c5ee11b9811e0b38f7ee835f00ab8afbcfb2819667120434288a6",
+      "after": "9faa57df9268857d1b5be0553e07903c57118d807827cc6c390bfe8b2c62e2b3"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/registry/CosmeticRarity.php",
+      "status": "modified",
+      "before": "72251c07bed96ffd1b9dece82680c4236ab7fab8dc7f192dff66101f8e64601a",
+      "after": "79177d198464d3790434c73c420d46fb493af04489fea6bca1145a5a1745d8d8"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/registry/CosmeticCategory.php",
+      "status": "modified",
+      "before": "f409c8740f15a09177bb5e2634a04dc975d7154c78e097cf3e8359c0a2f4ffbd",
+      "after": "cdb8f7f8687b1ba6c33439d0b8fa02d76d6032df73a3f9f49855b3a7105886f9"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/data/PlayerCosmeticsManager.php",
+      "status": "modified",
+      "before": "d84f5feba5b39ae49dc063438cef56974c5facd92fbac77c9e1a562b667cf179",
+      "after": "f2f31a8644427abf2e2b15e951f30e4df882f5b0e13b2a9e0cc9ef80f003c02d"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/BedWarsCore.php",
+      "status": "modified",
+      "before": "b7269e48db5f8f0ef1751db29e992826fa9f08cea47d1580ddaadf63b8806cec",
+      "after": "30c3a03e24d8f060572cbea367ada8a9cb127801b1f40c79a2e6d8e259312d08"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/fire.png",
+      "status": "removed",
+      "before": "ae677f7d98ac70a533713518416df4452fe5700365c09cf45d0d156ea9396551"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/aceee.png",
+      "status": "removed",
+      "before": "25fc6a9e8a19e18940b782e8702f4178034471193008c01062447393e71bee32"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/red_creeper.png",
+      "status": "removed",
+      "before": "953cac8b779fe41383e675ee2b86071a71658f2180f56fbce8aa315ea70e2ed6"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/day_dream.png",
+      "status": "removed",
+      "before": "f7bfca1d4d150d5b4f4a235ae4cead52460724e9deb408b3f81b4368b6240433"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/enderman.png",
+      "status": "removed",
+      "before": "e7dfea16dc83c97df01a12fabbd1216359c0cd0ea42f9999b6e97c584963e980"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/turtle.png",
+      "status": "removed",
+      "before": "af0745ec7f33ea6e2f4215a5261bad6858e85d616cff0851f73313fe70d29c67"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/pickaxe.png",
+      "status": "removed",
+      "before": "a2e8d97ec79100e90a75d369d1b3ba81273c4f82bc1b737e934eed4a854be1b6"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/iron_golem.png",
+      "status": "removed",
+      "before": "b0cc08840700447322d953a02b965f1d65a13a603bf64b17c803c21446fe1635"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/demon.png",
+      "status": "removed",
+      "before": "fb8cd0c907ee1efbe3187ffbd330f079ecdf36e0248946b4eaa676584fd28c0f"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/eva.png",
+      "status": "removed",
+      "before": "02c2f04dc3238e9211820cdda85e61d193c5230a08d2ec97ee3dfa2f7a7170cb"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/snake.png",
+      "status": "removed",
+      "before": "63a42151bed59017da71ed85e6eca13dd99820b891541bb39501bef6596f739f"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/orangest.png",
+      "status": "removed",
+      "before": "43e1d5bd1a2f7a09c309c76f4530a664781782784387ae0e97c54037d84ad88f"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/blue_creeper.png",
+      "status": "removed",
+      "before": "25d6aaa032082d65b0a30698fb113a62b8b476362d9f75cead5b07cf20097631"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/capes/firework.png",
+      "status": "removed",
+      "before": "a3a05acbc37a1c3f6899451af34fc4f0189f570b336e14cf5bf27b76c45d87a9"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/enderdragon.png",
+      "status": "removed",
+      "before": "c6d7f046c6bc74c4bb11589c2dc8e8bda36ceaf6ee155be457093285933472fe"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/fairy.png",
+      "status": "removed",
+      "before": "685a7fcff6d35f23fa7aec1bad3b5536317faed508b21ddc07bb90264dc7fffc"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/devil.json",
+      "status": "removed",
+      "before": "ed126843af5e7616b7e0f8e1afe3afb216af4312281f8dcd9e63a1b3343f06cb"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/davinci.png",
+      "status": "removed",
+      "before": "0a47ab4df08cbdae218a11070c5607ebb45931c57a0810c989cdae3f835c52e4"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/fairy.json",
+      "status": "removed",
+      "before": "d2ee07b1a5878f00edf2662675b810f6c37123027db35f43d183c8d798499efe"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/angelkiller.png",
+      "status": "removed",
+      "before": "d7c145129598f08e05bb097843a7542439923003bd67597ffb426404a76d1c5c"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/cuddle_bear.png",
+      "status": "removed",
+      "before": "c38951d2a7de75c3cfd737f84afc40320f135567c747d5fd98fc8bdf06679253"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/monarchbutterfly.png",
+      "status": "removed",
+      "before": "cad495acb84d10d25ce1d174914d7ef60bc5de2e68237d763be6319ba5a74e3a"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/angelwhite.json",
+      "status": "removed",
+      "before": "095d9dff1b423cbb41e6b6a8d263dbca074d15e8e8bb777e732932240a9a8a93"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/robotic.json",
+      "status": "removed",
+      "before": "4c390d3afb95cf931b2a722eb0dc28409c068a85d8d25eb902cd65ad409a8e04"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/monarchbutterfly.json",
+      "status": "removed",
+      "before": "97873f27764c0b6e766ad8fcfa65d68c380e8848719d0df4463bd0ea4ad8db67"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/soaring_heart.png",
+      "status": "removed",
+      "before": "be30f5f55e69e77d8fea1fa6b809473712f48c46e8cb612f56a0fc61e6247d06"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/robotic.png",
+      "status": "removed",
+      "before": "318a711e09694fe6cbc505e8f577b4916bd799bdc82286fd1f30508a32af5b2b"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/axolotl_plush.json",
+      "status": "removed",
+      "before": "ebceb577da346b1a36136d5bb0474008354c998330de26a89c2fe30b0bf7b05a"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/soaring_heart.json",
+      "status": "removed",
+      "before": "8132953a97161618f1ed8f3d585d5a016392fa353fb89bc557d791eca5813563"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/blazingelectro.json",
+      "status": "removed",
+      "before": "a3bc1cbfac2f1f9502ae367af0761375ed8b2ae60ddcb6e8d0261dbc8b17fbff"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/cuddle_bear.json",
+      "status": "removed",
+      "before": "74449fe9946452248919c9a6aaefef7f7e46a8674bc1c473be3479a85d8df9b1"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/enderdragon.json",
+      "status": "removed",
+      "before": "0fcd2937808ff22f0cf1777238178ecbcac32d0c8fdc6c119de5786b6e24d084"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/poisondragon.png",
+      "status": "removed",
+      "before": "f1649cec79ab4c86c5b2ef13b53f700e4728a56cb722311fd7b1ab6452309e9f"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/angelkiller.json",
+      "status": "removed",
+      "before": "ae3063f6f47b337c29b4e2c5784f5f6d3742eb4eb4814eeb1a27200aa5c66589"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/davinci.json",
+      "status": "removed",
+      "before": "898804e50b0da27b78b86babc48028d137e84dfecc82bfe4bddd1c33c6b932f0"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/poisondragon.json",
+      "status": "removed",
+      "before": "7a08b7f6b2b3c16c544cc3587c774d2716f11eab2624e10ad1f66953714d93fe"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/axolotl_plush.png",
+      "status": "removed",
+      "before": "70a5dadce0c946c126fae72ff96b0c1c62117ce758dd5a9be55fa6dc1e8f34ff"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/diamond.json",
+      "status": "removed",
+      "before": "caf1224d74f0df31a5ad99d75f3190a9d0fa7c6a7099a100a9e00e69f0874a22"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/kraken_tentacles.json",
+      "status": "removed",
+      "before": "330c978795a68db43574d4f1071ee4f6feebddbe561c387324046952ee661f56"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/angelwhite.png",
+      "status": "removed",
+      "before": "871ca1e1664487fe047133f222fd88fcc0e2d42db208c5adb4768d22eb6e1ff5"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/kraken_tentacles.png",
+      "status": "removed",
+      "before": "f4a6380a8bbbff2982abf5f56fa11174303b6b7ced2e70a90479e4f1b7587e20"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/devil.png",
+      "status": "removed",
+      "before": "ecd6fd188f1dfff99d964fc5b1b60543f776ceec0cc43700edcaa7ba6613018b"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/firedragon.png",
+      "status": "removed",
+      "before": "3ce8d22e58ade8a591706ca753fc10d7f1eda8a6c2560ed3ef83109ae4e13570"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/blazingelectro.png",
+      "status": "removed",
+      "before": "e81b420152e212c48307eeac6cfd771fa23242f3fb451ca4da7f6a40af13d1a0"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/firedragon.json",
+      "status": "removed",
+      "before": "89846e8fcd834334baafea82489224ad596ea5f375a4b6fab74fd6bbca82cc53"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/wearables/wings/diamond.png",
+      "status": "removed",
+      "before": "7d4bc9d5e3933445c32a9e6304e3401ec987b9aea55d489bbb5fef649b0877b6"
+    },
+    {
+      "path": "BedWarsGame/src/sergittos/bedwars/game/BedWarsGame.php",
+      "status": "modified",
+      "before": "ee75e936d67d629b6304f95fd5cfb2f164f0c5fc19ac0a0b59e82712e02960a1",
+      "after": "f97c8c5eecb1c7c2787b8d638c3de200db194d7117c09abe1288b7a3fde7dc56"
+    },
+    {
+      "path": "BedWarsGame/src/sergittos/bedwars/cosmetics/wearable/hats/CosmeticHatItem.php",
+      "status": "removed",
+      "before": "4c88fd538a0d01eff06f172e45d9c5551d8ff1db9a710abd5248c926161f8146"
+    },
+    {
+      "path": "BedWarsGame/src/sergittos/bedwars/cosmetics/wearable/HatResourcePackInstaller.php",
+      "status": "removed",
+      "before": "536d3c17eca924549c326f18810b0f8177501127e10ae206d85a919f0ac46e76"
+    },
+    {
+      "path": "BedWarsGame/src/sergittos/bedwars/cosmetics/wearable/HatItemRegistrar.php",
+      "status": "removed",
+      "before": "eacd5b6c0367a015ec11d17b99309e261b1d90e8535955361a041d32617c0b28"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/lobby/gui/LockerIconResourcePackInstaller.php",
+      "status": "modified",
+      "before": "91c48a5511d77bacd630d5dba9a158be154863a8a2df39bc400851cd0a0a6e09",
+      "after": "104b7987a8a3f2ba117d6fddfce7dc6455b28e33c8644d0d816ca10587418290"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/lobby/gui/CosmeticsGui.php",
+      "status": "modified",
+      "before": "e70478905b01bd1c1e2b6f60342f7bac8b670d66eae867e2f8963b3e76645c0a",
+      "after": "d8bb6f95071d3694cc419e98e7bb6551b9811ca1514a2e5b5153ceb3e52ee096"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/lobby/profile/ProfileUiResourcePackInstaller.php",
+      "status": "modified",
+      "before": "596a3ad7148c83c447222c14cab8c5c6664cf2084ecae07abe0e58fea88373fb",
+      "after": "23000adbf79e120cca166010cceb664918ba9f57ade2b5ae42d31dd6b980dd77"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/lobby/clan/ClanCrestResourcePackInstaller.php",
+      "status": "modified",
+      "before": "283ab24a16b1f5c2912335459b4fca9c924ba67065269e3e8918516bb3140625",
+      "after": "8e7909ca391390156befe78f5a05e9a24f298c5fa25858e49ae4f47c9a855f52"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/lobby/BedWarsLobby.php",
+      "status": "modified",
+      "before": "19f9e11f7179682748b98bbe17957009cc2d5230a2efef1c423c1cf9ec333d85",
+      "after": "2a7a60dfa9c8ff460ca114006d7fe7c6fb429eee70f899b01831c77e96700c94"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/cosmetics/wearable/hats/CosmeticHatItem.php",
+      "status": "removed",
+      "before": "4c88fd538a0d01eff06f172e45d9c5551d8ff1db9a710abd5248c926161f8146"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/cosmetics/wearable/HatResourcePackInstaller.php",
+      "status": "removed",
+      "before": "536d3c17eca924549c326f18810b0f8177501127e10ae206d85a919f0ac46e76"
+    },
+    {
+      "path": "BedWarsLobby/src/sergittos/bedwars/cosmetics/wearable/HatItemRegistrar.php",
+      "status": "removed",
+      "before": "eacd5b6c0367a015ec11d17b99309e261b1d90e8535955361a041d32617c0b28"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticCatalog.php",
+      "status": "added",
+      "after": "e714966d69a141d5376619484c24fa4ec9deedeeb970523118eb9537d8777b3b"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticActor.php",
+      "status": "added",
+      "after": "2d67893c293e826951c3c57a27d1d273aa4f5ebb344c10110de9824b212934ab"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticService.php",
+      "status": "added",
+      "after": "faf33d34ee1a57af7bac7334a21d8a7c21ff5c23a07d21a6834e3017c831ecf9"
+    },
+    {
+      "path": "BedWarsCore-game/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticListener.php",
+      "status": "added",
+      "after": "173964dba3e0a82d4ebec426ca569eff46fcf74c6a22c9aef0d9b5d1d6c12776"
+    },
+    {
+      "path": "BedWarsCore-game/resources/resource_cosmetics.json",
+      "status": "added",
+      "after": "611d5c8e8a1654b9acc8f8dd0b4906139ca365e49a8eb19aff251a29d42e9691"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticCatalog.php",
+      "status": "added",
+      "after": "e714966d69a141d5376619484c24fa4ec9deedeeb970523118eb9537d8777b3b"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticActor.php",
+      "status": "added",
+      "after": "2d67893c293e826951c3c57a27d1d273aa4f5ebb344c10110de9824b212934ab"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticService.php",
+      "status": "added",
+      "after": "faf33d34ee1a57af7bac7334a21d8a7c21ff5c23a07d21a6834e3017c831ecf9"
+    },
+    {
+      "path": "BedWarsCore-lobby/src/sergittos/bedwars/cosmetics/wearable/ResourceCosmeticListener.php",
+      "status": "added",
+      "after": "173964dba3e0a82d4ebec426ca569eff46fcf74c6a22c9aef0d9b5d1d6c12776"
+    },
+    {
+      "path": "BedWarsCore-lobby/resources/resource_cosmetics.json",
+      "status": "added",
+      "after": "611d5c8e8a1654b9acc8f8dd0b4906139ca365e49a8eb19aff251a29d42e9691"
+    }
+  ]
+}

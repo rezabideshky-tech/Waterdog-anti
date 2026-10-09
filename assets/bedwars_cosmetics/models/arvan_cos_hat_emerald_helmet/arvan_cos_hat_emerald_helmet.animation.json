@@ -1,0 +1,40 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_hat_emerald_helmet.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "emerald_helmet_gem": {
+          "scale": {
+            "0": [
+              0.7,
+              1,
+              1
+            ],
+            "1": [
+              1.0,
+              1,
+              1
+            ],
+            "2": [
+              0.7,
+              1,
+              1
+            ],
+            "3": [
+              0.39999999999999997,
+              1,
+              1
+            ],
+            "4": [
+              0.7,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    }
+  }
+}

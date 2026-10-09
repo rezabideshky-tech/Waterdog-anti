@@ -1,0 +1,98 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_cape_aurora_borealis.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "aurora_borealis_cloth0": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              0,
+              0,
+              1.0
+            ],
+            "2": [
+              0,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              0,
+              -1.0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "aurora_borealis_cloth1": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              0,
+              0,
+              1.0
+            ],
+            "2": [
+              0,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              0,
+              -1.0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "aurora_borealis_cloth2": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              0,
+              0,
+              1.0
+            ],
+            "2": [
+              0,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              0,
+              -1.0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

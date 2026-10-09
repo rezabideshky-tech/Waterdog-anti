@@ -1,0 +1,9 @@
+# BedWarsLobby Config
+spawn-protection-radius: 5
+
+# متنی که توی آیتم "Server Info" نمایش داده می‌شه (& برای رنگ - مثل &6، &l و...)
+server-info:
+  - "&6&lCyrusMC BedWars"
+  - "&7Welcome! Have fun and play fair."
+  - " "
+  - "&7Discord: &bMc.CmGaming.IR"

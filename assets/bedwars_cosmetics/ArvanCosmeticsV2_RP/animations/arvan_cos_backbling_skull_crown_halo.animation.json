@@ -1,0 +1,25 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_backbling_skull_crown_halo.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "skull_crown_halo_halo": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              -360,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

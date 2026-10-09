@@ -1,0 +1,54 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_backbling_pumpkin_spirit.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "pumpkin_spirit_pumpkin": {
+          "position": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              0,
+              0.45,
+              0
+            ],
+            "2": [
+              0,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              -0.45,
+              0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "pumpkin_spirit_ghost_orbit": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              -360,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

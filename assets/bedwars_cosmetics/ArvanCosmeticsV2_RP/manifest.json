@@ -1,0 +1,29 @@
+{
+ "format_version": 2,
+ "header": {
+  "name": "Arvan Cosmetics V2 | 52 Wearables",
+  "description": "15 hats + 22 backblings + 15 capes; resource-driven overlay; keep existing UI packs.",
+  "uuid": "848cf7bf-dc90-47f3-8259-2607c81252ec",
+  "version": [
+   2,
+   0,
+   0
+  ],
+  "min_engine_version": [
+   1,
+   20,
+   0
+  ]
+ },
+ "modules": [
+  {
+   "type": "resources",
+   "uuid": "68b26e1f-de6e-4de6-ae32-d5d78619d822",
+   "version": [
+    2,
+    0,
+    0
+   ]
+  }
+ ]
+}

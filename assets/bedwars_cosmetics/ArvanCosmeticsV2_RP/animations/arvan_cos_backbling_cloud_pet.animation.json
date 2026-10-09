@@ -1,0 +1,66 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_backbling_cloud_pet.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "cloud_pet_cloud": {
+     "position": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0.4,
+       0
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       -0.4,
+       0
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "rain",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "rain",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "rain",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "rain",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

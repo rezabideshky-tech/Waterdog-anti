@@ -1,0 +1,95 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_backbling_sakura_crane.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "sakura_crane_wing_0_-1": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       7,
+       0
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       -7,
+       0
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "sakura_crane_wing_0_1": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       -7,
+       0
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       7,
+       0
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "petal",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "petal",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "petal",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "petal",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

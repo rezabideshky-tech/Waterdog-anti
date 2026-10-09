@@ -1,0 +1,106 @@
+name: BedWarsCore
+version: 2.0.0
+main: sergittos\bedwars\BedWarsCore
+api: ["5.0.0"]
+description: "BedWars Core - shared systems for all servers"
+author: BedWarsTeam
+
+depend:
+  - DEVirion
+
+softdepend: []
+
+load: STARTUP
+
+# دستورات (party, bwadmin) عمداً اینجا تعریف نشدن — چون خودشون به‌صورت
+# دستی و کامل (اسم/permission/alias) داخل BedWarsCore::onEnable() از طریق
+# CommandMap ثبت می‌شن. اگه اینجا هم تعریف بشن، دو بار رجیستر می‌شن و تداخل ایجاد می‌کنن.
+
+permissions:
+  bedwars.party:
+    description: "Use party system"
+    default: true
+  bedwars.admin:
+    description: "Admin commands"
+    default: op
+  bedwars.setup:
+    description: "Map setup"
+    default: op
+  bedwars.moderator:
+    description: "Moderator tools: spectate games, teleport/kick players"
+    default: op
+  bedwars.report.use:
+    description: "Report players for rule violations"
+    default: true
+  bedwars.report.staff:
+    description: "Receive live report alerts and view submitted reports"
+    default: op
+  bedwars.rank.owner:
+    description: "Owner rank"
+    default: op
+  bedwars.rank.admin:
+    description: "Admin rank"
+    default: op
+  bedwars.rank.mod:
+    description: "Mod rank"
+    default: op
+  bedwars.rank.vipplus:
+    description: "VIP+ rank"
+    default: false
+  bedwars.rank.vip:
+    description: "VIP rank"
+    default: false
+  bedwars.battlepass.premium:
+    description: "Premium Battle Pass reward track"
+    default: false
+  bedwars.cosmetic.particle.rainbow:
+    description: "Rainbow particle"
+    default: false
+  bedwars.cosmetic.particle.totem:
+    description: "Totem particle"
+    default: false
+  bedwars.cosmetic.particle.galaxy:
+    description: "Galaxy particle"
+    default: false
+  bedwars.cosmetic.cape.rainbow_cape:
+    description: "Rainbow cape"
+    default: false
+  bedwars.cosmetic.cape.flame_cape:
+    description: "Flame cape"
+    default: false
+  bedwars.cosmetic.cape.galaxy_cape:
+    description: "Galaxy cape"
+    default: false
+  bedwars.cosmetic.wing.angel:
+    description: "Angel wings"
+    default: false
+  bedwars.cosmetic.wing.dragon:
+    description: "Dragon wings"
+    default: false
+  bedwars.cosmetic.wing.butterfly:
+    description: "Butterfly wings"
+    default: false
+  bedwars.cosmetic.hat.crown:
+    description: "Crown hat"
+    default: false
+  bedwars.cosmetic.hat.halo:
+    description: "Halo hat"
+    default: false
+  bedwars.cosmetic.kill_effect.explosion:
+    description: "Explosion kill effect"
+    default: false
+  bedwars.cosmetic.kill_effect.hearts:
+    description: "Hearts kill effect"
+    default: false
+  bedwars.cosmetic.kill_effect.totem:
+    description: "Totem kill effect"
+    default: false
+  bedwars.cosmetic.kill_effect.lava:
+    description: "Lava drip kill effect"
+    default: false
+  bedwars.cosmetic.kill_sound.thunder:
+    description: "Thunder kill sound"
+    default: false
+  bedwars.cosmetic.kill_sound.goat:
+    description: "Goat kill sound"
+    default: false

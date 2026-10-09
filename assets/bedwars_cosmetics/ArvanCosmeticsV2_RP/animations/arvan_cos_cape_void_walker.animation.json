@@ -1,0 +1,124 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_cape_void_walker.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "void_walker_cloth0": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       1.0
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -1.0
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "void_walker_cloth1": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       1.0
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -1.0
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "void_walker_cloth2": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       1.0
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -1.0
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,43 @@
+# BedWars Profile / Ranked Seasons / Medals / Achievements
+# Shared by the Lobby core and the Game core (each server keeps its own copy).
+# The current season lives in the database, so every server always agrees on it.
+
+season:
+  # 0 = seasons are only changed by hand (/bwseason new). Any other number = a new season starts automatically
+  # after that many days (only the FIRST season is created from this value; later ones copy it).
+  length-days: 0
+  # Every new season makes each division this much bigger (0.08 = +8% per season, capped by max-scale).
+  size-growth-per-season: 0.08
+  max-scale: 1.8
+
+ranked:
+  # RP needed to climb ONE division, per tier (3 divisions per tier: I, II, III). Grandmaster has no divisions.
+  # Order: Bronze, Silver, Gold, Platinum, Diamond, Master, Grandmaster
+  division-size: [200, 250, 300, 350, 400, 450]
+  win: 25
+  loss: -12
+  tie: 0
+  quit-penalty: 8          # extra RP lost by a player who leaves a match while still alive and not winning
+  kill: 1
+  final-kill: 2
+  bed: 3
+  performance-cap: 12      # maximum RP gained from kills/finals/beds in a single match
+  mvp-bonus: 5
+  mvp-min-points: 8        # points = kills*2 + finals*4 + beds*6 (same weighting as the TOP PLAYERS board)
+  min-match-seconds: 90    # shorter matches are not ranked (no RP, no history)
+  tier-demotion: false     # false = nobody can fall out of the tier they reached this season
+
+medals:
+  multi-kill-window: 10    # seconds between kills for Double / Triple / Fury / Rampage
+  slayer-kills: 8
+  marathon-seconds: 1200
+  blitz-seconds: 600
+  announce: true
+
+achievements:
+  # false = players who already qualify from old stats get their achievements silently (no coins/XP burst).
+  retroactive-rewards: false
+  give-rewards: true
+
+leaderboard:
+  size: 10

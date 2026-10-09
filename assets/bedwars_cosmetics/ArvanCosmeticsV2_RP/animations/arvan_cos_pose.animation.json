@@ -1,0 +1,51 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos.pose": {
+   "loop": true,
+   "bones": {
+    "root": {
+     "rotation": [
+      "query.is_sneaking ? 28 : 0",
+      0,
+      0
+     ],
+     "position": [
+      0,
+      "query.is_sneaking ? 1.25 : 0",
+      "query.is_sneaking ? 9 : 0"
+     ]
+    },
+    "head_anchor": {
+     "relative_to": {
+      "rotation": "entity"
+     },
+     "rotation": [
+      "query.target_x_rotation",
+      0,
+      0
+     ],
+     "position": [
+      0,
+      "query.is_sneaking ? -3 : 0",
+      0
+     ]
+    },
+    "back_anchor": {
+     "position": [
+      0,
+      "query.is_sneaking ? -2 : 0",
+      0
+     ]
+    },
+    "cape_anchor": {
+     "position": [
+      0,
+      "query.is_sneaking ? -2 : 0",
+      0
+     ]
+    }
+   }
+  }
+ }
+}

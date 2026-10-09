@@ -1,0 +1,51 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_hat_wizard_star.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "wizard_star_star_orbit": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "4": [
+       0,
+       -360,
+       0
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "star",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

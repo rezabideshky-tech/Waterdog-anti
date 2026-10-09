@@ -1,0 +1,30 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_hat_cyber_visor.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "cyber_visor_scan": {
+          "position": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "2": [
+              -7.6,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

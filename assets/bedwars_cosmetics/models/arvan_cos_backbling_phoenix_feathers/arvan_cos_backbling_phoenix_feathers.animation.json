@@ -1,0 +1,240 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_backbling_phoenix_feathers.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "phoenix_feathers_feather0": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       4
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -4
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "phoenix_feathers_feather1": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       4
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -4
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "phoenix_feathers_feather2": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       4
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -4
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "phoenix_feathers_feather3": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       4
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -4
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "phoenix_feathers_feather4": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       4
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -4
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "phoenix_feathers_feather5": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       4
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -4
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "phoenix_feathers_feather6": {
+     "rotation": {
+      "0": [
+       0,
+       0,
+       0
+      ],
+      "1": [
+       0,
+       0,
+       4
+      ],
+      "2": [
+       0,
+       0,
+       0
+      ],
+      "3": [
+       0,
+       0,
+       -4
+      ],
+      "4": [
+       0,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

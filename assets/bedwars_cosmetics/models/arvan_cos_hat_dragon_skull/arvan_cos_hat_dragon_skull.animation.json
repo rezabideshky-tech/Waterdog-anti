@@ -1,0 +1,95 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_hat_dragon_skull.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "dragon_skull_eye_-1": {
+     "scale": {
+      "0": [
+       1,
+       1,
+       1
+      ],
+      "1": [
+       1,
+       1.25,
+       1
+      ],
+      "2": [
+       1,
+       1,
+       1
+      ],
+      "3": [
+       1,
+       0.75,
+       1
+      ],
+      "4": [
+       1,
+       1,
+       1
+      ]
+     }
+    },
+    "dragon_skull_eye_1": {
+     "scale": {
+      "0": [
+       1,
+       1,
+       1
+      ],
+      "1": [
+       1,
+       1.25,
+       1
+      ],
+      "2": [
+       1,
+       1,
+       1
+      ],
+      "3": [
+       1,
+       0.75,
+       1
+      ],
+      "4": [
+       1,
+       1,
+       1
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

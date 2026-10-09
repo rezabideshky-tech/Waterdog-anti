@@ -1,0 +1,40 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_hat_bed_crown.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "bed_crown_gem": {
+          "position": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              0,
+              0.2,
+              0
+            ],
+            "2": [
+              0,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              -0.2,
+              0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

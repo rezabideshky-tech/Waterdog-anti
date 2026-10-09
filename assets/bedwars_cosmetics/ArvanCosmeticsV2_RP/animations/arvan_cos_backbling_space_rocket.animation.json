@@ -1,0 +1,66 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_backbling_space_rocket.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "space_rocket_flame_2": {
+     "scale": {
+      "0": [
+       1,
+       1,
+       1
+      ],
+      "1": [
+       1,
+       1.22,
+       1
+      ],
+      "2": [
+       1,
+       1,
+       1
+      ],
+      "3": [
+       1,
+       0.78,
+       1
+      ],
+      "4": [
+       1,
+       1,
+       1
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "smoke",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "smoke",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "smoke",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "smoke",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,96 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_backbling_guardian_drone.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "guardian_drone_rotor3": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              -360,
+              0
+            ]
+          }
+        },
+        "guardian_drone_rotor4": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              -360,
+              0
+            ]
+          }
+        },
+        "guardian_drone_rotor5": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              -360,
+              0
+            ]
+          }
+        },
+        "guardian_drone_rotor6": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "4": [
+              0,
+              -360,
+              0
+            ]
+          }
+        },
+        "guardian_drone_drone": {
+          "position": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              0,
+              0.5,
+              0
+            ],
+            "2": [
+              0,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              -0.5,
+              0
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

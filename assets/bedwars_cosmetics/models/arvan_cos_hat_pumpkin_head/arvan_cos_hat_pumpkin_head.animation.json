@@ -1,0 +1,95 @@
+{
+ "format_version": "1.8.0",
+ "animations": {
+  "animation.arvan_cos_hat_pumpkin_head.idle": {
+   "loop": true,
+   "animation_length": 4,
+   "bones": {
+    "pumpkin_head_flame_3": {
+     "scale": {
+      "0": [
+       1,
+       1,
+       1
+      ],
+      "1": [
+       1,
+       1.22,
+       1
+      ],
+      "2": [
+       1,
+       1,
+       1
+      ],
+      "3": [
+       1,
+       0.78,
+       1
+      ],
+      "4": [
+       1,
+       1,
+       1
+      ]
+     }
+    },
+    "pumpkin_head_lit_eyes": {
+     "scale": {
+      "0": [
+       1,
+       1,
+       1
+      ],
+      "1": [
+       1,
+       1,
+       1.06
+      ],
+      "2": [
+       1,
+       1,
+       1
+      ],
+      "3": [
+       1,
+       1,
+       0.94
+      ],
+      "4": [
+       1,
+       1,
+       1
+      ]
+     }
+    }
+   },
+   "particle_effects": {
+    "0": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "1": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "2": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ],
+    "3": [
+     {
+      "effect": "ember",
+      "locator": "fx_0"
+     }
+    ]
+   }
+  }
+ }
+}

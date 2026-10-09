@@ -1,0 +1,40 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.arvan_cos_hat_pirate_captain.idle": {
+      "loop": true,
+      "animation_length": 4,
+      "bones": {
+        "pirate_captain_feather": {
+          "rotation": {
+            "0": [
+              0,
+              0,
+              0
+            ],
+            "1": [
+              0,
+              0,
+              6
+            ],
+            "2": [
+              0,
+              0,
+              0
+            ],
+            "3": [
+              0,
+              0,
+              -6
+            ],
+            "4": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}
